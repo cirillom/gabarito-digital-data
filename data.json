@@ -2,1502 +2,1504 @@
   "ENEM": {
     "tipo": "faculdade",
     "descricao": "Vestibular nacional para ingresso em instituições de ensino superior no Brasil todo",
-    "2023": {
-      "1o dia": {
-        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Enem/2023/1o%20Dia/prova.pdf",
-        "data": "2023-11-05",
-        "qtd_questoes": 90,
-        "opcoes_resposta": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "questoes": {
-          "1": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "2": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "3": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "4": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "5": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "6": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "7": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "8": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "9": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "10": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "11": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "12": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "13": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "14": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "15": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "16": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "17": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "18": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "19": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "20": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "21": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "22": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "23": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "24": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "25": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "26": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "27": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "28": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "29": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "30": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "31": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "32": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "33": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "34": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "35": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "36": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "37": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "38": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "39": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "40": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "41": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "42": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "43": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "44": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "45": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "46": {
-            "disciplina": "Geografia",
-            "resposta": "C"
-          },
-          "47": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "48": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "49": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "50": {
-            "disciplina": "História",
-            "resposta": "E"
-          },
-          "51": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "52": {
-            "disciplina": "Filosofia",
-            "resposta": "A"
-          },
-          "53": {
-            "disciplina": "Geografia",
-            "resposta": "B"
-          },
-          "54": {
-            "disciplina": "Filosofia",
-            "resposta": "A"
-          },
-          "55": {
-            "disciplina": "Sociologia",
-            "resposta": "A"
-          },
-          "56": {
-            "disciplina": "Sociologia",
-            "resposta": "C"
-          },
-          "57": {
-            "disciplina": "Filosofia",
-            "resposta": "E"
-          },
-          "58": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "59": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "60": {
-            "disciplina": "Sociologia",
-            "resposta": "D"
-          },
-          "61": {
-            "disciplina": "Sociologia",
-            "resposta": "E"
-          },
-          "62": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "63": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "64": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "65": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "66": {
-            "disciplina": "Sociologia",
-            "resposta": "A"
-          },
-          "67": {
-            "disciplina": "Geografia",
-            "resposta": "B"
-          },
-          "68": {
-            "disciplina": "Geografia",
-            "resposta": "C"
-          },
-          "69": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "70": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "71": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "72": {
-            "disciplina": "Sociologia",
-            "resposta": "B"
-          },
-          "73": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "74": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "75": {
-            "disciplina": "Sociologia",
-            "resposta": "C"
-          },
-          "76": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "77": {
-            "disciplina": "História",
-            "resposta": "E"
-          },
-          "78": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "79": {
-            "disciplina": "Filosofia",
-            "resposta": "B"
-          },
-          "80": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "81": {
-            "disciplina": "Sociologia",
-            "resposta": "A"
-          },
-          "82": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "83": {
-            "disciplina": "Geografia",
-            "resposta": "C"
-          },
-          "84": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "85": {
-            "disciplina": "Economia",
-            "resposta": "D"
-          },
-          "86": {
-            "disciplina": "Sociologia",
-            "resposta": "E"
-          },
-          "87": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "88": {
-            "disciplina": "Sociologia",
-            "resposta": "A"
-          },
-          "89": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "90": {
-            "disciplina": "Filosofia",
-            "resposta": "B"
+    "provas": {
+      "2023": {
+        "1o dia": {
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Enem/2023/1o%20Dia/prova.pdf",
+          "data": "2023-11-05",
+          "qtd_questoes": 90,
+          "opcoes_resposta": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "questoes": {
+            "1": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "2": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "3": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "4": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "5": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "6": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "7": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "8": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "9": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "10": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "11": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "12": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "13": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "14": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "15": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "16": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "17": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "18": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "19": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "20": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "21": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "22": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "23": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "24": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "25": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "26": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "27": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "28": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "29": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "30": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "31": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "32": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "33": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "34": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "35": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "36": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "37": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "38": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "39": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "40": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "41": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "42": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "43": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "44": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "45": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "46": {
+              "disciplina": "Geografia",
+              "resposta": "C"
+            },
+            "47": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "48": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "49": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "50": {
+              "disciplina": "História",
+              "resposta": "E"
+            },
+            "51": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "52": {
+              "disciplina": "Filosofia",
+              "resposta": "A"
+            },
+            "53": {
+              "disciplina": "Geografia",
+              "resposta": "B"
+            },
+            "54": {
+              "disciplina": "Filosofia",
+              "resposta": "A"
+            },
+            "55": {
+              "disciplina": "Sociologia",
+              "resposta": "A"
+            },
+            "56": {
+              "disciplina": "Sociologia",
+              "resposta": "C"
+            },
+            "57": {
+              "disciplina": "Filosofia",
+              "resposta": "E"
+            },
+            "58": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "59": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "60": {
+              "disciplina": "Sociologia",
+              "resposta": "D"
+            },
+            "61": {
+              "disciplina": "Sociologia",
+              "resposta": "E"
+            },
+            "62": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "63": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "64": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "65": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "66": {
+              "disciplina": "Sociologia",
+              "resposta": "A"
+            },
+            "67": {
+              "disciplina": "Geografia",
+              "resposta": "B"
+            },
+            "68": {
+              "disciplina": "Geografia",
+              "resposta": "C"
+            },
+            "69": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "70": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "71": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "72": {
+              "disciplina": "Sociologia",
+              "resposta": "B"
+            },
+            "73": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "74": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "75": {
+              "disciplina": "Sociologia",
+              "resposta": "C"
+            },
+            "76": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "77": {
+              "disciplina": "História",
+              "resposta": "E"
+            },
+            "78": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "79": {
+              "disciplina": "Filosofia",
+              "resposta": "B"
+            },
+            "80": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "81": {
+              "disciplina": "Sociologia",
+              "resposta": "A"
+            },
+            "82": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "83": {
+              "disciplina": "Geografia",
+              "resposta": "C"
+            },
+            "84": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "85": {
+              "disciplina": "Economia",
+              "resposta": "D"
+            },
+            "86": {
+              "disciplina": "Sociologia",
+              "resposta": "E"
+            },
+            "87": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "88": {
+              "disciplina": "Sociologia",
+              "resposta": "A"
+            },
+            "89": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "90": {
+              "disciplina": "Filosofia",
+              "resposta": "B"
+            }
+          }
+        },
+        "2o dia": {
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Enem/2023/2o%20Dia/prova.pdf",
+          "data": "2023-11-12",
+          "qtd_questoes": 90,
+          "opcoes_resposta": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "questoes": {
+            "91": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "92": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "93": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "94": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "95": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "96": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "97": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "98": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "99": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "100": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "101": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "102": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "103": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "104": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "105": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "106": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "107": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "108": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "109": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "110": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "111": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "112": {
+              "disciplina": "Química",
+              "resposta": "E"
+            },
+            "113": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "114": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "115": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "116": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "117": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "118": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "119": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "120": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "121": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "122": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "123": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "124": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "125": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "126": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "127": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "128": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "129": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "130": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "131": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "132": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "133": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "134": {
+              "disciplina": "Química",
+              "resposta": "E"
+            },
+            "135": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "136": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "137": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "138": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "139": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "140": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "141": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "142": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "143": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "144": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "145": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "146": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "147": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "148": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "149": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "150": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "151": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "152": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "153": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "154": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "155": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "156": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "157": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "158": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "159": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "160": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "161": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "162": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "163": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "164": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "165": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "166": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "167": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "168": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "169": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "170": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "171": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "172": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "173": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "174": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "175": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "176": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "177": {
+              "disciplina": "Matemática",
+              "resposta": "N/A"
+            },
+            "178": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "179": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "180": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            }
           }
         }
       },
-      "2o dia": {
-        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Enem/2023/2o%20Dia/prova.pdf",
-        "data": "2023-11-12",
-        "qtd_questoes": 90,
-        "opcoes_resposta": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "questoes": {
-          "91": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "92": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "93": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "94": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "95": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "96": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "97": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "98": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "99": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "100": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "101": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "102": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "103": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "104": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "105": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "106": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "107": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "108": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "109": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "110": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "111": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "112": {
-            "disciplina": "Química",
-            "resposta": "E"
-          },
-          "113": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "114": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "115": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "116": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "117": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "118": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "119": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "120": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "121": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "122": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "123": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "124": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "125": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "126": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "127": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "128": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "129": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "130": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "131": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "132": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "133": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "134": {
-            "disciplina": "Química",
-            "resposta": "E"
-          },
-          "135": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "136": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "137": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "138": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "139": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "140": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "141": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "142": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "143": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "144": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "145": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "146": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "147": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "148": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "149": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "150": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "151": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "152": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "153": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "154": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "155": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "156": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "157": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "158": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "159": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "160": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "161": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "162": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "163": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "164": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "165": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "166": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "167": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "168": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "169": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "170": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "171": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "172": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "173": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "174": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "175": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "176": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "177": {
-            "disciplina": "Matemática",
-            "resposta": "N/A"
-          },
-          "178": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "179": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "180": {
-            "disciplina": "Matemática",
-            "resposta": "B"
+      "2024": {
+        "1o dia": {
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/2024/1a%20Fase/prova.pdf",
+          "data": "2024-11-03",
+          "qtd_questoes": 90,
+          "opcoes_resposta": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "questoes": {
+            "1": {
+              "disciplina": "Linguagens (Inglês)",
+              "resposta": "C"
+            },
+            "2": {
+              "disciplina": "Linguagens (Inglês)",
+              "resposta": "A"
+            },
+            "3": {
+              "disciplina": "Linguagens (Inglês)",
+              "resposta": "A"
+            },
+            "4": {
+              "disciplina": "Linguagens (Inglês)",
+              "resposta": "A"
+            },
+            "5": {
+              "disciplina": "Linguagens (Inglês)",
+              "resposta": "E"
+            },
+            "6": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "7": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "8": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "9": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "10": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "11": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "12": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "13": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "14": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "15": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "16": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "17": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "18": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "19": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "20": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "21": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "22": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "23": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "24": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "25": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "26": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "27": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "28": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "29": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "30": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "31": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "32": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "33": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "34": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "35": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "36": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "37": {
+              "disciplina": "Linguagens",
+              "resposta": "C"
+            },
+            "38": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "39": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "40": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "41": {
+              "disciplina": "Linguagens",
+              "resposta": "A"
+            },
+            "42": {
+              "disciplina": "Linguagens",
+              "resposta": "D"
+            },
+            "43": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "44": {
+              "disciplina": "Linguagens",
+              "resposta": "E"
+            },
+            "45": {
+              "disciplina": "Linguagens",
+              "resposta": "B"
+            },
+            "46": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "47": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "48": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "49": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "50": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "51": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "52": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "53": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "54": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "55": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "56": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "57": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "58": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "59": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "60": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "61": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "62": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "63": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "64": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "65": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "66": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "67": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "68": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "69": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "70": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "71": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "72": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "73": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "74": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "75": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "76": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "77": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "78": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "79": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "80": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "81": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "82": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "83": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "E"
+            },
+            "84": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "85": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "86": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "D"
+            },
+            "87": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "A"
+            },
+            "88": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            },
+            "89": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "B"
+            },
+            "90": {
+              "disciplina": "Ciências Humanas",
+              "resposta": "C"
+            }
           }
-        }
-      }
-    },
-    "2024": {
-      "1o dia": {
-        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/2024/1a%20Fase/prova.pdf",
-        "data": "2024-11-03",
-        "qtd_questoes": 90,
-        "opcoes_resposta": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "questoes": {
-          "1": {
-            "disciplina": "Linguagens (Inglês)",
-            "resposta": "C"
-          },
-          "2": {
-            "disciplina": "Linguagens (Inglês)",
-            "resposta": "A"
-          },
-          "3": {
-            "disciplina": "Linguagens (Inglês)",
-            "resposta": "A"
-          },
-          "4": {
-            "disciplina": "Linguagens (Inglês)",
-            "resposta": "A"
-          },
-          "5": {
-            "disciplina": "Linguagens (Inglês)",
-            "resposta": "E"
-          },
-          "6": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "7": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "8": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "9": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "10": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "11": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "12": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "13": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "14": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "15": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "16": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "17": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "18": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "19": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "20": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "21": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "22": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "23": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "24": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "25": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "26": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "27": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "28": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "29": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "30": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "31": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "32": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "33": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "34": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "35": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "36": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "37": {
-            "disciplina": "Linguagens",
-            "resposta": "C"
-          },
-          "38": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "39": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "40": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "41": {
-            "disciplina": "Linguagens",
-            "resposta": "A"
-          },
-          "42": {
-            "disciplina": "Linguagens",
-            "resposta": "D"
-          },
-          "43": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "44": {
-            "disciplina": "Linguagens",
-            "resposta": "E"
-          },
-          "45": {
-            "disciplina": "Linguagens",
-            "resposta": "B"
-          },
-          "46": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "47": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "48": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "49": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "50": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "51": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "52": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "53": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "54": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "55": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "56": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "57": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "58": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "59": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "60": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "61": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "62": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "63": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "64": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "65": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "66": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "67": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "68": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "69": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "70": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "71": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "72": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "73": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "74": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "75": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "76": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "77": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "78": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "79": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "80": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "81": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "82": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "83": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "E"
-          },
-          "84": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "85": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "86": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "D"
-          },
-          "87": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "A"
-          },
-          "88": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          },
-          "89": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "B"
-          },
-          "90": {
-            "disciplina": "Ciências Humanas",
-            "resposta": "C"
-          }
-        }
-      },
-      "2o dia": {
-        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
-        "data": "2024-11-10",
-        "qtd_questoes": 90,
-        "opcoes_resposta": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "questoes": {
-          "91": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "92": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "93": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "94": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "95": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "96": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "97": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "98": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "99": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "100": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "101": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "102": {
-            "disciplina": "Química",
-            "resposta": "N/A"
-          },
-          "103": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "104": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "105": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "106": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "107": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "108": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "109": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "110": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "111": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "112": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "113": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "114": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "115": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "116": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "117": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "118": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "119": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "120": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "121": {
-            "disciplina": "Química",
-            "resposta": "E"
-          },
-          "122": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "123": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "124": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "125": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "126": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "127": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "128": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "129": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "130": {
-            "disciplina": "Química",
-            "resposta": "E"
-          },
-          "131": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "132": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "133": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "134": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "135": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "136": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "137": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "138": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "139": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "140": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "141": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "142": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "143": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "144": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "145": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "146": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "147": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "148": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "149": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "150": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "151": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "152": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "153": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "154": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "155": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "156": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "157": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "158": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "159": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "160": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "161": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "162": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "163": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "164": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "165": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "166": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "167": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "168": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "169": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "170": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "171": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "172": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "173": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "174": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "175": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "176": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "177": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "178": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "179": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "180": {
-            "disciplina": "Matemática",
-            "resposta": "E"
+        },
+        "2o dia": {
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
+          "data": "2024-11-10",
+          "qtd_questoes": 90,
+          "opcoes_resposta": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "questoes": {
+            "91": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "92": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "93": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "94": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "95": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "96": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "97": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "98": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "99": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "100": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "101": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "102": {
+              "disciplina": "Química",
+              "resposta": "N/A"
+            },
+            "103": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "104": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "105": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "106": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "107": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "108": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "109": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "110": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "111": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "112": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "113": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "114": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "115": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "116": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "117": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "118": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "119": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "120": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "121": {
+              "disciplina": "Química",
+              "resposta": "E"
+            },
+            "122": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "123": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "124": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "125": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "126": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "127": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "128": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "129": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "130": {
+              "disciplina": "Química",
+              "resposta": "E"
+            },
+            "131": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "132": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "133": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "134": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "135": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "136": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "137": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "138": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "139": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "140": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "141": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "142": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "143": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "144": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "145": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "146": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "147": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "148": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "149": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "150": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "151": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "152": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "153": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "154": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "155": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "156": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "157": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "158": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "159": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "160": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "161": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "162": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "163": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "164": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "165": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "166": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "167": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "168": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "169": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "170": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "171": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "172": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "173": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "174": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "175": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "176": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "177": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "178": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "179": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "180": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            }
           }
         }
       }
@@ -1506,754 +1508,756 @@
   "Fuvest": {
     "tipo": "faculdade",
     "descricao": "Vestibular para ingresso na Universidade de São Paulo (USP)",
-    "2023": {
-      "1a Fase": {
-        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2023/1a%20Fase/prova.pdf",
-        "data": "2022-12-04",
-        "qtd_questoes": 90,
-        "opcoes_resposta": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "questoes": {
-          "1": {
-            "disciplina": "Sociologia",
-            "resposta": "D"
-          },
-          "2": {
-            "disciplina": "Sociologia",
-            "resposta": "C"
-          },
-          "3": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "4": {
-            "disciplina": "Literatura",
-            "resposta": "B"
-          },
-          "5": {
-            "disciplina": "Sociologia",
-            "resposta": "A"
-          },
-          "6": {
-            "disciplina": "Linguística",
-            "resposta": "C"
-          },
-          "7": {
-            "disciplina": "Linguística",
-            "resposta": "E"
-          },
-          "8": {
-            "disciplina": "Linguística",
-            "resposta": "D"
-          },
-          "9": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "10": {
-            "disciplina": "Sociologia",
-            "resposta": "C"
-          },
-          "11": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "12": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "13": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "14": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "15": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "16": {
-            "disciplina": "Geografia",
-            "resposta": "B"
-          },
-          "17": {
-            "disciplina": "Química",
-            "resposta": "E"
-          },
-          "18": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "19": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "20": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "21": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "22": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "23": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "24": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "25": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "26": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "27": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "28": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "29": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "30": {
-            "disciplina": "Filosofia",
-            "resposta": "D"
-          },
-          "31": {
-            "disciplina": "Filosofia",
-            "resposta": "C"
-          },
-          "32": {
-            "disciplina": "Inglês",
-            "resposta": "B"
-          },
-          "33": {
-            "disciplina": "Inglês",
-            "resposta": "E"
-          },
-          "34": {
-            "disciplina": "Inglês",
-            "resposta": "C"
-          },
-          "35": {
-            "disciplina": "Inglês",
-            "resposta": "A"
-          },
-          "36": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "37": {
-            "disciplina": "Literatura",
-            "resposta": "C"
-          },
-          "38": {
-            "disciplina": "Literatura",
-            "resposta": "D"
-          },
-          "39": {
-            "disciplina": "Literatura",
-            "resposta": "C"
-          },
-          "40": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "41": {
-            "disciplina": "Sociologia",
-            "resposta": "B"
-          },
-          "42": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "43": {
-            "disciplina": "Sociologia",
-            "resposta": "E"
-          },
-          "44": {
-            "disciplina": "Literatura",
-            "resposta": "E"
-          },
-          "45": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "46": {
-            "disciplina": "Filosofia",
-            "resposta": "D"
-          },
-          "47": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "48": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "49": {
-            "disciplina": "História",
-            "resposta": "E"
-          },
-          "50": {
-            "disciplina": "Linguística",
-            "resposta": "A"
-          },
-          "51": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "52": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "53": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "54": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "55": {
-            "disciplina": "Filosofia",
-            "resposta": "E"
-          },
-          "56": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "57": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "58": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "59": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "60": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "61": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "62": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "63": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "64": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "65": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "66": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "67": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "68": {
-            "disciplina": "Inglês",
-            "resposta": "D"
-          },
-          "69": {
-            "disciplina": "Inglês",
-            "resposta": "E"
-          },
-          "70": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "71": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "72": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "73": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "74": {
-            "disciplina": "Química",
-            "resposta": "E"
-          },
-          "75": {
-            "disciplina": "Linguística",
-            "resposta": "B"
-          },
-          "76": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "77": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "78": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "79": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "80": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "81": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "82": {
-            "disciplina": "Geografia",
-            "resposta": "B"
-          },
-          "83": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "84": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "85": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "86": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "87": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "88": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "89": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "90": {
-            "disciplina": "Matemática",
-            "resposta": "A"
+    "provas": {
+      "2023": {
+        "1a Fase": {
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2023/1a%20Fase/prova.pdf",
+          "data": "2022-12-04",
+          "qtd_questoes": 90,
+          "opcoes_resposta": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "questoes": {
+            "1": {
+              "disciplina": "Sociologia",
+              "resposta": "D"
+            },
+            "2": {
+              "disciplina": "Sociologia",
+              "resposta": "C"
+            },
+            "3": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "4": {
+              "disciplina": "Literatura",
+              "resposta": "B"
+            },
+            "5": {
+              "disciplina": "Sociologia",
+              "resposta": "A"
+            },
+            "6": {
+              "disciplina": "Linguística",
+              "resposta": "C"
+            },
+            "7": {
+              "disciplina": "Linguística",
+              "resposta": "E"
+            },
+            "8": {
+              "disciplina": "Linguística",
+              "resposta": "D"
+            },
+            "9": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "10": {
+              "disciplina": "Sociologia",
+              "resposta": "C"
+            },
+            "11": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "12": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "13": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "14": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "15": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "16": {
+              "disciplina": "Geografia",
+              "resposta": "B"
+            },
+            "17": {
+              "disciplina": "Química",
+              "resposta": "E"
+            },
+            "18": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "19": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "20": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "21": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "22": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "23": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "24": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "25": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "26": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "27": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "28": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "29": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "30": {
+              "disciplina": "Filosofia",
+              "resposta": "D"
+            },
+            "31": {
+              "disciplina": "Filosofia",
+              "resposta": "C"
+            },
+            "32": {
+              "disciplina": "Inglês",
+              "resposta": "B"
+            },
+            "33": {
+              "disciplina": "Inglês",
+              "resposta": "E"
+            },
+            "34": {
+              "disciplina": "Inglês",
+              "resposta": "C"
+            },
+            "35": {
+              "disciplina": "Inglês",
+              "resposta": "A"
+            },
+            "36": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "37": {
+              "disciplina": "Literatura",
+              "resposta": "C"
+            },
+            "38": {
+              "disciplina": "Literatura",
+              "resposta": "D"
+            },
+            "39": {
+              "disciplina": "Literatura",
+              "resposta": "C"
+            },
+            "40": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "41": {
+              "disciplina": "Sociologia",
+              "resposta": "B"
+            },
+            "42": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "43": {
+              "disciplina": "Sociologia",
+              "resposta": "E"
+            },
+            "44": {
+              "disciplina": "Literatura",
+              "resposta": "E"
+            },
+            "45": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "46": {
+              "disciplina": "Filosofia",
+              "resposta": "D"
+            },
+            "47": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "48": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "49": {
+              "disciplina": "História",
+              "resposta": "E"
+            },
+            "50": {
+              "disciplina": "Linguística",
+              "resposta": "A"
+            },
+            "51": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "52": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "53": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "54": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "55": {
+              "disciplina": "Filosofia",
+              "resposta": "E"
+            },
+            "56": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "57": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "58": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "59": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "60": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "61": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "62": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "63": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "64": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "65": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "66": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "67": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "68": {
+              "disciplina": "Inglês",
+              "resposta": "D"
+            },
+            "69": {
+              "disciplina": "Inglês",
+              "resposta": "E"
+            },
+            "70": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "71": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "72": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "73": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "74": {
+              "disciplina": "Química",
+              "resposta": "E"
+            },
+            "75": {
+              "disciplina": "Linguística",
+              "resposta": "B"
+            },
+            "76": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "77": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "78": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "79": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "80": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "81": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "82": {
+              "disciplina": "Geografia",
+              "resposta": "B"
+            },
+            "83": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "84": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "85": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "86": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "87": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "88": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "89": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "90": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            }
           }
         }
-      }
-    },
-    "2024": {
-      "1a Fase": {
-        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
-        "data": "2023-11-19",
-        "qtd_questoes": 90,
-        "opcoes_resposta": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "questoes": {
-          "1": {
-            "disciplina": "Português",
-            "resposta": "C"
-          },
-          "2": {
-            "disciplina": "Português",
-            "resposta": "C"
-          },
-          "3": {
-            "disciplina": "Arte",
-            "resposta": "E"
-          },
-          "4": {
-            "disciplina": "Inglês",
-            "resposta": "C"
-          },
-          "5": {
-            "disciplina": "Inglês",
-            "resposta": "C"
-          },
-          "6": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "7": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "8": {
-            "disciplina": "Sociologia",
-            "resposta": "B"
-          },
-          "9": {
-            "disciplina": "Literatura",
-            "resposta": "D"
-          },
-          "10": {
-            "disciplina": "Filosofia",
-            "resposta": "B"
-          },
-          "11": {
-            "disciplina": "Inglês",
-            "resposta": "E"
-          },
-          "12": {
-            "disciplina": "Inglês",
-            "resposta": "C"
-          },
-          "13": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "14": {
-            "disciplina": "Biologia",
-            "resposta": "E"
-          },
-          "15": {
-            "disciplina": "Literatura",
-            "resposta": "E"
-          },
-          "16": {
-            "disciplina": "Literatura",
-            "resposta": "A"
-          },
-          "17": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "18": {
-            "disciplina": "Biologia",
-            "resposta": "D"
-          },
-          "19": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "20": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "21": {
-            "disciplina": "Química",
-            "resposta": "A"
-          },
-          "22": {
-            "disciplina": "Filosofia",
-            "resposta": "E"
-          },
-          "23": {
-            "disciplina": "Filosofia",
-            "resposta": "E"
-          },
-          "24": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "25": {
-            "disciplina": "Física",
-            "resposta": "E"
-          },
-          "26": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "27": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "28": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "29": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "30": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "31": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "32": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "33": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "34": {
-            "disciplina": "Matemática",
-            "resposta": "A"
-          },
-          "35": {
-            "disciplina": "Matemática",
-            "resposta": "B"
-          },
-          "36": {
-            "disciplina": "Literatura",
-            "resposta": "C"
-          },
-          "37": {
-            "disciplina": "Literatura",
-            "resposta": "C"
-          },
-          "38": {
-            "disciplina": "Literatura",
-            "resposta": "E"
-          },
-          "39": {
-            "disciplina": "Literatura",
-            "resposta": "D"
-          },
-          "40": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "41": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "42": {
-            "disciplina": "Física",
-            "resposta": "D"
-          },
-          "43": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "44": {
-            "disciplina": "História",
-            "resposta": "E"
-          },
-          "45": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "46": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "47": {
-            "disciplina": "Geografia",
-            "resposta": "E"
-          },
-          "48": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "49": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "50": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "51": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "52": {
-            "disciplina": "Sociologia",
-            "resposta": "C"
-          },
-          "53": {
-            "disciplina": "Inglês",
-            "resposta": "B"
-          },
-          "54": {
-            "disciplina": "Inglês",
-            "resposta": "D"
-          },
-          "55": {
-            "disciplina": "Química",
-            "resposta": "C"
-          },
-          "56": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "57": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "58": {
-            "disciplina": "Química",
-            "resposta": "D"
-          },
-          "59": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "60": {
-            "disciplina": "Matemática",
-            "resposta": "E"
-          },
-          "61": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "62": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "63": {
-            "disciplina": "Matemática",
-            "resposta": "C"
-          },
-          "64": {
-            "disciplina": "Biologia",
-            "resposta": "A"
-          },
-          "65": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "66": {
-            "disciplina": "Geografia",
-            "resposta": "A"
-          },
-          "67": {
-            "disciplina": "Literatura",
-            "resposta": "E"
-          },
-          "68": {
-            "disciplina": "Biologia",
-            "resposta": "B"
-          },
-          "69": {
-            "disciplina": "Biologia",
-            "resposta": "C"
-          },
-          "70": {
-            "disciplina": "Geografia",
-            "resposta": "D"
-          },
-          "71": {
-            "disciplina": "Física",
-            "resposta": "B"
-          },
-          "72": {
-            "disciplina": "Física",
-            "resposta": "A"
-          },
-          "73": {
-            "disciplina": "Física",
-            "resposta": "C"
-          },
-          "74": {
-            "disciplina": "Química",
-            "resposta": "B"
-          },
-          "75": {
-            "disciplina": "História",
-            "resposta": "C"
-          },
-          "76": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "77": {
-            "disciplina": "História",
-            "resposta": "D"
-          },
-          "78": {
-            "disciplina": "Geografia",
-            "resposta": "C"
-          },
-          "79": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "80": {
-            "disciplina": "Geografia",
-            "resposta": "C"
-          },
-          "81": {
-            "disciplina": "Sociologia",
-            "resposta": "D"
-          },
-          "82": {
-            "disciplina": "Literatura",
-            "resposta": "B"
-          },
-          "83": {
-            "disciplina": "Literatura",
-            "resposta": "D"
-          },
-          "84": {
-            "disciplina": "Sociologia",
-            "resposta": "E"
-          },
-          "85": {
-            "disciplina": "Matemática",
-            "resposta": "D"
-          },
-          "86": {
-            "disciplina": "História",
-            "resposta": "B"
-          },
-          "87": {
-            "disciplina": "História",
-            "resposta": "E"
-          },
-          "88": {
-            "disciplina": "História",
-            "resposta": "A"
-          },
-          "89": {
-            "disciplina": "Sociologia",
-            "resposta": "D"
-          },
-          "90": {
-            "disciplina": "Sociologia",
-            "resposta": "D"
+      },
+      "2024": {
+        "1a Fase": {
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
+          "data": "2023-11-19",
+          "qtd_questoes": 90,
+          "opcoes_resposta": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "questoes": {
+            "1": {
+              "disciplina": "Português",
+              "resposta": "C"
+            },
+            "2": {
+              "disciplina": "Português",
+              "resposta": "C"
+            },
+            "3": {
+              "disciplina": "Arte",
+              "resposta": "E"
+            },
+            "4": {
+              "disciplina": "Inglês",
+              "resposta": "C"
+            },
+            "5": {
+              "disciplina": "Inglês",
+              "resposta": "C"
+            },
+            "6": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "7": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "8": {
+              "disciplina": "Sociologia",
+              "resposta": "B"
+            },
+            "9": {
+              "disciplina": "Literatura",
+              "resposta": "D"
+            },
+            "10": {
+              "disciplina": "Filosofia",
+              "resposta": "B"
+            },
+            "11": {
+              "disciplina": "Inglês",
+              "resposta": "E"
+            },
+            "12": {
+              "disciplina": "Inglês",
+              "resposta": "C"
+            },
+            "13": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "14": {
+              "disciplina": "Biologia",
+              "resposta": "E"
+            },
+            "15": {
+              "disciplina": "Literatura",
+              "resposta": "E"
+            },
+            "16": {
+              "disciplina": "Literatura",
+              "resposta": "A"
+            },
+            "17": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "18": {
+              "disciplina": "Biologia",
+              "resposta": "D"
+            },
+            "19": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "20": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "21": {
+              "disciplina": "Química",
+              "resposta": "A"
+            },
+            "22": {
+              "disciplina": "Filosofia",
+              "resposta": "E"
+            },
+            "23": {
+              "disciplina": "Filosofia",
+              "resposta": "E"
+            },
+            "24": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "25": {
+              "disciplina": "Física",
+              "resposta": "E"
+            },
+            "26": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "27": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "28": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "29": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "30": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "31": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "32": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "33": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "34": {
+              "disciplina": "Matemática",
+              "resposta": "A"
+            },
+            "35": {
+              "disciplina": "Matemática",
+              "resposta": "B"
+            },
+            "36": {
+              "disciplina": "Literatura",
+              "resposta": "C"
+            },
+            "37": {
+              "disciplina": "Literatura",
+              "resposta": "C"
+            },
+            "38": {
+              "disciplina": "Literatura",
+              "resposta": "E"
+            },
+            "39": {
+              "disciplina": "Literatura",
+              "resposta": "D"
+            },
+            "40": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "41": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "42": {
+              "disciplina": "Física",
+              "resposta": "D"
+            },
+            "43": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "44": {
+              "disciplina": "História",
+              "resposta": "E"
+            },
+            "45": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "46": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "47": {
+              "disciplina": "Geografia",
+              "resposta": "E"
+            },
+            "48": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "49": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "50": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "51": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "52": {
+              "disciplina": "Sociologia",
+              "resposta": "C"
+            },
+            "53": {
+              "disciplina": "Inglês",
+              "resposta": "B"
+            },
+            "54": {
+              "disciplina": "Inglês",
+              "resposta": "D"
+            },
+            "55": {
+              "disciplina": "Química",
+              "resposta": "C"
+            },
+            "56": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "57": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "58": {
+              "disciplina": "Química",
+              "resposta": "D"
+            },
+            "59": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "60": {
+              "disciplina": "Matemática",
+              "resposta": "E"
+            },
+            "61": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "62": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "63": {
+              "disciplina": "Matemática",
+              "resposta": "C"
+            },
+            "64": {
+              "disciplina": "Biologia",
+              "resposta": "A"
+            },
+            "65": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "66": {
+              "disciplina": "Geografia",
+              "resposta": "A"
+            },
+            "67": {
+              "disciplina": "Literatura",
+              "resposta": "E"
+            },
+            "68": {
+              "disciplina": "Biologia",
+              "resposta": "B"
+            },
+            "69": {
+              "disciplina": "Biologia",
+              "resposta": "C"
+            },
+            "70": {
+              "disciplina": "Geografia",
+              "resposta": "D"
+            },
+            "71": {
+              "disciplina": "Física",
+              "resposta": "B"
+            },
+            "72": {
+              "disciplina": "Física",
+              "resposta": "A"
+            },
+            "73": {
+              "disciplina": "Física",
+              "resposta": "C"
+            },
+            "74": {
+              "disciplina": "Química",
+              "resposta": "B"
+            },
+            "75": {
+              "disciplina": "História",
+              "resposta": "C"
+            },
+            "76": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "77": {
+              "disciplina": "História",
+              "resposta": "D"
+            },
+            "78": {
+              "disciplina": "Geografia",
+              "resposta": "C"
+            },
+            "79": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "80": {
+              "disciplina": "Geografia",
+              "resposta": "C"
+            },
+            "81": {
+              "disciplina": "Sociologia",
+              "resposta": "D"
+            },
+            "82": {
+              "disciplina": "Literatura",
+              "resposta": "B"
+            },
+            "83": {
+              "disciplina": "Literatura",
+              "resposta": "D"
+            },
+            "84": {
+              "disciplina": "Sociologia",
+              "resposta": "E"
+            },
+            "85": {
+              "disciplina": "Matemática",
+              "resposta": "D"
+            },
+            "86": {
+              "disciplina": "História",
+              "resposta": "B"
+            },
+            "87": {
+              "disciplina": "História",
+              "resposta": "E"
+            },
+            "88": {
+              "disciplina": "História",
+              "resposta": "A"
+            },
+            "89": {
+              "disciplina": "Sociologia",
+              "resposta": "D"
+            },
+            "90": {
+              "disciplina": "Sociologia",
+              "resposta": "D"
+            }
           }
         }
       }
