@@ -67,7 +67,7 @@ print("\nAll files uploaded successfully! ✅")
 
 model = genai.GenerativeModel(model_name='gemini-2.5-flash')
 
-prompt_text = """
+prompt_text = f"""
 You are a specialized data extraction API. Your sole function is to process two uploaded PDF files, prova.pdf and gabarito.pdf, and generate a single, precise JSON output.
 
 Constraints:
@@ -81,19 +81,19 @@ Instructions:
  - Populate the following JSON structure exactly as specified.
 
 JSON Output Structure:
-{
-    "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
+{{
+    "pdf_link": "https:\\raw.githubusercontent.com\\cirillom\\gabarito-digital-data\\refs\\heads\\main\\Fuvest\\2024\\1a%20Fase\\prova.pdf",
     "data": "2024-01-01",
     "qtd_questoes": 2,
     "opcoes_resposta": ["A", "B", "C", "D", "E"],
-    "questoes": {
-        "1": {"disciplina": "Matemática", "resposta": "A"},
-        "2": {"disciplina": "História", "resposta": "B"}
-    }
-}
+    "questoes": {{
+        "1": {{"disciplina": "Matemática", "resposta": "A"}},
+        "2": {{"disciplina": "História", "resposta": "B"}}
+    }}
+}} 
 
 Field Population Rules:
-  - pdf_link: the pdf is inside https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/, and the path to the PDF is the same as the directory where the files were uploaded, e.g., "Fuvest/2024/1a Fase/prova.pdf".
+  - pdf_link: the pdf is inside https:\\raw.githubusercontent.com\\cirillom\\gabarito-digital-data\\refs\\heads\\main\\{directory.replace(" ", "%20")}\\prova.pdf
   - data: Extract the exam date from the documents and format it as YYYY-MM-DD.
   - qtd_questoes: Determine the total count of questions in the exam.
   - opcoes_resposta: This field should be a static array: ["A", "B", "C", "D", "E"].
