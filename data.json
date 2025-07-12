@@ -5,7 +5,7 @@
     "provas": {
       "2023": {
         "1o dia": {
-          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Enem/2023/1o%20Dia/prova.pdf",
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/provas/2023/1o%20dia/prova.pdf",
           "data": "2023-11-05",
           "qtd_questoes": 90,
           "opcoes_resposta": [
@@ -379,7 +379,7 @@
           }
         },
         "2o dia": {
-          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Enem/2023/2o%20Dia/prova.pdf",
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/provas/2023/2o%20dia/prova.pdf",
           "data": "2023-11-12",
           "qtd_questoes": 90,
           "opcoes_resposta": [
@@ -755,7 +755,7 @@
       },
       "2024": {
         "1o dia": {
-          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/2024/1a%20Fase/prova.pdf",
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/provas/2024/1o%20dia/prova.pdf",
           "data": "2024-11-03",
           "qtd_questoes": 90,
           "opcoes_resposta": [
@@ -1129,7 +1129,7 @@
           }
         },
         "2o dia": {
-          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/provas/2024/2o%20dia/prova.pdf",
           "data": "2024-11-10",
           "qtd_questoes": 90,
           "opcoes_resposta": [
@@ -1511,7 +1511,7 @@
     "provas": {
       "2023": {
         "1a Fase": {
-          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2023/1a%20Fase/prova.pdf",
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/provas/2023/1a%20Fase/prova.pdf",
           "data": "2022-12-04",
           "qtd_questoes": 90,
           "opcoes_resposta": [
@@ -1527,7 +1527,7 @@
               "resposta": "D"
             },
             "2": {
-              "disciplina": "Sociologia",
+              "disciplina": "História",
               "resposta": "C"
             },
             "3": {
@@ -1543,15 +1543,15 @@
               "resposta": "A"
             },
             "6": {
-              "disciplina": "Linguística",
+              "disciplina": "Português",
               "resposta": "C"
             },
             "7": {
-              "disciplina": "Linguística",
+              "disciplina": "Português",
               "resposta": "E"
             },
             "8": {
-              "disciplina": "Linguística",
+              "disciplina": "Atualidades",
               "resposta": "D"
             },
             "9": {
@@ -1667,7 +1667,7 @@
               "resposta": "C"
             },
             "37": {
-              "disciplina": "Literatura",
+              "disciplina": "Português",
               "resposta": "C"
             },
             "38": {
@@ -1691,7 +1691,7 @@
               "resposta": "C"
             },
             "43": {
-              "disciplina": "Sociologia",
+              "disciplina": "História",
               "resposta": "E"
             },
             "44": {
@@ -1719,7 +1719,7 @@
               "resposta": "E"
             },
             "50": {
-              "disciplina": "Linguística",
+              "disciplina": "Português",
               "resposta": "A"
             },
             "51": {
@@ -1731,7 +1731,7 @@
               "resposta": "E"
             },
             "53": {
-              "disciplina": "História",
+              "disciplina": "Geografia",
               "resposta": "C"
             },
             "54": {
@@ -1743,11 +1743,11 @@
               "resposta": "E"
             },
             "56": {
-              "disciplina": "Física",
+              "disciplina": "Química",
               "resposta": "E"
             },
             "57": {
-              "disciplina": "Biologia",
+              "disciplina": "Química",
               "resposta": "D"
             },
             "58": {
@@ -1799,11 +1799,11 @@
               "resposta": "E"
             },
             "70": {
-              "disciplina": "Física",
+              "disciplina": "Inglês",
               "resposta": "C"
             },
             "71": {
-              "disciplina": "Física",
+              "disciplina": "Química",
               "resposta": "C"
             },
             "72": {
@@ -1819,7 +1819,7 @@
               "resposta": "E"
             },
             "75": {
-              "disciplina": "Linguística",
+              "disciplina": "Português",
               "resposta": "B"
             },
             "76": {
@@ -1836,7 +1836,7 @@
             },
             "79": {
               "disciplina": "Física",
-              "resposta": "B"
+              "resposta": "D"
             },
             "80": {
               "disciplina": "Biologia",
@@ -1863,7 +1863,7 @@
               "resposta": "C"
             },
             "86": {
-              "disciplina": "Física",
+              "disciplina": "Matemática",
               "resposta": "B"
             },
             "87": {
@@ -1887,7 +1887,7 @@
       },
       "2024": {
         "1a Fase": {
-          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/2024/1a%20Fase/prova.pdf",
+          "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/provas/2024/1a%20Fase/prova.pdf",
           "data": "2023-11-19",
           "qtd_questoes": 90,
           "opcoes_resposta": [
