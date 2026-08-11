@@ -2263,6 +2263,346 @@
       }
     }
   },
+  "OAB": {
+    "tipo": "concurso",
+    "descricao": "Exame que concede a licença legal para exercer a profissão de advogado no Brasil",
+    "provas": {
+      "31": {
+        "data": "2020-02-09",
+        "qtd_questoes": 80,
+        "opcoes_resposta": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "questoes": {
+          "1": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "D"
+          },
+          "2": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "B"
+          },
+          "3": {
+            "disciplina": "Direito Civil",
+            "resposta": "B"
+          },
+          "4": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "D"
+          },
+          "5": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "A"
+          },
+          "6": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "B"
+          },
+          "7": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "D"
+          },
+          "8": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "B"
+          },
+          "9": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "A"
+          },
+          "10": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "A"
+          },
+          "11": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "B"
+          },
+          "12": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "A"
+          },
+          "13": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "B"
+          },
+          "14": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "D"
+          },
+          "15": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "C"
+          },
+          "16": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "C"
+          },
+          "17": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "A"
+          },
+          "18": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "A"
+          },
+          "19": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "D"
+          },
+          "20": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "C"
+          },
+          "21": {
+            "disciplina": "Direito Internacional",
+            "resposta": "D"
+          },
+          "22": {
+            "disciplina": "Direito Tributário",
+            "resposta": "D"
+          },
+          "23": {
+            "disciplina": "Direito Tributário",
+            "resposta": "B"
+          },
+          "24": {
+            "disciplina": "Direito Tributário",
+            "resposta": "D"
+          },
+          "25": {
+            "disciplina": "Direito Tributário",
+            "resposta": "B"
+          },
+          "26": {
+            "disciplina": "Direito Tributário",
+            "resposta": "B"
+          },
+          "27": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "A"
+          },
+          "28": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "D"
+          },
+          "29": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "A"
+          },
+          "30": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "D"
+          },
+          "31": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "B"
+          },
+          "32": {
+            "disciplina": "Direito Administrativo",
+            "resposta": "A"
+          },
+          "33": {
+            "disciplina": "Direito Ambiental",
+            "resposta": "D"
+          },
+          "34": {
+            "disciplina": "Direito Ambiental",
+            "resposta": "D"
+          },
+          "35": {
+            "disciplina": "Direito Civil",
+            "resposta": "A"
+          },
+          "36": {
+            "disciplina": "Direito Civil",
+            "resposta": "C"
+          },
+          "37": {
+            "disciplina": "Direito Civil",
+            "resposta": "B"
+          },
+          "38": {
+            "disciplina": "Direito Civil",
+            "resposta": "D"
+          },
+          "39": {
+            "disciplina": "Direito Civil",
+            "resposta": "C"
+          },
+          "40": {
+            "disciplina": "Direito Civil",
+            "resposta": "D"
+          },
+          "41": {
+            "disciplina": "Direito Civil",
+            "resposta": "C"
+          },
+          "42": {
+            "disciplina": "Direito da Criança e do Adolescente",
+            "resposta": "C"
+          },
+          "43": {
+            "disciplina": "Direito da Criança e do Adolescente",
+            "resposta": "D"
+          },
+          "44": {
+            "disciplina": "Direito do Consumidor",
+            "resposta": "A"
+          },
+          "45": {
+            "disciplina": "Direito do Consumidor",
+            "resposta": "B"
+          },
+          "46": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "A"
+          },
+          "47": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "C"
+          },
+          "48": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "D"
+          },
+          "49": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "A"
+          },
+          "50": {
+            "disciplina": "Direito Empresarial",
+            "resposta": "A"
+          },
+          "51": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "B"
+          },
+          "52": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "D"
+          },
+          "53": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "D"
+          },
+          "54": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "C"
+          },
+          "55": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "C"
+          },
+          "56": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "B"
+          },
+          "57": {
+            "disciplina": "Direito Processual Civil",
+            "resposta": "B"
+          },
+          "58": {
+            "disciplina": "Direito Penal",
+            "resposta": "A"
+          },
+          "59": {
+            "disciplina": "Direito Penal",
+            "resposta": "D"
+          },
+          "60": {
+            "disciplina": "Direito Penal",
+            "resposta": "C"
+          },
+          "61": {
+            "disciplina": "Direito Penal",
+            "resposta": "C"
+          },
+          "62": {
+            "disciplina": "Direito Penal",
+            "resposta": "C"
+          },
+          "63": {
+            "disciplina": "Direito Penal",
+            "resposta": "C"
+          },
+          "64": {
+            "disciplina": "Direito Processual Penal",
+            "resposta": "C"
+          },
+          "65": {
+            "disciplina": "Direito Processual Penal",
+            "resposta": "C"
+          },
+          "66": {
+            "disciplina": "Direito Processual Penal",
+            "resposta": "C"
+          },
+          "67": {
+            "disciplina": "Direito Processual Penal",
+            "resposta": "C"
+          },
+          "68": {
+            "disciplina": "Direito Constitucional",
+            "resposta": "D"
+          },
+          "69": {
+            "disciplina": "Direito Processual Penal",
+            "resposta": "A"
+          },
+          "70": {
+            "disciplina": "Direito do Trabalho",
+            "resposta": "B"
+          },
+          "71": {
+            "disciplina": "Direito do Trabalho",
+            "resposta": "A"
+          },
+          "72": {
+            "disciplina": "Direito do Trabalho",
+            "resposta": "C"
+          },
+          "73": {
+            "disciplina": "Direito do Trabalho",
+            "resposta": "B"
+          },
+          "74": {
+            "disciplina": "Direito do Trabalho",
+            "resposta": "A"
+          },
+          "75": {
+            "disciplina": "Direito do Trabalho",
+            "resposta": "A"
+          },
+          "76": {
+            "disciplina": "Direito Processual do Trabalho",
+            "resposta": "B"
+          },
+          "77": {
+            "disciplina": "Direito Processual do Trabalho",
+            "resposta": "B"
+          },
+          "78": {
+            "disciplina": "Direito Processual do Trabalho",
+            "resposta": "C"
+          },
+          "79": {
+            "disciplina": "Direito Processual do Trabalho",
+            "resposta": "B"
+          },
+          "80": {
+            "disciplina": "Direito Processual do Trabalho",
+            "resposta": "D"
+          }
+        },
+        "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/OAB/provas/31/prova.pdf"
+      }
+    }
+  },
   "TJSP": {
     "tipo": "concurso",
     "descricao": "Concurso para ingresso no Tribunal de Justiça do Estado de São Paulo (TJSP)",
