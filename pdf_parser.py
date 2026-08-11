@@ -65,7 +65,7 @@ for file_path in pdf_file_paths:
 print("\nAll files uploaded successfully! ✅")
 
 
-model = genai.GenerativeModel(model_name='gemini-2.5-flash')
+model = genai.GenerativeModel(model_name='gemini-3.5-flash-lite')
 
 prompt_text = f"""
 You are a specialized data extraction API. Your sole function is to process two uploaded PDF files, prova.pdf and gabarito.pdf, and generate a single, precise JSON output.
