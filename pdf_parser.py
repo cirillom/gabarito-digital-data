@@ -1,4 +1,6 @@
-import os, argparse
+import os
+import argparse
+from pathlib import Path
 import google.generativeai as genai
 from dotenv import load_dotenv
 
@@ -9,9 +11,9 @@ parser = argparse.ArgumentParser(description="Parse and process PDF files for ex
 parser.add_argument(
     "--directory",
     "-d",
-    type=str,
-    default="fuvest\\2024\\1a Fase",
-    help="Directory containing the PDF files to process."
+    type=Path,
+    default=Path("fuvest") / "2024" / "1a Fase",
+    help="Directory containing the PDF files to process.",
 )
 
 args = parser.parse_args()
@@ -37,11 +39,14 @@ except KeyError:
 print("Uploading files...")
 
 #directory = "fuvest\\2024\\1a Fase"
-if not os.path.exists(directory):
+if not directory.exists():
     print(f"🔴 Error: The directory '{directory}' does not exist.")
     exit()
 
-pdf_file_paths = [f"{directory}\\prova.pdf", f"{directory}\\gabarito.pdf"]
+pdf_file_paths = [
+    directory / "prova.pdf",
+    directory / "gabarito.pdf",
+]
 uploaded_files = []
 
 for file_path in pdf_file_paths:
@@ -117,8 +122,8 @@ while True:
         print("-----------------------\n")
         # remove first and last line from response text
         md_removed_text = remove_first_last_lines(response.text)
-        output_file_path = os.path.join(directory, "data.json")
-        with open(output_file_path, 'w', encoding='utf-8') as output_file:
+        output_file_path = directory / "data.json"
+        with open(output_file_path, "w", encoding="utf-8") as output_file:
             output_file.write(md_removed_text)
         break
     except TimeoutError:
