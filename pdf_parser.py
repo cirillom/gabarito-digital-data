@@ -1,5 +1,7 @@
+import json
 import os
 import argparse
+from urllib.parse import quote
 from pathlib import Path
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -18,6 +20,19 @@ parser.add_argument(
 
 args = parser.parse_args()
 directory = args.directory
+directory = directory.resolve()
+
+repo_root = Path(__file__).resolve().parent
+relative_directory = directory.relative_to(repo_root)
+
+pdf_relative_path = relative_directory / "prova.pdf"
+
+pdf_link = (
+    "https://raw.githubusercontent.com/"
+    "cirillom/gabarito-digital-data/"
+    "refs/heads/main/"
+    + quote(pdf_relative_path.as_posix())
+)
 
 def remove_first_last_lines(text):
   """Removes the first and last lines from a block of text."""
@@ -52,7 +67,10 @@ for file_path in pdf_file_paths:
     while True:
         try:
             print(f"Uploading {file_path}...")
-            uploaded_file = genai.upload_file(path=file_path, display_name=file_path)
+            uploaded_file = genai.upload_file(
+                path=str(file_path),
+                display_name=str(file_path)
+            )
             uploaded_files.append(uploaded_file)
             print(f"✅ Completed upload for: {uploaded_file.display_name}")
             break
@@ -81,12 +99,11 @@ Instructions:
  - Analyze the prova.pdf to identify the specific exam version (e.g., "Prova V", "Prova K", etc.).
  - Using the identified exam version, locate the corresponding answer key column in the gabarito.pdf.
  - Read both documents to extract all necessary information.
- - If a piece of information is not explicitly available in the documents (like the PDF URL), perform a web search to find the correct data.
+ - If a piece of information is not explicitly available in the documents, perform a web search to find the correct data.
  - Populate the following JSON structure exactly as specified.
 
 JSON Output Structure:
 {{
-    "pdf_link": "https:\\raw.githubusercontent.com\\cirillom\\gabarito-digital-data\\refs\\heads\\main\\Fuvest\\2024\\1a%20Fase\\prova.pdf",
     "data": "2024-01-01",
     "qtd_questoes": 2,
     "opcoes_resposta": ["A", "B", "C", "D", "E"],
@@ -97,7 +114,6 @@ JSON Output Structure:
 }} 
 
 Field Population Rules:
-  - pdf_link: the pdf is inside https:\\raw.githubusercontent.com\\cirillom\\gabarito-digital-data\\refs\\heads\\main\\{directory.replace(" ", "%20")}\\prova.pdf
   - data: Extract the exam date from the documents and format it as YYYY-MM-DD.
   - qtd_questoes: Determine the total count of questions in the exam.
   - opcoes_resposta: This field should be a static array: ["A", "B", "C", "D", "E"].
@@ -122,8 +138,11 @@ while True:
         # remove first and last line from response text
         md_removed_text = remove_first_last_lines(response.text)
         output_file_path = directory / "data.json"
+        data = json.loads(md_removed_text)
+        data["pdf_link"] = pdf_link
+
         with open(output_file_path, "w", encoding="utf-8") as output_file:
-            output_file.write(md_removed_text)
+            json.dump(data, output_file, indent=2, ensure_ascii=False)
         break
     except TimeoutError:
         print("⏳ TimeoutError while generating content. Retrying...")
