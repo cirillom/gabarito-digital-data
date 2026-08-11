@@ -12,7 +12,7 @@ parser.add_argument(
     "--directory",
     "-d",
     type=Path,
-    default=Path("fuvest") / "2024" / "1a Fase",
+    required=True,
     help="Directory containing the PDF files to process.",
 )
 
@@ -38,7 +38,6 @@ except KeyError:
 # --- 1. File Uploading ---
 print("Uploading files...")
 
-#directory = "fuvest\\2024\\1a Fase"
 if not directory.exists():
     print(f"🔴 Error: The directory '{directory}' does not exist.")
     exit()
