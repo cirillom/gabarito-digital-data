@@ -10902,8 +10902,7 @@
           "A",
           "B",
           "C",
-          "D",
-          "E"
+          "D"
         ],
         "questoes": {
           "1": {
@@ -12364,8 +12363,7 @@
           "A",
           "B",
           "C",
-          "D",
-          "E"
+          "D"
         ],
         "questoes": {
           "1": {
@@ -13826,8 +13824,7 @@
           "A",
           "B",
           "C",
-          "D",
-          "E"
+          "D"
         ],
         "questoes": {
           "1": {
@@ -15298,8 +15295,7 @@
           "A",
           "B",
           "C",
-          "D",
-          "E"
+          "D"
         ],
         "questoes": {
           "1": {
@@ -15308,22 +15304,12 @@
             "conteudo": {
               "segments": [
                 {
-                  "page": 1,
+                  "page": 2,
                   "rect": [
                     0.0,
-                    0.558791,
+                    0.033301,
                     0.5,
-                    0.956
-                  ],
-                  "kind": "question"
-                },
-                {
-                  "page": 1,
-                  "rect": [
-                    0.5,
-                    0.024,
-                    1.0,
-                    0.956
+                    0.413824
                   ],
                   "kind": "question"
                 }
@@ -16758,7 +16744,7 @@
           "status": "success",
           "version": 1,
           "engine": "pymupdf",
-          "engine_revision": 4,
+          "engine_revision": 5,
           "question_count": 80,
           "pdf_sha256": "2e5311a24124196d03e5379205deb54a1d9b5727bfb00e0ac443b9965e219ac5"
         }

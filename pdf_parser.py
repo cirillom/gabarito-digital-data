@@ -64,7 +64,7 @@ JSON Output Structure:
 {
     "data": "2024-01-01",
     "qtd_questoes": 2,
-    "opcoes_resposta": ["A", "B", "C", "D", "E"],
+    "opcoes_resposta": ["A", "B", "C", "D"],
     "questoes": {
         "1": {"disciplina": "Matemática", "resposta": "A"},
         "2": {"disciplina": "História", "resposta": "B"}
@@ -74,7 +74,7 @@ JSON Output Structure:
 Field Population Rules:
   - data: Extract the exam date from the documents and format it as YYYY-MM-DD.
   - qtd_questoes: Determine the total count of questions in the exam.
-  - opcoes_resposta: This field should be a static array: ["A", "B", "C", "D", "E"].
+  - opcoes_resposta: Inspect the alternatives printed in prova.pdf and return exactly the selectable labels used by that exam, in order. Do not assume five alternatives. For example, OAB exams normally use ["A", "B", "C", "D"], while exams that actually print an E alternative should use ["A", "B", "C", "D", "E"].
   - questoes: This must be an object containing entries for every printed question number. Preserve the numbering used by prova.pdf (for example, an ENEM second-day exam may use keys 91 through 180 even though qtd_questoes is 90). For each question:
       - disciplina: Determine the academic discipline based on the question's content in prova.pdf. Use "Interdisciplinar" if it blends multiple distinct fields.
       - resposta: Extract the correct single-letter answer from the matched answer key in gabarito.pdf. Invalid, annulled, or non-existent answers should be represented as "N/A".

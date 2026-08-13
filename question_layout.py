@@ -23,7 +23,7 @@ import pymupdf
 
 LAYOUT_VERSION = 1
 ENGINE_NAME = "pymupdf"
-ENGINE_REVISION = 4
+ENGINE_REVISION = 5
 ANCHOR_PADDING = 4.0
 MIN_SEGMENT_HEIGHT = 6.0
 
@@ -157,6 +157,11 @@ def _find_anchor_candidates(
     for page_index, page in enumerate(document):
         width = float(page.rect.width)
         height = float(page.rect.height)
+        normalized_page_text = _normalize_text(page.get_text("text"))
+        is_instruction_page = (
+            "INFORMACOES GERAIS" in normalized_page_text
+            and "NAO SERA PERMITIDO" in normalized_page_text
+        )
         for text, spans, line_bbox in _iter_text_lines(page):
             normalized = _normalize_text(text)
             enem_match = _ENEM_ANCHOR.match(normalized)
@@ -176,7 +181,7 @@ def _find_anchor_candidates(
                 continue
 
             number_match = _NUMBER_ANCHOR.match(normalized)
-            if not number_match:
+            if not number_match or is_instruction_page:
                 continue
             number = int(number_match.group(1))
             if number not in expected_numbers:

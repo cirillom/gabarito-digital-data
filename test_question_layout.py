@@ -35,6 +35,23 @@ def _write_high_oab_style_pdf(path: Path) -> None:
     document.close()
 
 
+def _write_oab_pdf_with_numbered_instruction_page(path: Path) -> None:
+    document = pymupdf.open()
+    instructions = document.new_page(width=600, height=800)
+    instructions.insert_text((35, 40), "INFORMACOES GERAIS", fontsize=12)
+    instructions.insert_text((35, 60), "NAO SERA PERMITIDO", fontsize=12)
+    instructions.insert_text((80, 450), "1", fontsize=11, fontname="hebo")
+    instructions.insert_text((110, 450), "hora antes do termino", fontsize=10)
+
+    questions = document.new_page(width=600, height=800)
+    questions.insert_text((35, 35), "1", fontsize=11, fontname="hebo")
+    questions.insert_text((35, 60), "First actual question", fontsize=10)
+    questions.insert_text((315, 35), "2", fontsize=11, fontname="hebo")
+    questions.insert_text((315, 60), "Second actual question", fontsize=10)
+    document.save(path)
+    document.close()
+
+
 class QuestionLayoutTest(unittest.TestCase):
     def test_extracts_normalized_regions_for_every_question(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -66,6 +83,16 @@ class QuestionLayoutTest(unittest.TestCase):
                     segment for segment in segments if segment["kind"] == "question"
                 )
                 self.assertLess(question_segment["rect"][1], 0.05)
+
+    def test_ignores_numbered_exam_instruction_pages(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            pdf_path = Path(temporary_directory) / "prova.pdf"
+            _write_oab_pdf_with_numbered_instruction_page(pdf_path)
+
+            layouts = extract_question_layout(pdf_path, [1, 2])
+
+            self.assertEqual(layouts[1][0]["page"], 2)
+            self.assertEqual(layouts[2][0]["page"], 2)
 
     def test_failure_is_explicit_and_removes_stale_regions(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
