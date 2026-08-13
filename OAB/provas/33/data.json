@@ -1,0 +1,1472 @@
+{
+  "data": "2021-10-17",
+  "qtd_questoes": 80,
+  "opcoes_resposta": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "questoes": {
+    "1": {
+      "disciplina": "Direito Ética",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.327712
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "2": {
+      "disciplina": "Direito Ética",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.327712,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "3": {
+      "disciplina": "Direito Ética",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.252922
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "4": {
+      "disciplina": "Direito Ética",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.5,
+              0.252922,
+              1.0,
+              0.485553
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "5": {
+      "disciplina": "Direito Ética",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.5,
+              0.485553,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "6": {
+      "disciplina": "Direito Ética",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.355917
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "7": {
+      "disciplina": "Direito Ética",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.355917,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "8": {
+      "disciplina": "Direito Ética",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.23711
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "9": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.5,
+              0.23711,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "10": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.399366
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "11": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.0,
+              0.399366,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "12": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.5,
+              0.032201,
+              1.0,
+              0.44424
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "13": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.5,
+              0.44424,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "14": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.500083
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "15": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.0,
+              0.500083,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "16": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.032201,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "17": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.0,
+              0.032201,
+              0.5,
+              0.525297
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "18": {
+      "disciplina": "Direitos Humanos",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.0,
+              0.525297,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "19": {
+      "disciplina": "Direitos Humanos",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.518031
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "20": {
+      "disciplina": "Direitos Humanos",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.5,
+              0.518031,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "21": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.555639
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "22": {
+      "disciplina": "Direito Tributário",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.0,
+              0.555639,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "23": {
+      "disciplina": "Direito Tributário",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.298224
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "24": {
+      "disciplina": "Direito Tributário",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.5,
+              0.298224,
+              1.0,
+              0.679149
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "25": {
+      "disciplina": "Direito Tributário",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.5,
+              0.679149,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "26": {
+      "disciplina": "Direito Tributário",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.402217
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "27": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.0,
+              0.402217,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "28": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.467176
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "29": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.5,
+              0.467176,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "30": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.455493
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "31": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.0,
+              0.455493,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "32": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.419881
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "33": {
+      "disciplina": "Direito Ambiental",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.5,
+              0.419881,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "34": {
+      "disciplina": "Direito Ambiental",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.268878
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "35": {
+      "disciplina": "Direito Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.0,
+              0.268878,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "36": {
+      "disciplina": "Direito Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.384837
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "37": {
+      "disciplina": "Direito Civil",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.5,
+              0.384837,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "38": {
+      "disciplina": "Direito Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.488687
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "39": {
+      "disciplina": "Direito Civil",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.0,
+              0.488687,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "40": {
+      "disciplina": "Direito Civil",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.534414
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "41": {
+      "disciplina": "Direito Civil",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.5,
+              0.534414,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "42": {
+      "disciplina": "Direito da Criança e do Adolescente",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.0,
+              0.032401,
+              0.5,
+              0.369452
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "43": {
+      "disciplina": "Direito da Criança e do Adolescente",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.0,
+              0.369452,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "44": {
+      "disciplina": "Direito do Consumidor",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.5,
+              0.032401,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "45": {
+      "disciplina": "Direito do Consumidor",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.557491
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "46": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.0,
+              0.557491,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "47": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.488972
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "48": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.5,
+              0.488972,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "49": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.514327
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "50": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.0,
+              0.514327,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "51": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.032401,
+              1.0,
+              0.431277
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "52": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.431277,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "53": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.417458
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "54": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.0,
+              0.417458,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "55": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.469028
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "56": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.5,
+              0.469028,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "57": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.506066
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "58": {
+      "disciplina": "Direito Penal",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.0,
+              0.506066,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "59": {
+      "disciplina": "Direito Penal",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.38213
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "60": {
+      "disciplina": "Direito Penal",
+      "resposta": "N/A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.5,
+              0.38213,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "61": {
+      "disciplina": "Direito Penal",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.485838
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "62": {
+      "disciplina": "Direito Penal",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.0,
+              0.485838,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "63": {
+      "disciplina": "Direito Penal",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "64": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.0,
+              0.032401,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "65": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.502363
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "66": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.5,
+              0.502363,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "67": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.510483
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "68": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.0,
+              0.510483,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "69": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.484983
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "70": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.5,
+              0.484983,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "71": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.341388
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "72": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.0,
+              0.341388,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "73": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.425579
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "74": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.425579,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "75": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.367314
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "76": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.0,
+              0.367314,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "77": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.5,
+              0.032543,
+              1.0,
+              0.297511
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "78": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.5,
+              0.297511,
+              1.0,
+              0.725162
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "79": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.5,
+              0.725162,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "80": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 22,
+            "rect": [
+              0.0,
+              0.032543,
+              0.5,
+              0.956
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 22,
+            "rect": [
+              0.5,
+              0.024,
+              1.0,
+              0.956
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    }
+  },
+  "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/OAB/provas/33/prova.pdf",
+  "layout_extraction": {
+    "status": "success",
+    "version": 1,
+    "engine": "pymupdf",
+    "engine_revision": 4,
+    "question_count": 80,
+    "pdf_sha256": "f3d248892e71cc4bd1fd4bab53eba8c12263a02b355330dc947933e27d7f9afa"
+  }
+}

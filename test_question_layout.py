@@ -24,6 +24,17 @@ def _write_two_column_pdf(path: Path, *, include_second_question: bool = True) -
     document.close()
 
 
+def _write_high_oab_style_pdf(path: Path) -> None:
+    document = pymupdf.open()
+    page = document.new_page(width=600, height=800)
+    page.insert_text((35, 35), "1", fontsize=11, fontname="hebo")
+    page.insert_text((35, 60), "First high statement", fontsize=10)
+    page.insert_text((315, 35), "2", fontsize=11, fontname="hebo")
+    page.insert_text((315, 60), "Second high statement", fontsize=10)
+    document.save(path)
+    document.close()
+
+
 class QuestionLayoutTest(unittest.TestCase):
     def test_extracts_normalized_regions_for_every_question(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -41,6 +52,20 @@ class QuestionLayoutTest(unittest.TestCase):
                     left, top, right, bottom = segment["rect"]
                     self.assertTrue(0 <= left < right <= 1)
                     self.assertTrue(0 <= top < bottom <= 1)
+
+    def test_retries_with_generic_profile_when_exam_margin_clips_anchor(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            pdf_path = Path(temporary_directory) / "prova.pdf"
+            _write_high_oab_style_pdf(pdf_path)
+
+            layouts = extract_question_layout(pdf_path, [1, 2])
+
+            self.assertEqual(set(layouts), {1, 2})
+            for segments in layouts.values():
+                question_segment = next(
+                    segment for segment in segments if segment["kind"] == "question"
+                )
+                self.assertLess(question_segment["rect"][1], 0.05)
 
     def test_failure_is_explicit_and_removes_stale_regions(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -135,7 +160,7 @@ class QuestionLayoutTest(unittest.TestCase):
                     f"{data_path}: question {number}",
                 )
 
-        self.assertEqual(len(manifests), 8)
+        self.assertTrue(manifests, "No exam manifests were discovered.")
 
 
 if __name__ == "__main__":

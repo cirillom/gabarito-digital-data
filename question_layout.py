@@ -23,7 +23,7 @@ import pymupdf
 
 LAYOUT_VERSION = 1
 ENGINE_NAME = "pymupdf"
-ENGINE_REVISION = 3
+ENGINE_REVISION = 4
 ANCHOR_PADDING = 4.0
 MIN_SEGMENT_HEIGHT = 6.0
 
@@ -544,6 +544,78 @@ def _validate_segments(
             )
 
 
+def _build_layouts_with_profile(
+    document: pymupdf.Document,
+    *,
+    candidates: list[Boundary],
+    selected: list[Boundary],
+    expected_numbers: set[int],
+    profile: DocumentProfile,
+) -> dict[int, list[dict[str, Any]]]:
+    """Segment and validate an already detected question sequence."""
+    selected_keys = {(item.page, item.column, item.bbox, item.number) for item in selected}
+    other_candidates = [
+        Boundary(
+            page=item.page,
+            column=item.column,
+            bbox=item.bbox,
+            kind="other_anchor",
+            number=item.number,
+        )
+        for item in candidates
+        if (item.page, item.column, item.bbox, item.number) not in selected_keys
+    ]
+    shared_passages = _find_shared_passages(document, expected_numbers)
+    boundaries = sorted(
+        [*selected, *other_candidates, *shared_passages],
+        key=lambda item: item.sort_key,
+    )
+    boundary_index = {id(item): index for index, item in enumerate(boundaries)}
+    excluded = _excluded_pages(document)
+
+    layouts: dict[int, list[dict[str, Any]]] = {}
+    anchors_by_number = {item.number: item for item in selected if item.number is not None}
+    for anchor in selected:
+        index = boundary_index[id(anchor)]
+        next_boundary = boundaries[index + 1] if index + 1 < len(boundaries) else None
+        segments = _segments_between(
+            document,
+            anchor,
+            next_boundary,
+            profile=profile,
+            excluded_pages=excluded,
+            kind="question",
+        )
+        segments = _remove_empty_tail_segments(document, segments)
+        layouts[anchor.number] = segments  # type: ignore[index]
+
+    for passage in shared_passages:
+        first, last = passage.shared_range or (0, -1)
+        first_anchor = anchors_by_number.get(first)
+        if first_anchor is None or passage.sort_key >= first_anchor.sort_key:
+            raise LayoutExtractionError(
+                f"Shared passage for questions {first}-{last} does not precede question {first}."
+            )
+        shared_segments = _segments_between(
+            document,
+            passage,
+            first_anchor,
+            profile=profile,
+            excluded_pages=excluded,
+            kind="shared",
+        )
+        shared_segments = _remove_empty_tail_segments(document, shared_segments)
+        if not shared_segments:
+            raise LayoutExtractionError(
+                f"Shared passage for questions {first}-{last} is empty."
+            )
+        for number in range(first, last + 1):
+            layouts[number] = [*shared_segments, *layouts[number]]
+
+    _validate_segments(document, layouts, anchors_by_number)  # type: ignore[arg-type]
+    return layouts
+
+
 def extract_question_layout(
     pdf_path: str | Path,
     question_numbers: Iterable[int],
@@ -571,67 +643,30 @@ def extract_question_layout(
                 selected,
                 raw_questions,
             )
-        selected_keys = {(item.page, item.column, item.bbox, item.number) for item in selected}
-        other_candidates = [
-            Boundary(
-                page=item.page,
-                column=item.column,
-                bbox=item.bbox,
-                kind="other_anchor",
-                number=item.number,
-            )
-            for item in candidates
-            if (item.page, item.column, item.bbox, item.number) not in selected_keys
-        ]
-        shared_passages = _find_shared_passages(document, set(expected_numbers))
-        boundaries = sorted(
-            [*selected, *other_candidates, *shared_passages],
-            key=lambda item: item.sort_key,
-        )
-        boundary_index = {id(item): index for index, item in enumerate(boundaries)}
-        excluded = _excluded_pages(document)
-
-        layouts: dict[int, list[dict[str, Any]]] = {}
-        anchors_by_number = {item.number: item for item in selected if item.number is not None}
-        for anchor in selected:
-            index = boundary_index[id(anchor)]
-            next_boundary = boundaries[index + 1] if index + 1 < len(boundaries) else None
-            segments = _segments_between(
+        expected_number_set = set(expected_numbers)
+        try:
+            return _build_layouts_with_profile(
                 document,
-                anchor,
-                next_boundary,
+                candidates=candidates,
+                selected=selected,
+                expected_numbers=expected_number_set,
                 profile=profile,
-                excluded_pages=excluded,
-                kind="question",
             )
-            segments = _remove_empty_tail_segments(document, segments)
-            layouts[anchor.number] = segments  # type: ignore[index]
-
-        for passage in shared_passages:
-            first, last = passage.shared_range or (0, -1)
-            first_anchor = anchors_by_number.get(first)
-            if first_anchor is None or passage.sort_key >= first_anchor.sort_key:
-                raise LayoutExtractionError(
-                    f"Shared passage for questions {first}-{last} does not precede question {first}."
+        except LayoutExtractionError as primary_error:
+            if profile == _GENERIC_PROFILE:
+                raise
+            try:
+                return _build_layouts_with_profile(
+                    document,
+                    candidates=candidates,
+                    selected=selected,
+                    expected_numbers=expected_number_set,
+                    profile=_GENERIC_PROFILE,
                 )
-            shared_segments = _segments_between(
-                document,
-                passage,
-                first_anchor,
-                profile=profile,
-                excluded_pages=excluded,
-                kind="shared",
-            )
-            shared_segments = _remove_empty_tail_segments(document, shared_segments)
-            if not shared_segments:
+            except LayoutExtractionError as fallback_error:
                 raise LayoutExtractionError(
-                    f"Shared passage for questions {first}-{last} is empty."
-                )
-            for number in range(first, last + 1):
-                layouts[number] = [*shared_segments, *layouts[number]]
-
-        _validate_segments(document, layouts, anchors_by_number)  # type: ignore[arg-type]
-        return layouts
+                    f"{primary_error} Generic profile retry failed: {fallback_error}"
+                ) from fallback_error
 
 
 def _has_complete_cached_layout(raw_questions: dict[str, Any]) -> bool:
