@@ -1,98 +1,1842 @@
 {
-    "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/provas/2024/1a%20Fase/prova.pdf",
-    "data": "2023-11-19",
-    "qtd_questoes": 90,
-    "opcoes_resposta": ["A", "B", "C", "D", "E"],
-    "questoes": {
-        "1": {"disciplina": "Português", "resposta": "C"},
-        "2": {"disciplina": "Português", "resposta": "C"},
-        "3": {"disciplina": "Arte", "resposta": "E"},
-        "4": {"disciplina": "Inglês", "resposta": "C"},
-        "5": {"disciplina": "Inglês", "resposta": "C"},
-        "6": {"disciplina": "História", "resposta": "C"},
-        "7": {"disciplina": "História", "resposta": "C"},
-        "8": {"disciplina": "Sociologia", "resposta": "B"},
-        "9": {"disciplina": "Literatura", "resposta": "D"},
-        "10": {"disciplina": "Filosofia", "resposta": "B"},
-        "11": {"disciplina": "Inglês", "resposta": "E"},
-        "12": {"disciplina": "Inglês", "resposta": "C"},
-        "13": {"disciplina": "Matemática", "resposta": "B"},
-        "14": {"disciplina": "Biologia", "resposta": "E"},
-        "15": {"disciplina": "Literatura", "resposta": "E"},
-        "16": {"disciplina": "Literatura", "resposta": "A"},
-        "17": {"disciplina": "Biologia", "resposta": "A"},
-        "18": {"disciplina": "Biologia", "resposta": "D"},
-        "19": {"disciplina": "Química", "resposta": "B"},
-        "20": {"disciplina": "Biologia", "resposta": "C"},
-        "21": {"disciplina": "Química", "resposta": "A"},
-        "22": {"disciplina": "Filosofia", "resposta": "E"},
-        "23": {"disciplina": "Filosofia", "resposta": "E"},
-        "24": {"disciplina": "Física", "resposta": "B"},
-        "25": {"disciplina": "Física", "resposta": "E"},
-        "26": {"disciplina": "Física", "resposta": "C"},
-        "27": {"disciplina": "Física", "resposta": "D"},
-        "28": {"disciplina": "Física", "resposta": "A"},
-        "29": {"disciplina": "Química", "resposta": "B"},
-        "30": {"disciplina": "Química", "resposta": "B"},
-        "31": {"disciplina": "Matemática", "resposta": "B"},
-        "32": {"disciplina": "Geografia", "resposta": "E"},
-        "33": {"disciplina": "Matemática", "resposta": "A"},
-        "34": {"disciplina": "Matemática", "resposta": "A"},
-        "35": {"disciplina": "Matemática", "resposta": "B"},
-        "36": {"disciplina": "Literatura", "resposta": "C"},
-        "37": {"disciplina": "Literatura", "resposta": "C"},
-        "38": {"disciplina": "Literatura", "resposta": "E"},
-        "39": {"disciplina": "Literatura", "resposta": "D"},
-        "40": {"disciplina": "Biologia", "resposta": "A"},
-        "41": {"disciplina": "Química", "resposta": "B"},
-        "42": {"disciplina": "Física", "resposta": "D"},
-        "43": {"disciplina": "Geografia", "resposta": "E"},
-        "44": {"disciplina": "História", "resposta": "E"},
-        "45": {"disciplina": "História", "resposta": "B"},
-        "46": {"disciplina": "Geografia", "resposta": "E"},
-        "47": {"disciplina": "Geografia", "resposta": "E"},
-        "48": {"disciplina": "Matemática", "resposta": "D"},
-        "49": {"disciplina": "Matemática", "resposta": "C"},
-        "50": {"disciplina": "Física", "resposta": "A"},
-        "51": {"disciplina": "Física", "resposta": "C"},
-        "52": {"disciplina": "Sociologia", "resposta": "C"},
-        "53": {"disciplina": "Inglês", "resposta": "B"},
-        "54": {"disciplina": "Inglês", "resposta": "D"},
-        "55": {"disciplina": "Química", "resposta": "C"},
-        "56": {"disciplina": "Química", "resposta": "D"},
-        "57": {"disciplina": "Física", "resposta": "C"},
-        "58": {"disciplina": "Química", "resposta": "D"},
-        "59": {"disciplina": "Matemática", "resposta": "D"},
-        "60": {"disciplina": "Matemática", "resposta": "E"},
-        "61": {"disciplina": "Biologia", "resposta": "A"},
-        "62": {"disciplina": "Geografia", "resposta": "A"},
-        "63": {"disciplina": "Matemática", "resposta": "C"},
-        "64": {"disciplina": "Biologia", "resposta": "A"},
-        "65": {"disciplina": "Geografia", "resposta": "D"},
-        "66": {"disciplina": "Geografia", "resposta": "A"},
-        "67": {"disciplina": "Literatura", "resposta": "E"},
-        "68": {"disciplina": "Biologia", "resposta": "B"},
-        "69": {"disciplina": "Biologia", "resposta": "C"},
-        "70": {"disciplina": "Geografia", "resposta": "D"},
-        "71": {"disciplina": "Física", "resposta": "B"},
-        "72": {"disciplina": "Física", "resposta": "A"},
-        "73": {"disciplina": "Física", "resposta": "C"},
-        "74": {"disciplina": "Química", "resposta": "B"},
-        "75": {"disciplina": "História", "resposta": "C"},
-        "76": {"disciplina": "História", "resposta": "D"},
-        "77": {"disciplina": "História", "resposta": "D"},
-        "78": {"disciplina": "Geografia", "resposta": "C"},
-        "79": {"disciplina": "História", "resposta": "B"},
-        "80": {"disciplina": "Geografia", "resposta": "C"},
-        "81": {"disciplina": "Sociologia", "resposta": "D"},
-        "82": {"disciplina": "Literatura", "resposta": "B"},
-        "83": {"disciplina": "Literatura", "resposta": "D"},
-        "84": {"disciplina": "Sociologia", "resposta": "E"},
-        "85": {"disciplina": "Matemática", "resposta": "D"},
-        "86": {"disciplina": "História", "resposta": "B"},
-        "87": {"disciplina": "História", "resposta": "E"},
-        "88": {"disciplina": "História", "resposta": "A"},
-        "89": {"disciplina": "Sociologia", "resposta": "D"},
-        "90": {"disciplina": "Sociologia", "resposta": "D"}
+  "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/Fuvest/provas/2024/1a%20Fase/prova.pdf",
+  "data": "2023-11-19",
+  "qtd_questoes": 90,
+  "opcoes_resposta": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "questoes": {
+    "1": {
+      "disciplina": "Português",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.053165,
+              0.5,
+              0.40227
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.40227,
+              0.5,
+              0.620179
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "2": {
+      "disciplina": "Português",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.053165,
+              0.5,
+              0.40227
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.620179,
+              0.5,
+              0.853909
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "3": {
+      "disciplina": "Arte",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.853909,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 2,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "4": {
+      "disciplina": "Inglês",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.046039,
+              0.5,
+              0.351106
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.351106,
+              0.5,
+              0.537092
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "5": {
+      "disciplina": "Inglês",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.046039,
+              0.5,
+              0.351106
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.537092,
+              0.5,
+              0.694146
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "6": {
+      "disciplina": "História",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.694146,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 3,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.284621
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "7": {
+      "disciplina": "História",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.5,
+              0.284621,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "8": {
+      "disciplina": "Sociologia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "9": {
+      "disciplina": "Literatura",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "10": {
+      "disciplina": "Filosofia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.04896
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "11": {
+      "disciplina": "Inglês",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.04896,
+              1.0,
+              0.467543
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.467543,
+              1.0,
+              0.668065
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "12": {
+      "disciplina": "Inglês",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.04896,
+              1.0,
+              0.467543
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.668065,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "13": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "14": {
+      "disciplina": "Biologia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.552341
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "15": {
+      "disciplina": "Literatura",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.5,
+              0.552341,
+              1.0,
+              0.728208
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "16": {
+      "disciplina": "Literatura",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.5,
+              0.728208,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "17": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.418802
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "18": {
+      "disciplina": "Biologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.0,
+              0.418802,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "19": {
+      "disciplina": "Química",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "20": {
+      "disciplina": "Biologia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.51151
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "21": {
+      "disciplina": "Química",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.0,
+              0.51151,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "22": {
+      "disciplina": "Filosofia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.466617
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "23": {
+      "disciplina": "Filosofia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.5,
+              0.466617,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "24": {
+      "disciplina": "Física",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "25": {
+      "disciplina": "Física",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "26": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 10,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "27": {
+      "disciplina": "Física",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "28": {
+      "disciplina": "Física",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "29": {
+      "disciplina": "Química",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "30": {
+      "disciplina": "Química",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "31": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.672769
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "32": {
+      "disciplina": "Geografia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.0,
+              0.672769,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 13,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.215072
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "33": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.5,
+              0.215072,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "34": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.287757
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "35": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.0,
+              0.287757,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "36": {
+      "disciplina": "Literatura",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.455073
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "37": {
+      "disciplina": "Literatura",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.455073,
+              1.0,
+              0.670061
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "38": {
+      "disciplina": "Literatura",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.670061,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "39": {
+      "disciplina": "Literatura",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "40": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "41": {
+      "disciplina": "Química",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "42": {
+      "disciplina": "Física",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "43": {
+      "disciplina": "Geografia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "44": {
+      "disciplina": "História",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.489847
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "45": {
+      "disciplina": "História",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.5,
+              0.489847,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "46": {
+      "disciplina": "Geografia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "47": {
+      "disciplina": "Geografia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.566878
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "48": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.5,
+              0.566878,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "49": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "50": {
+      "disciplina": "Física",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.554906
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "51": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.5,
+              0.554906,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "52": {
+      "disciplina": "Sociologia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "53": {
+      "disciplina": "Inglês",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.04617,
+              1.0,
+              0.489776
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.489776,
+              1.0,
+              0.733837
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "54": {
+      "disciplina": "Inglês",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.04617,
+              1.0,
+              0.489776
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.733837,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "55": {
+      "disciplina": "Química",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.573006
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "56": {
+      "disciplina": "Química",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.0,
+              0.573006,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 21,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.254265
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "57": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.5,
+              0.254265,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "58": {
+      "disciplina": "Química",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 22,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.468541
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "59": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 22,
+            "rect": [
+              0.0,
+              0.468541,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "60": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 22,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "61": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 23,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "62": {
+      "disciplina": "Geografia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 23,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "63": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 24,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "64": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 24,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "65": {
+      "disciplina": "Geografia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 25,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "66": {
+      "disciplina": "Geografia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 25,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "67": {
+      "disciplina": "Literatura",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 26,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "68": {
+      "disciplina": "Biologia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 26,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.490916
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "69": {
+      "disciplina": "Biologia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 26,
+            "rect": [
+              0.5,
+              0.490916,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "70": {
+      "disciplina": "Geografia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 27,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "71": {
+      "disciplina": "Física",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 27,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "72": {
+      "disciplina": "Física",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 28,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "73": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 28,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.430916
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "74": {
+      "disciplina": "Química",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 28,
+            "rect": [
+              0.5,
+              0.430916,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "75": {
+      "disciplina": "História",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.541723
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "76": {
+      "disciplina": "História",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.0,
+              0.541723,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 29,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.296236
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "77": {
+      "disciplina": "História",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.5,
+              0.296236,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "78": {
+      "disciplina": "Geografia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.668707
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "79": {
+      "disciplina": "História",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.0,
+              0.668707,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 30,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.292032
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "80": {
+      "disciplina": "Geografia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.5,
+              0.292032,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "81": {
+      "disciplina": "Sociologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "82": {
+      "disciplina": "Literatura",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.5,
+              0.046164,
+              1.0,
+              0.530322
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 31,
+            "rect": [
+              0.5,
+              0.530322,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "83": {
+      "disciplina": "Literatura",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.5,
+              0.046164,
+              1.0,
+              0.530322
+            ],
+            "kind": "shared"
+          },
+          {
+            "page": 32,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.35588
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "84": {
+      "disciplina": "Sociologia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 32,
+            "rect": [
+              0.0,
+              0.35588,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 32,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.103552
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "85": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 32,
+            "rect": [
+              0.5,
+              0.103552,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "86": {
+      "disciplina": "História",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 33,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.542008
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "87": {
+      "disciplina": "História",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 33,
+            "rect": [
+              0.0,
+              0.542008,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "88": {
+      "disciplina": "História",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 33,
+            "rect": [
+              0.5,
+              0.043766,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "89": {
+      "disciplina": "Sociologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 34,
+            "rect": [
+              0.0,
+              0.043766,
+              0.5,
+              0.408612
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "90": {
+      "disciplina": "Sociologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 34,
+            "rect": [
+              0.0,
+              0.408612,
+              0.5,
+              0.962
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 34,
+            "rect": [
+              0.5,
+              0.04,
+              1.0,
+              0.962
+            ],
+            "kind": "question"
+          }
+        ]
+      }
     }
+  },
+  "layout_extraction": {
+    "status": "success",
+    "version": 1,
+    "engine": "pymupdf",
+    "engine_revision": 3,
+    "question_count": 90,
+    "pdf_sha256": "f7d6e72253ac8fb23ec2283a5776155e6f5a91ef192c280bcc0e94e167c7f41e"
+  }
 }

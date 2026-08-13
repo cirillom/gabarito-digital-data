@@ -1,98 +1,1722 @@
 {
-    "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/provas/2024/2o%20dia/prova.pdf",
-    "data": "2024-11-10",
-    "qtd_questoes": 90,
-    "opcoes_resposta": ["A", "B", "C", "D", "E"],
-    "questoes": {
-        "91": {"disciplina": "Biologia", "resposta": "C"},
-        "92": {"disciplina": "Química", "resposta": "A"},
-        "93": {"disciplina": "Biologia", "resposta": "E"},
-        "94": {"disciplina": "Química", "resposta": "D"},
-        "95": {"disciplina": "Física", "resposta": "A"},
-        "96": {"disciplina": "Química", "resposta": "A"},
-        "97": {"disciplina": "Biologia", "resposta": "C"},
-        "98": {"disciplina": "Física", "resposta": "C"},
-        "99": {"disciplina": "Biologia", "resposta": "A"},
-        "100": {"disciplina": "Física", "resposta": "E"},
-        "101": {"disciplina": "Física", "resposta": "E"},
-        "102": {"disciplina": "Química", "resposta": "N/A"},
-        "103": {"disciplina": "Física", "resposta": "C"},
-        "104": {"disciplina": "Física", "resposta": "B"},
-        "105": {"disciplina": "Biologia", "resposta": "B"},
-        "106": {"disciplina": "Física", "resposta": "A"},
-        "107": {"disciplina": "Biologia", "resposta": "E"},
-        "108": {"disciplina": "Química", "resposta": "D"},
-        "109": {"disciplina": "Física", "resposta": "B"},
-        "110": {"disciplina": "Física", "resposta": "B"},
-        "111": {"disciplina": "Química", "resposta": "C"},
-        "112": {"disciplina": "Química", "resposta": "A"},
-        "113": {"disciplina": "Biologia", "resposta": "A"},
-        "114": {"disciplina": "Física", "resposta": "C"},
-        "115": {"disciplina": "Química", "resposta": "D"},
-        "116": {"disciplina": "Biologia", "resposta": "E"},
-        "117": {"disciplina": "Física", "resposta": "D"},
-        "118": {"disciplina": "Física", "resposta": "C"},
-        "119": {"disciplina": "Física", "resposta": "B"},
-        "120": {"disciplina": "Química", "resposta": "C"},
-        "121": {"disciplina": "Química", "resposta": "E"},
-        "122": {"disciplina": "Biologia", "resposta": "E"},
-        "123": {"disciplina": "Química", "resposta": "C"},
-        "124": {"disciplina": "Física", "resposta": "A"},
-        "125": {"disciplina": "Biologia", "resposta": "A"},
-        "126": {"disciplina": "Física", "resposta": "E"},
-        "127": {"disciplina": "Biologia", "resposta": "D"},
-        "128": {"disciplina": "Biologia", "resposta": "D"},
-        "129": {"disciplina": "Física", "resposta": "D"},
-        "130": {"disciplina": "Química", "resposta": "E"},
-        "131": {"disciplina": "Biologia", "resposta": "B"},
-        "132": {"disciplina": "Biologia", "resposta": "B"},
-        "133": {"disciplina": "Biologia", "resposta": "D"},
-        "134": {"disciplina": "Biologia", "resposta": "D"},
-        "135": {"disciplina": "Biologia", "resposta": "B"},
-        "136": {"disciplina": "Matemática", "resposta": "C"},
-        "137": {"disciplina": "Matemática", "resposta": "E"},
-        "138": {"disciplina": "Matemática", "resposta": "C"},
-        "139": {"disciplina": "Matemática", "resposta": "E"},
-        "140": {"disciplina": "Matemática", "resposta": "B"},
-        "141": {"disciplina": "Matemática", "resposta": "E"},
-        "142": {"disciplina": "Matemática", "resposta": "D"},
-        "143": {"disciplina": "Matemática", "resposta": "A"},
-        "144": {"disciplina": "Matemática", "resposta": "D"},
-        "145": {"disciplina": "Matemática", "resposta": "C"},
-        "146": {"disciplina": "Matemática", "resposta": "A"},
-        "147": {"disciplina": "Matemática", "resposta": "A"},
-        "148": {"disciplina": "Matemática", "resposta": "D"},
-        "149": {"disciplina": "Matemática", "resposta": "E"},
-        "150": {"disciplina": "Matemática", "resposta": "C"},
-        "151": {"disciplina": "Matemática", "resposta": "D"},
-        "152": {"disciplina": "Matemática", "resposta": "B"},
-        "153": {"disciplina": "Matemática", "resposta": "B"},
-        "154": {"disciplina": "Matemática", "resposta": "C"},
-        "155": {"disciplina": "Matemática", "resposta": "E"},
-        "156": {"disciplina": "Matemática", "resposta": "B"},
-        "157": {"disciplina": "Matemática", "resposta": "D"},
-        "158": {"disciplina": "Matemática", "resposta": "C"},
-        "159": {"disciplina": "Matemática", "resposta": "C"},
-        "160": {"disciplina": "Matemática", "resposta": "C"},
-        "161": {"disciplina": "Matemática", "resposta": "A"},
-        "162": {"disciplina": "Matemática", "resposta": "C"},
-        "163": {"disciplina": "Matemática", "resposta": "A"},
-        "164": {"disciplina": "Matemática", "resposta": "B"},
-        "165": {"disciplina": "Matemática", "resposta": "B"},
-        "166": {"disciplina": "Matemática", "resposta": "A"},
-        "167": {"disciplina": "Matemática", "resposta": "B"},
-        "168": {"disciplina": "Matemática", "resposta": "B"},
-        "169": {"disciplina": "Matemática", "resposta": "A"},
-        "170": {"disciplina": "Matemática", "resposta": "D"},
-        "171": {"disciplina": "Matemática", "resposta": "D"},
-        "172": {"disciplina": "Matemática", "resposta": "D"},
-        "173": {"disciplina": "Matemática", "resposta": "C"},
-        "174": {"disciplina": "Matemática", "resposta": "E"},
-        "175": {"disciplina": "Matemática", "resposta": "A"},
-        "176": {"disciplina": "Matemática", "resposta": "D"},
-        "177": {"disciplina": "Matemática", "resposta": "B"},
-        "178": {"disciplina": "Matemática", "resposta": "B"},
-        "179": {"disciplina": "Matemática", "resposta": "C"},
-        "180": {"disciplina": "Matemática", "resposta": "E"}
+  "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/ENEM/provas/2024/2o%20dia/prova.pdf",
+  "data": "2024-11-10",
+  "qtd_questoes": 90,
+  "opcoes_resposta": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "questoes": {
+    "91": {
+      "disciplina": "Biologia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.112222,
+              0.5,
+              0.657281
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "92": {
+      "disciplina": "Química",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.0,
+              0.657281,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "93": {
+      "disciplina": "Biologia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.362791
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "94": {
+      "disciplina": "Química",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 2,
+            "rect": [
+              0.5,
+              0.362791,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "95": {
+      "disciplina": "Física",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "96": {
+      "disciplina": "Química",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.526158
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "97": {
+      "disciplina": "Biologia",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 3,
+            "rect": [
+              0.5,
+              0.526158,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "98": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.585615
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "99": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.0,
+              0.585615,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "100": {
+      "disciplina": "Física",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 4,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "101": {
+      "disciplina": "Física",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.672564
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "102": {
+      "disciplina": "Química",
+      "resposta": "N/A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.0,
+              0.672564,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "103": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 5,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "104": {
+      "disciplina": "Física",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.626372
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "105": {
+      "disciplina": "Biologia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.0,
+              0.626372,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "106": {
+      "disciplina": "Física",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 6,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "107": {
+      "disciplina": "Biologia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.681497
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "108": {
+      "disciplina": "Química",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 7,
+            "rect": [
+              0.0,
+              0.681497,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 7,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "109": {
+      "disciplina": "Física",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "110": {
+      "disciplina": "Física",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.634344
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "111": {
+      "disciplina": "Química",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 8,
+            "rect": [
+              0.5,
+              0.634344,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "112": {
+      "disciplina": "Química",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.666447
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "113": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.0,
+              0.666447,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "114": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.639211
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "115": {
+      "disciplina": "Química",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 9,
+            "rect": [
+              0.5,
+              0.639211,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "116": {
+      "disciplina": "Biologia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.653287
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "117": {
+      "disciplina": "Física",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.0,
+              0.653287,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "118": {
+      "disciplina": "Física",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 10,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "119": {
+      "disciplina": "Física",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "120": {
+      "disciplina": "Química",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.704396
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "121": {
+      "disciplina": "Química",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 11,
+            "rect": [
+              0.5,
+              0.704396,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "122": {
+      "disciplina": "Biologia",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 12,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.207543
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "123": {
+      "disciplina": "Química",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 12,
+            "rect": [
+              0.5,
+              0.207543,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "124": {
+      "disciplina": "Física",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.6705
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "125": {
+      "disciplina": "Biologia",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.0,
+              0.6705,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "126": {
+      "disciplina": "Física",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.513722
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "127": {
+      "disciplina": "Biologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 13,
+            "rect": [
+              0.5,
+              0.513722,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "128": {
+      "disciplina": "Biologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.3927
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "129": {
+      "disciplina": "Física",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.0,
+              0.3927,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "130": {
+      "disciplina": "Química",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.305492
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "131": {
+      "disciplina": "Biologia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.305492,
+              1.0,
+              0.662057
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "132": {
+      "disciplina": "Biologia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 14,
+            "rect": [
+              0.5,
+              0.662057,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "133": {
+      "disciplina": "Biologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.622926
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "134": {
+      "disciplina": "Biologia",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.0,
+              0.622926,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "135": {
+      "disciplina": "Biologia",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 15,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 16,
+            "rect": [
+              0.0,
+              0.075,
+              0.5,
+              0.119038
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "136": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.0,
+              0.119038,
+              0.5,
+              0.451222
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "137": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.0,
+              0.451222,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "138": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.443008
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "139": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 16,
+            "rect": [
+              0.5,
+              0.443008,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "140": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.462377
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "141": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.0,
+              0.462377,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "142": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 17,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "143": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.447908
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "144": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.0,
+              0.447908,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "145": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 18,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "146": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 19,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 19,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "147": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.361458
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "148": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 20,
+            "rect": [
+              0.0,
+              0.361458,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 20,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "149": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.667261
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "150": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 21,
+            "rect": [
+              0.0,
+              0.667261,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 21,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "151": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 22,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "152": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 22,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "153": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 23,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 23,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "154": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 24,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.576554
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "155": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 24,
+            "rect": [
+              0.0,
+              0.576554,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          },
+          {
+            "page": 24,
+            "rect": [
+              0.5,
+              0.075,
+              1.0,
+              0.392112
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "156": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 24,
+            "rect": [
+              0.5,
+              0.392112,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "157": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 25,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.359968
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "158": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 25,
+            "rect": [
+              0.0,
+              0.359968,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "159": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 25,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.599517
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "160": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 25,
+            "rect": [
+              0.5,
+              0.599517,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "161": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 26,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "162": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 26,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "163": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 27,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "164": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 27,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.285037
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "165": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 27,
+            "rect": [
+              0.5,
+              0.285037,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "166": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 28,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.455721
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "167": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 28,
+            "rect": [
+              0.0,
+              0.455721,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "168": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 28,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "169": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.491686
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "170": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.0,
+              0.491686,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "171": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.609261
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "172": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 29,
+            "rect": [
+              0.5,
+              0.609261,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "173": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.694796
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "174": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.0,
+              0.694796,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "175": {
+      "disciplina": "Matemática",
+      "resposta": "A",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.72653
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "176": {
+      "disciplina": "Matemática",
+      "resposta": "D",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 30,
+            "rect": [
+              0.5,
+              0.72653,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "177": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.0,
+              0.078513,
+              0.5,
+              0.365896
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "178": {
+      "disciplina": "Matemática",
+      "resposta": "B",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.0,
+              0.365896,
+              0.5,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "179": {
+      "disciplina": "Matemática",
+      "resposta": "C",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.5,
+              0.078513,
+              1.0,
+              0.658352
+            ],
+            "kind": "question"
+          }
+        ]
+      }
+    },
+    "180": {
+      "disciplina": "Matemática",
+      "resposta": "E",
+      "conteudo": {
+        "segments": [
+          {
+            "page": 31,
+            "rect": [
+              0.5,
+              0.658352,
+              1.0,
+              0.945
+            ],
+            "kind": "question"
+          }
+        ]
+      }
     }
+  },
+  "layout_extraction": {
+    "status": "success",
+    "version": 1,
+    "engine": "pymupdf",
+    "engine_revision": 3,
+    "question_count": 90,
+    "pdf_sha256": "9707d9dae08c177dd27dcd5ac8d6ae97e6f9d45d46fb0892c84679838ff8a4ae"
+  }
 }

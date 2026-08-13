@@ -13,6 +13,8 @@ from urllib.parse import quote
 import google.generativeai as genai
 from dotenv import load_dotenv
 
+from question_layout import apply_layout_to_data
+
 
 PDF_FILENAMES = ("prova.pdf", "gabarito.pdf")
 MODEL_NAME = "gemini-3.5-flash-lite"
@@ -73,7 +75,7 @@ Field Population Rules:
   - data: Extract the exam date from the documents and format it as YYYY-MM-DD.
   - qtd_questoes: Determine the total count of questions in the exam.
   - opcoes_resposta: This field should be a static array: ["A", "B", "C", "D", "E"].
-  - questoes: This must be an object containing entries for every question number (from 1 to the total). For each question:
+  - questoes: This must be an object containing entries for every printed question number. Preserve the numbering used by prova.pdf (for example, an ENEM second-day exam may use keys 91 through 180 even though qtd_questoes is 90). For each question:
       - disciplina: Determine the academic discipline based on the question's content in prova.pdf. Use "Interdisciplinar" if it blends multiple distinct fields.
       - resposta: Extract the correct single-letter answer from the matched answer key in gabarito.pdf. Invalid, annulled, or non-existent answers should be represented as "N/A".
 """.strip()
@@ -115,10 +117,16 @@ def parse_exam_directory(
     response = model.generate_content([build_prompt(), *uploaded_files])
     data = extract_json(response.text)
     data["pdf_link"] = build_pdf_link(directory, repository_root)
+    layout_succeeded = apply_layout_to_data(data, directory / "prova.pdf")
+    print(
+        "Question layout extraction "
+        f"{'succeeded' if layout_succeeded else 'failed; PDF mode will stay disabled'}."
+    )
 
     output_path = directory / "data.json"
-    with output_path.open("w", encoding="utf-8") as output_file:
+    with output_path.open("w", encoding="utf-8", newline="\n") as output_file:
         json.dump(data, output_file, indent=2, ensure_ascii=False)
+        output_file.write("\n")
 
     return data
 

@@ -46,8 +46,9 @@ def write_gabarito_json(root_dir: str | Path = ".", output_file: str | Path = "d
     """Create the aggregate data and write it to ``output_file``."""
     data = create_gabarito_json(root_dir)
     output_path = Path(output_file)
-    with output_path.open("w", encoding="utf-8") as file:
+    with output_path.open("w", encoding="utf-8", newline="\n") as file:
         json.dump(data, file, indent=2, ensure_ascii=False)
+        file.write("\n")
     return data
 
 
