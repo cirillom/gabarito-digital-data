@@ -1,0 +1,34 @@
+name: Sugerir uma nova prova
+description: Envie a prova e o respectivo gabarito para inclusão no catálogo.
+title: "[Nova prova]: "
+body:
+  - type: input
+    id: institution
+    attributes:
+      label: Instituição ou exame
+      placeholder: ENEM, Fuvest, OAB, concurso...
+    validations:
+      required: true
+  - type: input
+    id: edition
+    attributes:
+      label: Ano e edição
+      description: Inclua fase, dia, cargo ou tipo de caderno quando aplicável.
+      placeholder: 2025 - 2º dia - caderno azul
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: PDF da prova e PDF do gabarito
+      description: Arraste os dois PDFs para este campo ou informe links oficiais diretos para ambos.
+      placeholder: |
+        Prova: arraste prova.pdf aqui
+        Gabarito: arraste gabarito.pdf aqui
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Observações
+      description: Informe versão, cor, idioma ou qualquer detalhe necessário para associar o gabarito correto.

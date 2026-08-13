@@ -12,6 +12,19 @@ Run the complete repository update with:
 .\.venv\Scripts\python.exe main.py
 ```
 
+## Generate data from GitHub
+
+The **Generate exam data** workflow can run the same process without a local
+checkout. Add `prova.pdf` and `gabarito.pdf` under the desired exam directory,
+then open **Actions > Generate exam data > Run workflow**. The workflow tests
+the extractor, runs `uv run main.py`, rebuilds the root `data.json`, and commits
+the generated files to the selected branch.
+
+Before its first run, create an Actions repository secret named
+`GEMINI_API_KEY` under **Settings > Secrets and variables > Actions**. The
+workflow's `contents: write` permission is used only to commit generated JSON
+files back to the branch.
+
 To add or refresh layout metadata without calling Gemini again:
 
 ```powershell

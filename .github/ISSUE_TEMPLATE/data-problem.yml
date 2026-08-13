@@ -1,0 +1,39 @@
+name: Problema nos dados de uma prova
+description: Informe uma questão, disciplina, resposta ou PDF incorreto.
+title: "[Dados]: "
+body:
+  - type: input
+    id: exam
+    attributes:
+      label: Prova
+      description: Informe a instituição, o ano, a fase/dia e o caderno, quando houver.
+      placeholder: OAB 34 - Tipo 1 - 2022
+    validations:
+      required: true
+  - type: input
+    id: question
+    attributes:
+      label: Questão
+      description: Informe o número da questão ou escreva "prova inteira".
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: Tipo de problema
+      options:
+        - Resposta incorreta
+        - Disciplina incorreta
+        - Questão ou imagem mal recortada
+        - PDF incorreto
+        - Questão anulada não identificada
+        - Outro problema nos dados
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Detalhes e fonte correta
+      description: Explique a correção e anexe capturas ou links oficiais, se possível.
+    validations:
+      required: true
