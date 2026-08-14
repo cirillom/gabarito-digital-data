@@ -57,7 +57,10 @@ Instructions:
  - Analyze the prova.pdf to identify the specific exam version (e.g., "Prova V", "Prova K", etc.).
  - Using the identified exam version, locate the corresponding answer key column in the gabarito.pdf.
  - Read both documents to extract all necessary information.
- - If a piece of information is not explicitly available in the documents, perform a web search to find the correct data.
+ - Before classifying any question, research the official subject list for this exact exam and edition. Prefer the official edital, program, organizer page, or other primary source. Use web search when the list is not present in the uploaded PDFs.
+ - Build one canonical subject vocabulary from that research, then classify every question using only a subject from that vocabulary. Do not infer an unrelated school subject merely from isolated words in the question.
+ - For professional exams, use their official professional subject areas. For example, OAB questions must use the legal disciplines defined for that edition (such as Ética Profissional, Direito Constitucional, Direito Civil, and the other official areas), not generic disciplines such as História, Sociologia, or Português unless the official program explicitly defines them.
+ - If any other piece of information is not explicitly available in the documents, perform a web search and prefer primary sources.
  - Populate the following JSON structure exactly as specified.
 
 JSON Output Structure:
@@ -65,6 +68,7 @@ JSON Output Structure:
     "data": "2024-01-01",
     "qtd_questoes": 2,
     "opcoes_resposta": ["A", "B", "C", "D"],
+    "disciplinas": ["Matemática", "História"],
     "questoes": {
         "1": {"disciplina": "Matemática", "resposta": "A"},
         "2": {"disciplina": "História", "resposta": "B"}
@@ -75,8 +79,9 @@ Field Population Rules:
   - data: Extract the exam date from the documents and format it as YYYY-MM-DD.
   - qtd_questoes: Determine the total count of questions in the exam.
   - opcoes_resposta: Inspect the alternatives printed in prova.pdf and return exactly the selectable labels used by that exam, in order. Do not assume five alternatives. For example, OAB exams normally use ["A", "B", "C", "D"], while exams that actually print an E alternative should use ["A", "B", "C", "D", "E"].
+  - disciplinas: Return the canonical official subject list researched for this exact exam and edition. Use consistent spelling and granularity. Every questoes[*].disciplina value must be one of these entries, except "Interdisciplinar".
   - questoes: This must be an object containing entries for every printed question number. Preserve the numbering used by prova.pdf (for example, an ENEM second-day exam may use keys 91 through 180 even though qtd_questoes is 90). For each question:
-      - disciplina: Determine the academic discipline based on the question's content in prova.pdf. Use "Interdisciplinar" if it blends multiple distinct fields.
+      - disciplina: Classify the question against the researched official subject vocabulary. Use "Interdisciplinar" only when it genuinely blends multiple official fields.
       - resposta: Extract the correct single-letter answer from the matched answer key in gabarito.pdf. Invalid, annulled, or non-existent answers should be represented as "N/A".
 """.strip()
 

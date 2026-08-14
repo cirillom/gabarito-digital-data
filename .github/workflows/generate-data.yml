@@ -8,6 +8,11 @@ on:
         required: true
         default: "data: generate exam catalog"
         type: string
+      regenerate_all:
+        description: Regenerate every exam data.json with Gemini
+        required: true
+        default: false
+        type: boolean
 
 concurrency:
   group: generate-data-${{ github.ref }}
@@ -42,7 +47,13 @@ jobs:
       - name: Generate exam data and catalog
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: uv run main.py
+          REGENERATE_ALL: ${{ inputs.regenerate_all }}
+        run: |
+          if [ "$REGENERATE_ALL" = "true" ]; then
+            uv run main.py --regenerate-all
+          else
+            uv run main.py
+          fi
 
       - name: Commit generated files
         env:
