@@ -3,7 +3,9 @@ import unittest
 from pathlib import Path
 
 from main import partition_exam_directories
-from pdf_parser import build_prompt
+import json
+
+from pdf_parser import build_prompt, normalize_answer_keys
 
 
 class GeneratorTests(unittest.TestCase):
@@ -40,6 +42,42 @@ class GeneratorTests(unittest.TestCase):
         self.assertIn('"disciplinas"', prompt)
         self.assertIn("Every questoes[*].disciplina value", prompt)
         self.assertIn("OAB questions must use the legal disciplines", prompt)
+
+    def test_normalizes_annulments_and_rejects_malformed_answers(self) -> None:
+        data = {
+            "opcoes_resposta": ["A", "B", "C", "D"],
+            "questoes": {
+                "1": {"resposta": "anulada"},
+                "2": {"resposta": " b "},
+            },
+        }
+
+        normalize_answer_keys(data)
+
+        self.assertEqual(data["questoes"]["1"]["resposta"], "N/A")
+        self.assertEqual(data["questoes"]["2"]["resposta"], "B")
+        data["questoes"]["3"] = {"resposta": "Aidão"}
+        with self.assertRaisesRegex(ValueError, "neither a selectable option"):
+            normalize_answer_keys(data)
+
+    def test_oab_answer_data_matches_official_annulments(self) -> None:
+        root = Path(__file__).resolve().parent
+        expected = {
+            "32": {3, 45, 55, 61, 74},
+            "33": {59},
+        }
+        for edition, expected_questions in expected.items():
+            data = json.loads(
+                (root / "OAB" / "provas" / edition / "data.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            invalidated = {
+                int(number)
+                for number, question in data["questoes"].items()
+                if question["resposta"] == "N/A"
+            }
+            self.assertEqual(invalidated, expected_questions)
 
 
 if __name__ == "__main__":

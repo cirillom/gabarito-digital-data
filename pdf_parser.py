@@ -18,6 +18,17 @@ from question_layout import apply_layout_to_data
 
 PDF_FILENAMES = ("prova.pdf", "gabarito.pdf")
 MODEL_NAME = "gemini-3.5-flash-lite"
+INVALIDATED_ANSWER_KEYS = {
+    "*",
+    "N/A",
+    "N.A.",
+    "ANULADA",
+    "ANULADO",
+    "INVALIDADA",
+    "INVALIDADO",
+    "CANCELADA",
+    "CANCELADO",
+}
 
 
 def build_pdf_link(directory: Path, repository_root: Path) -> str:
@@ -43,6 +54,35 @@ def extract_json(response_text: str) -> dict:
     if not isinstance(result, dict):
         raise ValueError("Gemini response must be a JSON object.")
     return result
+
+
+def normalize_answer_keys(data: dict) -> None:
+    """Normalize annulments and reject answers the app cannot present."""
+    options = data.get("opcoes_resposta")
+    questions = data.get("questoes")
+    if not isinstance(options, list) or not all(
+        isinstance(option, str) and option.strip() for option in options
+    ):
+        raise ValueError("opcoes_resposta must be a non-empty list of labels.")
+    if not isinstance(questions, dict):
+        raise ValueError("questoes must be an object.")
+
+    allowed = {option.strip().upper() for option in options}
+    for number, question in questions.items():
+        if not isinstance(question, dict) or not isinstance(
+            question.get("resposta"), str
+        ):
+            raise ValueError(f"Question {number} has no textual answer key.")
+        answer = question["resposta"].strip().upper()
+        if answer in INVALIDATED_ANSWER_KEYS:
+            question["resposta"] = "N/A"
+        elif answer in allowed:
+            question["resposta"] = answer
+        else:
+            raise ValueError(
+                f"Question {number} answer {question['resposta']!r} is neither "
+                "a selectable option nor an annulment."
+            )
 
 
 def build_prompt() -> str:
@@ -121,6 +161,7 @@ def parse_exam_directory(
     model = genai.GenerativeModel(model_name=MODEL_NAME)
     response = model.generate_content([build_prompt(), *uploaded_files])
     data = extract_json(response.text)
+    normalize_answer_keys(data)
     data["pdf_link"] = build_pdf_link(directory, repository_root)
     layout_succeeded = apply_layout_to_data(data, directory / "prova.pdf")
     print(
