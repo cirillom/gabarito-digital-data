@@ -2155,7 +2155,7 @@
     "status": "success",
     "version": 1,
     "engine": "pymupdf",
-    "engine_revision": 3,
+    "engine_revision": 5,
     "question_count": 100,
     "pdf_sha256": "f7b04931bbf1ba2dac20a28c0428fd90a2704877618b338531701e4b3cb9abe2"
   }

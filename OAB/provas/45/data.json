@@ -1,0 +1,358 @@
+{
+  "data": "2025-12-21",
+  "qtd_questoes": 80,
+  "opcoes_resposta": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "disciplinas": [
+    "Ética Profissional",
+    "Filosofia do Direito",
+    "Direito Constitucional",
+    "Direito Administrativo",
+    "Direito Tributário",
+    "Direito Internacional",
+    "Direitos Humanos",
+    "Direito Eleitoral",
+    "Direito Civil",
+    "Direito do Consumidor",
+    "Direito Empresarial",
+    "Direito Processual Civil",
+    "Direito Penal",
+    "Direito Processual Penal",
+    "Direito do Trabalho",
+    "Direito Processual do Trabalho"
+  ],
+  "questoes": {
+    "1": {
+      "disciplina": "Ética Profissional",
+      "resposta": "A"
+    },
+    "2": {
+      "disciplina": "Ética Profissional",
+      "resposta": "A"
+    },
+    "3": {
+      "disciplina": "Ética Profissional",
+      "resposta": "C"
+    },
+    "4": {
+      "disciplina": "Ética Profissional",
+      "resposta": "C"
+    },
+    "5": {
+      "disciplina": "Ética Profissional",
+      "resposta": "B"
+    },
+    "6": {
+      "disciplina": "Ética Profissional",
+      "resposta": "A"
+    },
+    "7": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "D"
+    },
+    "8": {
+      "disciplina": "Ética Profissional",
+      "resposta": "B"
+    },
+    "9": {
+      "disciplina": "Filosofia do Direito",
+      "resposta": "B"
+    },
+    "10": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "C"
+    },
+    "11": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "C"
+    },
+    "12": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "D"
+    },
+    "13": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "B"
+    },
+    "14": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "A"
+    },
+    "15": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "D"
+    },
+    "16": {
+      "disciplina": "Direito Constitucional",
+      "resposta": "A"
+    },
+    "17": {
+      "disciplina": "Direitos Humanos",
+      "resposta": "B"
+    },
+    "18": {
+      "disciplina": "Direitos Humanos",
+      "resposta": "A"
+    },
+    "19": {
+      "disciplina": "Direito Eleitoral",
+      "resposta": "C"
+    },
+    "20": {
+      "disciplina": "Direito Eleitoral",
+      "resposta": "A"
+    },
+    "21": {
+      "disciplina": "Direito Internacional",
+      "resposta": "D"
+    },
+    "22": {
+      "disciplina": "Direito Internacional",
+      "resposta": "C"
+    },
+    "23": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "A"
+    },
+    "24": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "D"
+    },
+    "25": {
+      "disciplina": "Direito Tributário",
+      "resposta": "B"
+    },
+    "26": {
+      "disciplina": "Direito Tributário",
+      "resposta": "C"
+    },
+    "27": {
+      "disciplina": "Direito Tributário",
+      "resposta": "B"
+    },
+    "28": {
+      "disciplina": "Direito Tributário",
+      "resposta": "B"
+    },
+    "29": {
+      "disciplina": "Direito Tributário",
+      "resposta": "D"
+    },
+    "30": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "B"
+    },
+    "31": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "D"
+    },
+    "32": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "A"
+    },
+    "33": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "A"
+    },
+    "34": {
+      "disciplina": "Direito Administrativo",
+      "resposta": "D"
+    },
+    "35": {
+      "disciplina": "Direito Ambiental",
+      "resposta": "D"
+    },
+    "36": {
+      "disciplina": "Direito Ambiental",
+      "resposta": "A"
+    },
+    "37": {
+      "disciplina": "Direito Civil",
+      "resposta": "B"
+    },
+    "38": {
+      "disciplina": "Direito Civil",
+      "resposta": "D"
+    },
+    "39": {
+      "disciplina": "Direito Civil",
+      "resposta": "C"
+    },
+    "40": {
+      "disciplina": "Direito Civil",
+      "resposta": "C"
+    },
+    "41": {
+      "disciplina": "Direito Civil",
+      "resposta": "B"
+    },
+    "42": {
+      "disciplina": "Direito Civil",
+      "resposta": "D"
+    },
+    "43": {
+      "disciplina": "Direito Civil",
+      "resposta": "D"
+    },
+    "44": {
+      "disciplina": "Direito Civil",
+      "resposta": "C"
+    },
+    "45": {
+      "disciplina": "Direito do Consumidor",
+      "resposta": "B"
+    },
+    "46": {
+      "disciplina": "Direito do Consumidor",
+      "resposta": "D"
+    },
+    "47": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "B"
+    },
+    "48": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "C"
+    },
+    "49": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "A"
+    },
+    "50": {
+      "disciplina": "Direito Empresarial",
+      "resposta": "D"
+    },
+    "51": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "B"
+    },
+    "52": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "C"
+    },
+    "53": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "D"
+    },
+    "54": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "A"
+    },
+    "55": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "B"
+    },
+    "56": {
+      "disciplina": "Direito Processual Civil",
+      "resposta": "D"
+    },
+    "57": {
+      "disciplina": "Direito Penal",
+      "resposta": "C"
+    },
+    "58": {
+      "disciplina": "Direito Penal",
+      "resposta": "C"
+    },
+    "59": {
+      "disciplina": "Direito Penal",
+      "resposta": "B"
+    },
+    "60": {
+      "disciplina": "Direito Penal",
+      "resposta": "A"
+    },
+    "61": {
+      "disciplina": "Direito Penal",
+      "resposta": "A"
+    },
+    "62": {
+      "disciplina": "Direito Penal",
+      "resposta": "B"
+    },
+    "63": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "C"
+    },
+    "64": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "A"
+    },
+    "65": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "D"
+    },
+    "66": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "C"
+    },
+    "67": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "B"
+    },
+    "68": {
+      "disciplina": "Direito Processual Penal",
+      "resposta": "D"
+    },
+    "69": {
+      "disciplina": "Direito Previdenciário",
+      "resposta": "C"
+    },
+    "70": {
+      "disciplina": "Direito Previdenciário",
+      "resposta": "D"
+    },
+    "71": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "A"
+    },
+    "72": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "B"
+    },
+    "73": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "D"
+    },
+    "74": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "D"
+    },
+    "75": {
+      "disciplina": "Direito do Trabalho",
+      "resposta": "B"
+    },
+    "76": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "C"
+    },
+    "77": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "B"
+    },
+    "78": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "B"
+    },
+    "79": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "A"
+    },
+    "80": {
+      "disciplina": "Direito Processual do Trabalho",
+      "resposta": "A"
+    }
+  },
+  "pdf_link": "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/refs/heads/main/OAB/provas/45/prova.pdf",
+  "layout_extraction": {
+    "status": "failed",
+    "version": 1,
+    "engine": "pymupdf",
+    "engine_revision": 5,
+    "error": "No supported question-number anchors were found."
+  }
+}
