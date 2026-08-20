@@ -6,6 +6,7 @@ from pathlib import Path
 from folder_parser import write_gabarito_json
 from pdf_parser import parse_exam_directory
 from question_layout import enrich_data_file
+from rich_content import enrich_rich_data_file, write_html_preview
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -33,7 +34,14 @@ def partition_exam_directories(
     )
 
 
-def run(*, regenerate_all: bool = False) -> None:
+def run(
+    *,
+    regenerate_all: bool = False,
+    rich_content: bool = True,
+    use_gemini_rich: bool = False,
+    rich_questions: set[int] | None = None,
+    preview_dir: Path | None = None,
+) -> None:
     print("Scanning repository for exams...\n")
     directories = find_exam_directories()
 
@@ -78,6 +86,42 @@ def run(*, regenerate_all: bool = False) -> None:
             failures.append((relative_directory, str(error)))
             print(f"  Failed: {error}")
 
+    if rich_content:
+        print("\nExtracting rich question content...")
+        for directory in directories:
+            relative_directory = directory.relative_to(ROOT_DIR)
+            data_file = directory / "data.json"
+            if not data_file.is_file():
+                continue
+            print(f"{relative_directory}")
+            try:
+                enriched = enrich_rich_data_file(
+                    data_file,
+                    directory / "prova.pdf",
+                    repository_root=ROOT_DIR,
+                    question_numbers=rich_questions,
+                    use_gemini=use_gemini_rich,
+                    force=regenerate_all,
+                )
+                metadata = enriched["rich_extraction"]
+                print(
+                    "  Rich extraction "
+                    f"{metadata['successful_question_count']}/"
+                    f"{metadata['question_count']} ({metadata['status']})"
+                )
+                if preview_dir is not None:
+                    preview_path = preview_dir / relative_directory / "index.html"
+                    write_html_preview(
+                        enriched,
+                        directory=directory,
+                        output_path=preview_path,
+                        question_numbers=rich_questions,
+                    )
+                    print(f"  Preview: {preview_path}")
+            except (OSError, ValueError, RuntimeError) as error:
+                failures.append((relative_directory, f"rich extraction: {error}"))
+                print(f"  Rich extraction failed: {error}")
+
     write_gabarito_json(ROOT_DIR, MAIN_DATA)
     print(f"\nUpdated {MAIN_DATA.relative_to(ROOT_DIR)}")
     if failures:
@@ -96,8 +140,40 @@ def main() -> None:
         action="store_true",
         help="Regenerate every exam data.json with Gemini, even when it already exists.",
     )
+    parser.add_argument(
+        "--rich-content",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Build rich text, image, formula, and option content from local PDFs (default: enabled).",
+    )
+    parser.add_argument(
+        "--use-gemini-rich",
+        action="store_true",
+        help="Use Gemini vision to enhance rich content (requires --rich-content).",
+    )
+    parser.add_argument(
+        "--rich-question",
+        type=int,
+        action="append",
+        help="Limit rich extraction to one or more question numbers.",
+    )
+    parser.add_argument(
+        "--preview-dir",
+        type=Path,
+        help="Write local HTML previews beneath this directory.",
+    )
     args = parser.parse_args()
-    run(regenerate_all=args.regenerate_all)
+    if args.use_gemini_rich and not args.rich_content:
+        parser.error("--use-gemini-rich requires --rich-content")
+    if args.rich_question and not args.rich_content:
+        parser.error("--rich-question requires --rich-content")
+    run(
+        regenerate_all=args.regenerate_all,
+        rich_content=args.rich_content,
+        use_gemini_rich=args.use_gemini_rich,
+        rich_questions=set(args.rich_question) if args.rich_question else None,
+        preview_dir=args.preview_dir.resolve() if args.preview_dir else None,
+    )
 
 
 if __name__ == "__main__":

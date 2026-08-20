@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pymupdf
 
-from question_layout import apply_layout_to_data, extract_question_layout
+from question_layout import _normalize_text, apply_layout_to_data, extract_question_layout
 
 
 def _write_two_column_pdf(path: Path, *, include_second_question: bool = True) -> None:
@@ -53,6 +53,9 @@ def _write_oab_pdf_with_numbered_instruction_page(path: Path) -> None:
 
 
 class QuestionLayoutTest(unittest.TestCase):
+    def test_decodes_symbol_font_digits_used_by_newer_oab_pdfs(self) -> None:
+        self.assertEqual(_normalize_text("ϰϱ"), "45")
+
     def test_extracts_normalized_regions_for_every_question(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             pdf_path = Path(temporary_directory) / "prova.pdf"

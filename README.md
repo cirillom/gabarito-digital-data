@@ -2,9 +2,10 @@
 
 Each exam directory contains `prova.pdf`, `gabarito.pdf`, and a generated
 `data.json`. Besides the answer and discipline, the generator detects the
-original PDF region occupied by every question. The Flutter app uses those
-regions to render the statement, figures, tables, and equations directly from
-the source PDF.
+original PDF region occupied by every question. It also reconstructs a
+versioned rich-content tree containing text, figures, exact formula crops, and
+the complete selectable alternatives. The Flutter app prefers that tree and
+falls back question-by-question to the original PDF crop.
 
 Run the complete repository update with:
 
@@ -13,12 +14,20 @@ uv sync --locked
 uv run main.py
 ```
 
-The default mode generates missing exams and refreshes PDF layout metadata for
-existing JSON files. To regenerate every exam with Gemini—including answers,
-official subject research, and question classification—run:
+The default mode generates missing exams, refreshes PDF layout metadata, and
+builds deterministic rich content for missing or stale questions. Existing
+rich content is reused when the source PDF digest is unchanged. To add the
+Gemini vision pass for faithful formulas and complex layouts, run:
 
 ```powershell
-uv run main.py --regenerate-all
+uv run main.py --use-gemini-rich
+```
+
+To regenerate every exam with Gemini—including answers, official subject
+research, question classification, and rich content—run:
+
+```powershell
+uv run main.py --regenerate-all --use-gemini-rich
 ```
 
 On Windows, the checked-in helper installs locked dependencies, runs the test
@@ -26,7 +35,7 @@ suite, and then generates the catalog:
 
 ```powershell
 .\scripts\generate-data.ps1
-.\scripts\generate-data.ps1 -RegenerateAll
+.\scripts\generate-data.ps1 -RegenerateAll -UseGeminiRich
 ```
 
 ## Generate data from GitHub
@@ -37,6 +46,8 @@ then open **Actions > Generate exam data > Run workflow**. The workflow tests
 the extractor, rebuilds the root `data.json`, and commits the generated files
 to the selected branch. Enable **Regenerate every exam data.json with Gemini**
 to replace all per-exam JSON files instead of generating only missing exams.
+Rich reconstruction is enabled by default; enable **Use Gemini vision** when
+the source has formulas, encoded text, or a complex visual layout.
 
 Before its first run, create an Actions repository secret named
 `GEMINI_API_KEY` under **Settings > Secrets and variables > Actions**. The
@@ -59,3 +70,33 @@ Each segment stores a 1-based PDF page, a normalized
 `shared`. Shared passages are attached to every question that references
 them, so a question remains complete even when its source text appears in a
 different column or on a preceding page.
+
+## Preview without GitHub
+
+Generate a browser preview from the checked-out PDFs without changing the
+exam JSON or downloading the catalog from GitHub:
+
+```powershell
+uv run rich_content.py --directory "ENEM\provas\2024\2o dia" --question 91 --preview ".rich-preview\enem-91.html"
+```
+
+Add `--use-gemini` to inspect the AI-enhanced result, or `--write` when the
+validated result should be persisted. The preview contains selectable answer
+cards and references assets generated beside the preview.
+
+For end-to-end Flutter testing against the checkout, first generate the local
+catalog, then serve it with CORS:
+
+```powershell
+uv run folder_parser.py --output data.json
+uv run scripts\serve-local.py
+```
+
+In a second terminal, run Flutter with the local catalog and asset origin:
+
+```powershell
+flutter run -d chrome --dart-define=CATALOG_URL=http://127.0.0.1:8765/data.json --dart-define=DATA_ASSET_BASE_URL=http://127.0.0.1:8765/ --dart-define=FORCE_CATALOG_REFRESH=true
+```
+
+This path reads both JSON and extracted images from the local checkout. It
+does not depend on `raw.githubusercontent.com`.

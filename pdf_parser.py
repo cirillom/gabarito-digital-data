@@ -7,10 +7,12 @@ Python code. Run this file directly to use the command-line interface.
 import argparse
 import json
 import os
+import time
 from pathlib import Path
 from urllib.parse import quote
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 from question_layout import apply_layout_to_data
@@ -150,16 +152,46 @@ def parse_exam_directory(
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set. Add it to the environment or .env file.")
 
-    genai.configure(api_key=api_key)
+    client = genai.Client(api_key=api_key)
     uploaded_files = []
     for filename in PDF_FILENAMES:
         file_path = directory / filename
         print(f"Uploading {file_path}...")
-        uploaded_files.append(genai.upload_file(path=str(file_path), display_name=str(file_path)))
+        uploaded_files.append(
+            client.files.upload(
+                file=file_path,
+                config=types.UploadFileConfig(
+                    mime_type="application/pdf",
+                    display_name=str(file_path),
+                ),
+            )
+        )
+
+    for index, uploaded_file in enumerate(uploaded_files):
+        for _ in range(60):
+            state = getattr(uploaded_file, "state", None)
+            state_name = getattr(state, "name", str(state or ""))
+            if state_name != "PROCESSING":
+                break
+            time.sleep(1)
+            uploaded_file = client.files.get(name=uploaded_file.name)
+            uploaded_files[index] = uploaded_file
+        state = getattr(uploaded_file, "state", None)
+        state_name = getattr(state, "name", str(state or ""))
+        if state_name == "FAILED":
+            raise RuntimeError(f"Gemini could not process {uploaded_file.display_name}.")
+        if state_name == "PROCESSING":
+            raise RuntimeError(f"Timed out while processing {uploaded_file.display_name}.")
 
     print("Sending prompt to Gemini...")
-    model = genai.GenerativeModel(model_name=MODEL_NAME)
-    response = model.generate_content([build_prompt(), *uploaded_files])
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=[build_prompt(), *uploaded_files],
+        config=types.GenerateContentConfig(
+            temperature=0,
+            response_mime_type="application/json",
+        ),
+    )
     data = extract_json(response.text)
     normalize_answer_keys(data)
     data["pdf_link"] = build_pdf_link(directory, repository_root)

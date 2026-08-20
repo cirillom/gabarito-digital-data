@@ -23,7 +23,7 @@ import pymupdf
 
 LAYOUT_VERSION = 1
 ENGINE_NAME = "pymupdf"
-ENGINE_REVISION = 5
+ENGINE_REVISION = 6
 ANCHOR_PADDING = 4.0
 MIN_SEGMENT_HEIGHT = 6.0
 
@@ -71,12 +71,16 @@ _TJSP_SHARED = re.compile(
     r"\bLEIA O TEXTO PARA RESPONDER (?:A|AS) QUESTOES DE NUMEROS?\s+"
     r"(\d{1,3})\s+A\s+(\d{1,3})\b"
 )
+_ENCODED_DIGITS = str.maketrans("ϬϭϮϯϰϱϲϳϴϵ", "0123456789")
 
 
 def _normalize_text(value: str) -> str:
-    decomposed = unicodedata.normalize("NFKD", value)
+    decoded_digits = value.translate(_ENCODED_DIGITS)
+    decomposed = unicodedata.normalize("NFKD", decoded_digits)
     without_accents = "".join(
-        character for character in decomposed if not unicodedata.combining(character)
+        " " if unicodedata.category(character) == "Cc" else character
+        for character in decomposed
+        if not unicodedata.combining(character)
     )
     return re.sub(r"\s+", " ", without_accents).strip().upper()
 

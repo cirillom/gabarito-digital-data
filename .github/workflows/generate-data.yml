@@ -13,6 +13,16 @@ on:
         required: true
         default: false
         type: boolean
+      rich_content:
+        description: Reconstruct questions and alternatives as rich content
+        required: true
+        default: true
+        type: boolean
+      use_gemini_rich:
+        description: Use Gemini vision for formulas and complex rich layouts
+        required: true
+        default: false
+        type: boolean
 
 concurrency:
   group: generate-data-${{ github.ref }}
@@ -48,12 +58,22 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           REGENERATE_ALL: ${{ inputs.regenerate_all }}
+          RICH_CONTENT: ${{ inputs.rich_content }}
+          USE_GEMINI_RICH: ${{ inputs.use_gemini_rich }}
         run: |
+          args=()
           if [ "$REGENERATE_ALL" = "true" ]; then
-            uv run main.py --regenerate-all
-          else
-            uv run main.py
+            args+=(--regenerate-all)
           fi
+          if [ "$RICH_CONTENT" = "true" ]; then
+            args+=(--rich-content)
+          else
+            args+=(--no-rich-content)
+          fi
+          if [ "$USE_GEMINI_RICH" = "true" ]; then
+            args+=(--use-gemini-rich)
+          fi
+          uv run main.py "${args[@]}"
 
       - name: Commit generated files
         env:

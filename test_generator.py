@@ -1,11 +1,13 @@
 import tempfile
 import unittest
+from types import SimpleNamespace
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 from main import partition_exam_directories
 import json
 
-from pdf_parser import build_prompt, normalize_answer_keys
+from pdf_parser import build_prompt, normalize_answer_keys, parse_exam_directory
 
 
 class GeneratorTests(unittest.TestCase):
@@ -78,6 +80,53 @@ class GeneratorTests(unittest.TestCase):
                 if question["resposta"] == "N/A"
             }
             self.assertEqual(invalidated, expected_questions)
+
+    def test_parser_uses_google_genai_client_files_and_models_apis(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            (directory / "prova.pdf").write_bytes(b"test prova")
+            (directory / "gabarito.pdf").write_bytes(b"test gabarito")
+            client = MagicMock()
+            client.files.upload.side_effect = [
+                SimpleNamespace(
+                    name="files/prova",
+                    state=SimpleNamespace(name="ACTIVE"),
+                    display_name="prova.pdf",
+                ),
+                SimpleNamespace(
+                    name="files/gabarito",
+                    state=SimpleNamespace(name="ACTIVE"),
+                    display_name="gabarito.pdf",
+                ),
+            ]
+            client.models.generate_content.return_value = SimpleNamespace(
+                text=json.dumps(
+                    {
+                        "data": "2026-01-01",
+                        "qtd_questoes": 1,
+                        "opcoes_resposta": ["A", "B"],
+                        "disciplinas": ["Teste"],
+                        "questoes": {
+                            "1": {"disciplina": "Teste", "resposta": "A"}
+                        },
+                    }
+                )
+            )
+
+            with (
+                patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}),
+                patch("pdf_parser.genai.Client", return_value=client),
+                patch("pdf_parser.apply_layout_to_data", return_value=True),
+            ):
+                data = parse_exam_directory(
+                    directory,
+                    repository_root=directory,
+                )
+
+            self.assertEqual(client.files.upload.call_count, 2)
+            client.models.generate_content.assert_called_once()
+            self.assertEqual(data["questoes"]["1"]["resposta"], "A")
+            self.assertTrue((directory / "data.json").is_file())
 
 
 if __name__ == "__main__":
