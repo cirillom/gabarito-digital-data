@@ -3,11 +3,11 @@
 Each exam directory contains `prova.pdf`, `gabarito.pdf`, and a generated
 `data.json`. Besides the answer and discipline, the generator detects the
 original PDF region occupied by every question. It also reconstructs a
-versioned rich-content tree containing text, figures, exact formula crops, and
-the complete selectable alternatives. Figures and formula fallbacks remain
-normalized references into `prova.pdf`; generation does not add PNG/JPG files
-to the repository. The Flutter app prefers that tree and falls back
-question-by-question to the original PDF crop.
+versioned rich-content tree containing text, LaTeX formulas, figures, and the
+complete selectable alternatives. Figures remain normalized references into
+`prova.pdf`; formulas are never stored as image crops, and generation does not
+add PNG/JPG files to the repository. The Flutter app prefers that tree and
+falls back question-by-question to the original PDF crop.
 
 Run the complete repository update with:
 
@@ -84,8 +84,8 @@ uv run rich_content.py --directory "ENEM\provas\2024\2o dia" --question 91 --pre
 
 Add `--use-gemini` to inspect the AI-enhanced result, or `--write` when the
 validated result should be persisted. The preview contains selectable answer
-cards and embeds temporary renderings inside the HTML file; it does not create
-repository image assets.
+cards, renders LaTeX as browser-native MathML, and embeds temporary figure
+renderings inside the HTML file; it does not create repository image assets.
 
 Useful ENEM 2024 day-two samples are question 91 for figure/caption ordering,
 question 109 for image-only alternatives, and question 150 for equations.

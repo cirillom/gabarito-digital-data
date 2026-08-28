@@ -20,8 +20,9 @@ from pathlib import Path
 from typing import Any, Literal
 
 import pymupdf
+import latex2mathml.converter
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 RICH_CONTENT_VERSION = 2
@@ -46,7 +47,6 @@ class GeminiInline(BaseModel):
     marks: list[
         Literal["bold", "italic", "underline", "superscript", "subscript"]
     ] = Field(default_factory=list)
-    source_crop: SourceCrop | None = None
 
 
 class GeminiBlock(BaseModel):
@@ -54,10 +54,19 @@ class GeminiBlock(BaseModel):
     inlines: list[GeminiInline] = Field(default_factory=list)
     latex: str | None = None
     asset_ids: list[str] = Field(default_factory=list)
-    source_crop: SourceCrop | None = None
+    source_crop: SourceCrop | None = Field(
+        default=None,
+        description="Crop for a figure only; formulas must be represented as LaTeX.",
+    )
     alt: str | None = None
     caption: str | None = None
     align: Literal["left", "center", "right", "justify"] = "left"
+
+    @model_validator(mode="after")
+    def validate_source_crop(self) -> "GeminiBlock":
+        if self.type != "figure" and self.source_crop is not None:
+            raise ValueError("Only figure blocks may contain a source crop.")
+        return self
 
 
 class GeminiDocument(BaseModel):
@@ -558,8 +567,8 @@ Rules:
 - The option labels must be exactly {json.dumps(labels, ensure_ascii=False)} and in that order.
 - Separate the statement from each selectable option.
 - Use text in paragraph/quote blocks, preserving bold and italic marks when visually meaningful.
-- Convert mathematical expressions to LaTeX formula nodes.
-- For an inline or display formula, include source_crop relative to its segment so an exact image fallback can be generated.
+- Convert every mathematical expression to a LaTeX formula node. Formula nodes
+  contain LaTeX only and must never be represented by a figure or source_crop.
 - Reuse an asset_id only from AVAILABLE_ASSETS when it is the relevant figure.
 - If a relevant diagram/table is missing from AVAILABLE_ASSETS, return a figure block with source_crop and useful alt text.
 - Preserve the source reading order: text before a figure, the figure, then text after it.
@@ -651,6 +660,8 @@ def _materialize_gemini_document(
         source_crop = block.pop("source_crop", None)
         block["source"] = default_source
         if source_crop is not None:
+            if block["type"] != "figure":
+                raise ValueError("Only figures may use PDF source crops.")
             crop = SourceCrop.model_validate(source_crop)
             page, rect = _relative_crop_to_page(crop, segments)
             block["source"] = [{"page": page, "rect": rect}]
@@ -661,10 +672,7 @@ def _materialize_gemini_document(
                 pdf_sha256=pdf_sha256,
             )
             known_assets[asset["id"]] = asset
-            if block["type"] == "figure":
-                block["asset_ids"] = [asset["id"]]
-            elif block["type"] == "formula":
-                block["fallback_asset_id"] = asset["id"]
+            block["asset_ids"] = [asset["id"]]
         elif (
             block["type"] == "figure"
             and not block.get("asset_ids")
@@ -674,19 +682,7 @@ def _materialize_gemini_document(
 
         materialized_inlines: list[dict[str, Any]] = []
         for inline_value in block.get("inlines", []):
-            inline = dict(inline_value)
-            inline_crop_value = inline.pop("source_crop", None)
-            if inline_crop_value is not None:
-                inline_crop = SourceCrop.model_validate(inline_crop_value)
-                asset = _materialize_model_crop(
-                    inline_crop,
-                    document=pdf_document,
-                    segments=segments,
-                    pdf_sha256=pdf_sha256,
-                )
-                known_assets[asset["id"]] = asset
-                inline["fallback_asset_id"] = asset["id"]
-            materialized_inlines.append(inline)
+            materialized_inlines.append(dict(inline_value))
         if "inlines" in block:
             block["inlines"] = materialized_inlines
         blocks.append(block)
@@ -715,17 +711,8 @@ def _validate_document(document: Any, *, assets: dict[str, dict[str, Any]]) -> N
                     raise ValueError("Text inline content cannot be empty.")
                 if inline.get("type") == "formula" and not inline.get("latex", "").strip():
                     raise ValueError("Formula inline content needs LaTeX.")
-                fallback = inline.get("fallback_asset_id")
-                if fallback is not None and fallback not in assets:
-                    raise ValueError("An inline formula references an unknown crop.")
         if block["type"] == "formula" and not block.get("latex", "").strip():
             raise ValueError("Formula blocks need LaTeX.")
-        if (
-            block["type"] == "formula"
-            and block.get("fallback_asset_id") is not None
-            and block["fallback_asset_id"] not in assets
-        ):
-            raise ValueError("A formula block references an unknown crop.")
         if block["type"] == "figure":
             asset_ids = block.get("asset_ids")
             if not isinstance(asset_ids, list) or not asset_ids:
@@ -782,11 +769,6 @@ def _referenced_asset_ids(
     for document in documents:
         for block in document["blocks"]:
             referenced.update(block.get("asset_ids", []))
-            if block.get("fallback_asset_id"):
-                referenced.add(block["fallback_asset_id"])
-            for inline in block.get("inlines", []):
-                if inline.get("fallback_asset_id"):
-                    referenced.add(inline["fallback_asset_id"])
     return referenced
 
 
@@ -1097,15 +1079,20 @@ def _render_inlines(inlines: list[dict[str, Any]], assets: dict[str, dict[str, A
         elif kind == "line_break":
             rendered.append("<br>")
         elif kind == "formula":
-            fallback = assets.get(inline.get("fallback_asset_id"))
-            if fallback:
-                rendered.append(
-                    f'<img class="formula-inline" src="{html.escape(fallback["preview_uri"])}" '
-                    f'alt="{html.escape(str(inline.get("latex", "formula")))}">'
-                )
-            else:
-                rendered.append(f'<code class="formula">{html.escape(str(inline.get("latex", "")))}</code>')
+            rendered.append(_render_formula(str(inline.get("latex", "")), display=False))
     return "".join(rendered)
+
+
+def _render_formula(latex: str, *, display: bool) -> str:
+    """Render preview math without a PDF screenshot or a network dependency."""
+    try:
+        return latex2mathml.converter.convert(
+            latex,
+            display="block" if display else "inline",
+        )
+    except Exception as error:
+        message = html.escape(f"Invalid LaTeX: {error}")
+        return f'<span class="formula-error" title="{message}">{html.escape(latex)}</span>'
 
 
 def _render_document(document: dict[str, Any], assets: dict[str, dict[str, Any]]) -> str:
@@ -1116,14 +1103,7 @@ def _render_document(document: dict[str, Any], assets: dict[str, dict[str, Any]]
             tag = "blockquote" if kind == "quote" else "p"
             rendered.append(f"<{tag}>{_render_inlines(block.get('inlines', []), assets)}</{tag}>")
         elif kind == "formula":
-            fallback = assets.get(block.get("fallback_asset_id"))
-            if fallback:
-                rendered.append(
-                    f'<img class="formula-block" src="{html.escape(fallback["preview_uri"])}" '
-                    f'alt="{html.escape(str(block.get("latex", "formula")))}">'
-                )
-            else:
-                rendered.append(f'<pre class="formula">{html.escape(str(block.get("latex", "")))}</pre>')
+            rendered.append(_render_formula(str(block.get("latex", "")), display=True))
         elif kind == "figure":
             width = max(
                 (
@@ -1219,8 +1199,7 @@ p,blockquote{font-size:18px;line-height:1.55}figure{width:min(100%,var(--figure-
 .figures img{width:100%;height:auto;background:white;border-radius:8px}figcaption{width:100%;margin-top:6px;color:#d6d2e8;font-size:13px;line-height:1.35}.options{display:grid;gap:12px;margin-top:24px}
 .option{display:flex;align-items:flex-start;gap:14px;padding:16px;border:2px solid #6d64ba;border-radius:12px;cursor:pointer}
 .option:has(input:checked){background:#4a3ba7;border-color:#a99fff}.option input{margin-top:7px}.label{font-size:20px;font-weight:700}
-.option-content{flex:1}.option-content p{margin:0}.formula{font-family:serif;background:#151225;padding:2px 5px;border-radius:4px}
-.formula-inline{max-height:1.7em;vertical-align:middle}.formula-block{display:block;max-width:100%;margin:16px auto}
+.option-content{flex:1}.option-content p{margin:0}math[display="block"]{font-size:1.2em;margin:16px auto}.formula-error{font-family:monospace;color:#ff9e9e}
 </style></head><body><h1>Rich question preview</h1>""" + "".join(sections) + "</body></html>"
     output_path.write_text(page, encoding="utf-8", newline="\n")
     return output_path

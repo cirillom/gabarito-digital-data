@@ -180,7 +180,7 @@ class RichContentTest(unittest.TestCase):
             self.assertIn("1", data["rich_extraction"]["failures"])
             self.assertNotIn("rich", data["questoes"]["1"]["conteudo"])
 
-    def test_gemini_can_recover_unusable_text_and_crops_formula_fallback(self) -> None:
+    def test_gemini_can_recover_unusable_text_and_stores_formula_as_latex(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
             pdf_path = directory / "prova.pdf"
@@ -197,10 +197,6 @@ class RichContentTest(unittest.TestCase):
                         GeminiBlock(
                             type="formula",
                             latex=r"x^2",
-                            source_crop=SourceCrop(
-                                segment_index=0,
-                                rect=[0.1, 0.1, 0.4, 0.25],
-                            ),
                         ),
                     ]
                 ),
@@ -240,10 +236,21 @@ class RichContentTest(unittest.TestCase):
             rich = data["questoes"]["1"]["conteudo"]["rich"]
             formula_block = rich["statement"]["blocks"][1]
             self.assertEqual(rich["status"], "success")
-            self.assertIn(formula_block["fallback_asset_id"], {
-                asset["id"] for asset in rich["assets"]
-            })
+            self.assertEqual(formula_block["latex"], r"x^2")
+            self.assertNotIn("fallback_asset_id", formula_block)
+            self.assertEqual(rich["assets"], [])
             validate_rich_content(rich, ["A", "B", "C", "D"])
+
+    def test_rejects_formula_source_crops(self) -> None:
+        with self.assertRaisesRegex(ValueError, "Only figure blocks"):
+            GeminiBlock(
+                type="formula",
+                latex=r"x^2",
+                source_crop=SourceCrop(
+                    segment_index=0,
+                    rect=[0.1, 0.1, 0.4, 0.25],
+                ),
+            )
 
     def test_reuses_valid_content_for_the_same_pdf(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
