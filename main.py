@@ -122,6 +122,7 @@ def check_repository_rich_content(
 
 def run(
     *,
+    directories: list[Path] | None = None,
     regenerate_all: bool = False,
     rich_content: bool = True,
     use_gemini_rich: bool = False,
@@ -129,7 +130,7 @@ def run(
     preview_dir: Path | None = None,
 ) -> None:
     print("Scanning repository for exams...\n")
-    directories = find_exam_directories()
+    directories = directories if directories is not None else find_exam_directories()
 
     if not directories:
         print("No directories containing prova.pdf and gabarito.pdf were found.")
@@ -227,6 +228,12 @@ def main() -> None:
         help="Regenerate every exam data.json with Gemini, even when it already exists.",
     )
     parser.add_argument(
+        "--directory",
+        type=Path,
+        action="append",
+        help="Limit generation to exam directories found beneath this path; repeatable.",
+    )
+    parser.add_argument(
         "--rich-content",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -258,10 +265,28 @@ def main() -> None:
         parser.error("--use-gemini-rich requires --rich-content")
     if args.rich_question and not args.rich_content:
         parser.error("--rich-question requires --rich-content")
+    directories = None
+    if args.directory:
+        scopes = []
+        for directory in args.directory:
+            resolved = directory.resolve()
+            try:
+                resolved.relative_to(ROOT_DIR)
+            except ValueError:
+                parser.error(f"--directory must be inside {ROOT_DIR}")
+            scopes.append(resolved)
+        directories = sorted(
+            {
+                exam_directory
+                for scope in scopes
+                for exam_directory in find_exam_directories(scope)
+            }
+        )
     if args.check_rich_content:
-        check_repository_rich_content(find_exam_directories())
+        check_repository_rich_content(directories or find_exam_directories())
         return
     run(
+        directories=directories,
         regenerate_all=args.regenerate_all,
         rich_content=args.rich_content,
         use_gemini_rich=args.use_gemini_rich,

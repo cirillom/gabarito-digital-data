@@ -1,5 +1,6 @@
 {
   "data": "2025-12-21",
+  "descricao": "TIPO 1 - BRANCA",
   "qtd_questoes": 80,
   "opcoes_resposta": [
     "A",
@@ -9,21 +10,22 @@
   ],
   "disciplinas": [
     "Ética Profissional",
-    "Filosofia do Direito",
     "Direito Constitucional",
     "Direito Administrativo",
     "Direito Tributário",
-    "Direito Internacional",
-    "Direitos Humanos",
-    "Direito Eleitoral",
+    "Direito Ambiental",
     "Direito Civil",
-    "Direito do Consumidor",
+    "Código de Defesa do Consumidor",
     "Direito Empresarial",
     "Direito Processual Civil",
     "Direito Penal",
     "Direito Processual Penal",
     "Direito do Trabalho",
-    "Direito Processual do Trabalho"
+    "Direito Processual do Trabalho",
+    "Direito Internacional",
+    "Direitos Humanos",
+    "Estatuto da Criança e do Adolescente",
+    "Direito Eleitoral"
   ],
   "questoes": {
     "1": {
@@ -165,7 +167,7 @@
       }
     },
     "7": {
-      "disciplina": "Direito Constitucional",
+      "disciplina": "Ética Profissional",
       "resposta": "D",
       "conteudo": {
         "segments": [
@@ -340,7 +342,7 @@
     },
     "15": {
       "disciplina": "Direito Constitucional",
-      "resposta": "D",
+      "resposta": "A",
       "conteudo": {
         "segments": [
           {
@@ -368,7 +370,7 @@
     },
     "16": {
       "disciplina": "Direito Constitucional",
-      "resposta": "A",
+      "resposta": "D",
       "conteudo": {
         "segments": [
           {
@@ -396,7 +398,7 @@
     },
     "17": {
       "disciplina": "Direitos Humanos",
-      "resposta": "B",
+      "resposta": "A",
       "conteudo": {
         "segments": [
           {
@@ -533,7 +535,7 @@
       }
     },
     "23": {
-      "disciplina": "Direito Administrativo",
+      "disciplina": "Direito Financeiro",
       "resposta": "A",
       "conteudo": {
         "segments": [
@@ -551,7 +553,7 @@
       }
     },
     "24": {
-      "disciplina": "Direito Administrativo",
+      "disciplina": "Direito Financeiro",
       "resposta": "D",
       "conteudo": {
         "segments": [
@@ -902,7 +904,7 @@
     },
     "39": {
       "disciplina": "Direito Civil",
-      "resposta": "C",
+      "resposta": "A",
       "conteudo": {
         "segments": [
           {
@@ -947,7 +949,7 @@
       }
     },
     "41": {
-      "disciplina": "Direito Civil",
+      "disciplina": "Código de Defesa do Consumidor",
       "resposta": "B",
       "conteudo": {
         "segments": [
@@ -993,7 +995,7 @@
       }
     },
     "43": {
-      "disciplina": "Direito Civil",
+      "disciplina": "Estatuto da Criança e do Adolescente",
       "resposta": "D",
       "conteudo": {
         "segments": [
@@ -1011,8 +1013,8 @@
       }
     },
     "44": {
-      "disciplina": "Direito Civil",
-      "resposta": "C",
+      "disciplina": "Estatuto da Criança e do Adolescente",
+      "resposta": "B",
       "conteudo": {
         "segments": [
           {
@@ -1039,7 +1041,7 @@
       }
     },
     "45": {
-      "disciplina": "Direito do Consumidor",
+      "disciplina": "Código de Defesa do Consumidor",
       "resposta": "B",
       "conteudo": {
         "segments": [
@@ -1057,7 +1059,7 @@
       }
     },
     "46": {
-      "disciplina": "Direito do Consumidor",
+      "disciplina": "Código de Defesa do Consumidor",
       "resposta": "D",
       "conteudo": {
         "segments": [
@@ -1132,7 +1134,7 @@
     },
     "49": {
       "disciplina": "Direito Empresarial",
-      "resposta": "A",
+      "resposta": "C",
       "conteudo": {
         "segments": [
           {
@@ -1150,7 +1152,7 @@
     },
     "50": {
       "disciplina": "Direito Empresarial",
-      "resposta": "D",
+      "resposta": "B",
       "conteudo": {
         "segments": [
           {
@@ -1178,7 +1180,7 @@
     },
     "51": {
       "disciplina": "Direito Processual Civil",
-      "resposta": "B",
+      "resposta": "D",
       "conteudo": {
         "segments": [
           {
@@ -1316,7 +1318,7 @@
     },
     "57": {
       "disciplina": "Direito Penal",
-      "resposta": "C",
+      "resposta": "A",
       "conteudo": {
         "segments": [
           {
@@ -1362,7 +1364,7 @@
     },
     "59": {
       "disciplina": "Direito Penal",
-      "resposta": "B",
+      "resposta": "C",
       "conteudo": {
         "segments": [
           {
@@ -1380,7 +1382,7 @@
     },
     "60": {
       "disciplina": "Direito Penal",
-      "resposta": "A",
+      "resposta": "D",
       "conteudo": {
         "segments": [
           {

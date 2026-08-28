@@ -1,5 +1,6 @@
 {
   "data": "2022-02-20",
+  "descricao": "Tipo 1 - BRANCA",
   "qtd_questoes": 80,
   "opcoes_resposta": [
     "A",
@@ -7,9 +8,28 @@
     "C",
     "D"
   ],
+  "disciplinas": [
+    "Ética Profissional",
+    "Direito Constitucional",
+    "Direito Administrativo",
+    "Direito Tributário",
+    "Direito Civil",
+    "Direito Empresarial",
+    "Direito Processual Civil",
+    "Direito Penal",
+    "Direito Processual Penal",
+    "Direito do Trabalho",
+    "Direito Processual do Trabalho",
+    "Direitos Humanos",
+    "Direito Internacional",
+    "Estatuto da Criança e do Adolescente",
+    "Direito do Consumidor",
+    "Direito Ambiental",
+    "Filosofia do Direito"
+  ],
   "questoes": {
     "1": {
-      "disciplina": "Direito Civil",
+      "disciplina": "Ética Profissional",
       "resposta": "B",
       "conteudo": {
         "segments": [
@@ -27,7 +47,7 @@
       }
     },
     "2": {
-      "disciplina": "Direito Empresarial",
+      "disciplina": "Ética Profissional",
       "resposta": "C",
       "conteudo": {
         "segments": [
@@ -63,7 +83,7 @@
       }
     },
     "4": {
-      "disciplina": "Direito Empresarial",
+      "disciplina": "Ética Profissional",
       "resposta": "B",
       "conteudo": {
         "segments": [
@@ -153,7 +173,7 @@
       }
     },
     "9": {
-      "disciplina": "Direitos Humanos",
+      "disciplina": "Filosofia do Direito",
       "resposta": "D",
       "conteudo": {
         "segments": [
@@ -171,7 +191,7 @@
       }
     },
     "10": {
-      "disciplina": "Direitos Humanos",
+      "disciplina": "Filosofia do Direito",
       "resposta": "C",
       "conteudo": {
         "segments": [
@@ -369,7 +389,7 @@
       }
     },
     "21": {
-      "disciplina": "Direito Constitucional",
+      "disciplina": "Direitos Humanos",
       "resposta": "B",
       "conteudo": {
         "segments": [
@@ -549,7 +569,7 @@
       }
     },
     "31": {
-      "disciplina": "Ética Profissional",
+      "disciplina": "Direito Administrativo",
       "resposta": "A",
       "conteudo": {
         "segments": [
@@ -622,7 +642,7 @@
     },
     "35": {
       "disciplina": "Direito Civil",
-      "resposta": "B",
+      "resposta": "C",
       "conteudo": {
         "segments": [
           {
@@ -640,7 +660,7 @@
     },
     "36": {
       "disciplina": "Direito Civil",
-      "resposta": "C",
+      "resposta": "A",
       "conteudo": {
         "segments": [
           {
@@ -658,7 +678,7 @@
     },
     "37": {
       "disciplina": "Direito Civil",
-      "resposta": "A",
+      "resposta": "B",
       "conteudo": {
         "segments": [
           {
@@ -747,7 +767,7 @@
       }
     },
     "42": {
-      "disciplina": "ECA",
+      "disciplina": "Estatuto da Criança e do Adolescente",
       "resposta": "A",
       "conteudo": {
         "segments": [
@@ -765,7 +785,7 @@
       }
     },
     "43": {
-      "disciplina": "ECA",
+      "disciplina": "Estatuto da Criança e do Adolescente",
       "resposta": "C",
       "conteudo": {
         "segments": [
@@ -1017,7 +1037,7 @@
       }
     },
     "57": {
-      "disciplina": "Juizados Especiais",
+      "disciplina": "Direito Processual Civil",
       "resposta": "A",
       "conteudo": {
         "segments": [
@@ -1396,7 +1416,7 @@
     },
     "78": {
       "disciplina": "Direito Processual do Trabalho",
-      "resposta": "D",
+      "resposta": "A",
       "conteudo": {
         "segments": [
           {
@@ -1454,7 +1474,7 @@
     "status": "success",
     "version": 1,
     "engine": "pymupdf",
-    "engine_revision": 5,
+    "engine_revision": 6,
     "question_count": 80,
     "pdf_sha256": "2e5311a24124196d03e5379205deb54a1d9b5727bfb00e0ac443b9965e219ac5"
   }
