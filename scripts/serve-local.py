@@ -1,4 +1,4 @@
-"""Serve the checked-out data catalog and image assets with browser CORS."""
+"""Serve the checked-out data catalog and source PDFs with browser CORS."""
 
 from __future__ import annotations
 

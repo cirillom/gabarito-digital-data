@@ -1753,7 +1753,265 @@
                     ],
                     "kind": "question"
                   }
-                ]
+                ],
+                "rich": {
+                  "version": 2,
+                  "status": "success",
+                  "source_pdf_sha256": "9707d9dae08c177dd27dcd5ac8d6ae97e6f9d45d46fb0892c84679838ff8a4ae",
+                  "method": "gemini:gemini-3.5-flash-lite",
+                  "statement": {
+                    "blocks": [
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "O esquema representa um experimento feito com células do protozoário ",
+                            "marks": []
+                          },
+                          {
+                            "type": "text",
+                            "text": "Amoeba proteus",
+                            "marks": [
+                              "italic"
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": ". Nele, um grupo de células foi tratado com a droga citocalasina B, enquanto outro grupo não foi tratado, servindo como controle. O formato e o movimento das células tratadas foram comprometidos.",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 2,
+                            "rect": [
+                              0.0,
+                              0.112222,
+                              0.5,
+                              0.657281
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "figure",
+                        "inlines": [],
+                        "asset_ids": [
+                          "ad8812efa2733391832d608cf4029263d8dba4a1dca9807878e53d1b5e56c320"
+                        ],
+                        "alt": "Esquema do experimento com células da amoeba proteus, comparando um grupo controle e uma ameba tratada com citocalasina B.",
+                        "caption": "SADAVA, D. et al. Vida: a ciência da biologia — volume I: célula e hereditariedade. Porto Alegre: Artmed, 2009 (adaptado).",
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 2,
+                            "rect": [
+                              0.0,
+                              0.112222,
+                              0.5,
+                              0.657281
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "Qual componente celular foi afetado pela droga utilizada no experimento?",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 2,
+                            "rect": [
+                              0.0,
+                              0.112222,
+                              0.5,
+                              0.657281
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": [
+                    {
+                      "label": "A",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "Vacúolos.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 2,
+                                "rect": [
+                                  0.0,
+                                  0.112222,
+                                  0.5,
+                                  0.657281
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "B",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "Mitocôndrias.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 2,
+                                "rect": [
+                                  0.0,
+                                  0.112222,
+                                  0.5,
+                                  0.657281
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "C",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "Microfilamentos.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 2,
+                                "rect": [
+                                  0.0,
+                                  0.112222,
+                                  0.5,
+                                  0.657281
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "D",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "Material genético.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 2,
+                                "rect": [
+                                  0.0,
+                                  0.112222,
+                                  0.5,
+                                  0.657281
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "E",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "Membrana plasmática.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 2,
+                                "rect": [
+                                  0.0,
+                                  0.112222,
+                                  0.5,
+                                  0.657281
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "assets": [
+                    {
+                      "id": "ad8812efa2733391832d608cf4029263d8dba4a1dca9807878e53d1b5e56c320",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 1.030928,
+                      "display_width": 0.759784,
+                      "source": {
+                        "page": 2,
+                        "rect": [
+                          0.082925,
+                          0.226694,
+                          0.462817,
+                          0.494903
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             },
             "92": {
@@ -2087,7 +2345,413 @@
                     ],
                     "kind": "question"
                   }
-                ]
+                ],
+                "rich": {
+                  "version": 2,
+                  "status": "success",
+                  "source_pdf_sha256": "9707d9dae08c177dd27dcd5ac8d6ae97e6f9d45d46fb0892c84679838ff8a4ae",
+                  "method": "gemini:gemini-3.5-flash-lite",
+                  "statement": {
+                    "blocks": [
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "O LED é um dispositivo eletrônico que conduz corrente elétrica em um ònico sentido, sendo caracterizado por uma tensão e uma corrente máxima de funcionamento, ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "I_{\\text{máx}}",
+                            "marks": [],
+                            "fallback_asset_id": "349065e1c27be839befe416d27c0efdb842bafe4c76cc68df43fa8936ca07f5b"
+                          },
+                          {
+                            "type": "text",
+                            "text": ". Um LED acende apenas se a corrente que o percorre está no sentido permitido e se a diferença de potencial à qual está submetido é igual ou superior à sua tensão de funcionamento. A figura ilustra o sómbolo do LED usado na representação de circuitos.",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 8,
+                            "rect": [
+                              0.0,
+                              0.078513,
+                              0.5,
+                              0.945
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "figure",
+                        "inlines": [],
+                        "asset_ids": [
+                          "b88c1f6de64d2f53ac510e2d78ac7e05da5e9390118cc3766d20b266b5e9d4b9"
+                        ],
+                        "alt": "Sómbolo do LED e sentido permitido da corrente",
+                        "align": "center",
+                        "source": [
+                          {
+                            "page": 8,
+                            "rect": [
+                              0.0,
+                              0.078513,
+                              0.5,
+                              0.945
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "Um estudante de física analisa as propriedades do LED em um circuito simples de corrente contínua. Ele dispõe dos seguintes materiais: uma bateria ideal de 4,5 V; dois LEDs de tensão 3,0 V e ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "I_{\\text{máx}} = 1,0\\text{ mA}",
+                            "marks": [],
+                            "fallback_asset_id": "5fddae067f4bf23003d6e9625b40ff56bfa6e6603ba60b94fec5198e635a947d"
+                          },
+                          {
+                            "type": "text",
+                            "text": " cada; e dois resistores de 1,5 kΩ cada.",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 8,
+                            "rect": [
+                              0.0,
+                              0.078513,
+                              0.5,
+                              0.945
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "O circuito que o estudante pode montar, para que ambos os LEDs fiquem acesos e cada um seja percorrido por ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "I_{\\text{máx}}",
+                            "marks": [],
+                            "fallback_asset_id": "254584323412320a831cafcaa5bf5e65dcffd17996a4e813b948a8e14f09ec6f"
+                          },
+                          {
+                            "type": "text",
+                            "text": ", é",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 8,
+                            "rect": [
+                              0.0,
+                              0.078513,
+                              0.5,
+                              0.945
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": [
+                    {
+                      "label": "A",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "figure",
+                            "inlines": [],
+                            "asset_ids": [
+                              "445a08978474766b6a359e77fca257475ff56edf67d66cd1fcb32ba9547c8002"
+                            ],
+                            "alt": "Circuito A",
+                            "align": "center",
+                            "source": [
+                              {
+                                "page": 8,
+                                "rect": [
+                                  0.0,
+                                  0.078513,
+                                  0.5,
+                                  0.945
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "B",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "figure",
+                            "inlines": [],
+                            "asset_ids": [
+                              "348e4797bdd5515acf2a38d097dae0f9d809c16ab355d1e5737940779c8c5bba"
+                            ],
+                            "alt": "Circuito B",
+                            "align": "center",
+                            "source": [
+                              {
+                                "page": 8,
+                                "rect": [
+                                  0.0,
+                                  0.078513,
+                                  0.5,
+                                  0.945
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "C",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "figure",
+                            "inlines": [],
+                            "asset_ids": [
+                              "aa81fbfac5ad4b45bdd9d5f71112a7936400cf2e894eb8d2e6f3e89f0e24ffe3"
+                            ],
+                            "alt": "Circuito C",
+                            "align": "center",
+                            "source": [
+                              {
+                                "page": 8,
+                                "rect": [
+                                  0.0,
+                                  0.078513,
+                                  0.5,
+                                  0.945
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "D",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "figure",
+                            "inlines": [],
+                            "asset_ids": [
+                              "713f5333ed9c92ace8e83348fc2a223b177b7372ade2826982ff1f803c53f95b"
+                            ],
+                            "alt": "Circuito D",
+                            "align": "center",
+                            "source": [
+                              {
+                                "page": 8,
+                                "rect": [
+                                  0.0,
+                                  0.078513,
+                                  0.5,
+                                  0.945
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "E",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "figure",
+                            "inlines": [],
+                            "asset_ids": [
+                              "f0c47fa5246f48275a52aae693235434680f9f3b930b9dad89272642ee602e09"
+                            ],
+                            "alt": "Circuito E",
+                            "align": "center",
+                            "source": [
+                              {
+                                "page": 8,
+                                "rect": [
+                                  0.0,
+                                  0.078513,
+                                  0.5,
+                                  0.945
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "assets": [
+                    {
+                      "id": "b88c1f6de64d2f53ac510e2d78ac7e05da5e9390118cc3766d20b266b5e9d4b9",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 2.197531,
+                      "display_width": 0.450805,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.16017,
+                          0.215559,
+                          0.385572,
+                          0.290215
+                        ]
+                      }
+                    },
+                    {
+                      "id": "445a08978474766b6a359e77fca257475ff56edf67d66cd1fcb32ba9547c8002",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 1.817427,
+                      "display_width": 0.369762,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.083493,
+                          0.416658,
+                          0.268374,
+                          0.4907
+                        ]
+                      }
+                    },
+                    {
+                      "id": "348e4797bdd5515acf2a38d097dae0f9d809c16ab355d1e5737940779c8c5bba",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.97619,
+                      "display_width": 0.276899,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.083493,
+                          0.501361,
+                          0.221943,
+                          0.604589
+                        ]
+                      }
+                    },
+                    {
+                      "id": "aa81fbfac5ad4b45bdd9d5f71112a7936400cf2e894eb8d2e6f3e89f0e24ffe3",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.896648,
+                      "display_width": 0.27099,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.083493,
+                          0.620693,
+                          0.218988,
+                          0.73068
+                        ]
+                      }
+                    },
+                    {
+                      "id": "713f5333ed9c92ace8e83348fc2a223b177b7372ade2826982ff1f803c53f95b",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.892473,
+                      "display_width": 0.280276,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.083493,
+                          0.745569,
+                          0.223631,
+                          0.859858
+                        ]
+                      }
+                    },
+                    {
+                      "id": "f0c47fa5246f48275a52aae693235434680f9f3b930b9dad89272642ee602e09",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 1.694561,
+                      "display_width": 0.341903,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.083493,
+                          0.871426,
+                          0.254445,
+                          0.944853
+                        ]
+                      }
+                    },
+                    {
+                      "id": "349065e1c27be839befe416d27c0efdb842bafe4c76cc68df43fa8936ca07f5b",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.834163,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.396809,
+                          0.746782,
+                          0.417021,
+                          0.764418
+                        ]
+                      }
+                    },
+                    {
+                      "id": "5fddae067f4bf23003d6e9625b40ff56bfa6e6603ba60b94fec5198e635a947d",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 5.865905,
+                      "display_width": 0.201642,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.192786,
+                          0.343709,
+                          0.293607,
+                          0.356219
+                        ]
+                      }
+                    },
+                    {
+                      "id": "254584323412320a831cafcaa5bf5e65dcffd17996a4e813b948a8e14f09ec6f",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.821418,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 8,
+                        "rect": [
+                          0.434826,
+                          0.399845,
+                          0.453358,
+                          0.416266
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             },
             "110": {
@@ -2875,7 +3539,430 @@
                     ],
                     "kind": "question"
                   }
-                ]
+                ],
+                "rich": {
+                  "version": 2,
+                  "status": "success",
+                  "source_pdf_sha256": "9707d9dae08c177dd27dcd5ac8d6ae97e6f9d45d46fb0892c84679838ff8a4ae",
+                  "method": "gemini:gemini-3.5-flash-lite",
+                  "statement": {
+                    "blocks": [
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "Em uma região com grande incidência de terremotos, observou-se que dois terremotos ocorridos apresentaram magnitudes ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "M_1",
+                            "marks": [],
+                            "fallback_asset_id": "6ebe65467b2338993edd75669e4edcc64763835513d941e1399964ca3e9cc078"
+                          },
+                          {
+                            "type": "text",
+                            "text": " e ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "M_2",
+                            "marks": [],
+                            "fallback_asset_id": "6c67231ac48be9aafbfdcc6a80ce20c3830d8c02af2e6b3be58a50a1a9e26898"
+                          },
+                          {
+                            "type": "text",
+                            "text": ", medidos segundo a escala Richter, e liberaram energias iguais a ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "E_1",
+                            "marks": [],
+                            "fallback_asset_id": "57c2e22052963ec9acad6ed7f4dc7326adfedbe5bf6918217841d4a01302f3f7"
+                          },
+                          {
+                            "type": "text",
+                            "text": " e ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "E_2",
+                            "marks": [],
+                            "fallback_asset_id": "cb0dd9da82e4909c5bf00dc5e3334e41f1b528bda2ffc73a3e0de556dc04cffe"
+                          },
+                          {
+                            "type": "text",
+                            "text": ", respectivamente. Entre os estudiosos do assunto, é conhecida uma expressão algébrica relacionando esses valores dada por",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 21,
+                            "rect": [
+                              0.0555,
+                              0.699479,
+                              0.4925,
+                              0.740584
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "formula",
+                        "inlines": [],
+                        "latex": "M_2 - M_1 = \\frac{2}{3} \\log \\left( \\frac{E_2}{E_1} \\right)",
+                        "asset_ids": [],
+                        "align": "center",
+                        "source": [
+                          {
+                            "page": 21,
+                            "rect": [
+                              0.677,
+                              0.73011,
+                              0.8705,
+                              0.78057
+                            ]
+                          }
+                        ],
+                        "fallback_asset_id": "391be7ac561e383da5e946f79adda569dbfad7b06059c03ee920a00d9267d8ab"
+                      },
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "Estudos mais abrangentes observaram que o primeiro terremoto apresentou a magnitude ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "M_1 = 6,9",
+                            "marks": [],
+                            "fallback_asset_id": "90d8a16ac4a02a38f56c9cc9fca9bd49e18020c4f6cf69e8340d2fe6b1920580"
+                          },
+                          {
+                            "type": "text",
+                            "text": " e a energia liberada foi um décimo da observada no segundo terremoto.",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 21,
+                            "rect": [
+                              0.2455,
+                              0.804464,
+                              0.4925,
+                              0.830294
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "inlines": [
+                          {
+                            "type": "text",
+                            "text": "O valor aproximado da magnitude ",
+                            "marks": []
+                          },
+                          {
+                            "type": "formula",
+                            "latex": "M_2",
+                            "marks": [],
+                            "fallback_asset_id": "a3033e7baa8464bca96d48048ee98b4ab62217d409a1b16e34df7dcb71ac0a08"
+                          },
+                          {
+                            "type": "text",
+                            "text": " do segundo terremoto, expresso com uma casa decimal, é igual a",
+                            "marks": []
+                          }
+                        ],
+                        "asset_ids": [],
+                        "align": "left",
+                        "source": [
+                          {
+                            "page": 21,
+                            "rect": [
+                              0.056,
+                              0.845847,
+                              0.4925,
+                              0.856401
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": [
+                    {
+                      "label": "A",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "5,4.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 21,
+                                "rect": [
+                                  0.078,
+                                  0.865289,
+                                  0.1075,
+                                  0.876954
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "B",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "6,2.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 21,
+                                "rect": [
+                                  0.078,
+                                  0.880287,
+                                  0.107,
+                                  0.891952
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "C",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "7,6.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 21,
+                                "rect": [
+                                  0.0785,
+                                  0.895562,
+                                  0.107,
+                                  0.906672
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "D",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "8,2.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 21,
+                                "rect": [
+                                  0.0785,
+                                  0.910283,
+                                  0.107,
+                                  0.921114
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "label": "E",
+                      "content": {
+                        "blocks": [
+                          {
+                            "type": "paragraph",
+                            "inlines": [
+                              {
+                                "type": "text",
+                                "text": "8,4.",
+                                "marks": []
+                              }
+                            ],
+                            "asset_ids": [],
+                            "align": "left",
+                            "source": [
+                              {
+                                "page": 21,
+                                "rect": [
+                                  0.078,
+                                  0.925281,
+                                  0.107,
+                                  0.93639
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "assets": [
+                    {
+                      "id": "6ebe65467b2338993edd75669e4edcc64763835513d941e1399964ca3e9cc078",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 1.411085,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.1485,
+                          0.714199,
+                          0.1695,
+                          0.725031
+                        ]
+                      }
+                    },
+                    {
+                      "id": "6c67231ac48be9aafbfdcc6a80ce20c3830d8c02af2e6b3be58a50a1a9e26898",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 2.116628,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.1795,
+                          0.714199,
+                          0.211,
+                          0.725031
+                        ]
+                      }
+                    },
+                    {
+                      "id": "57c2e22052963ec9acad6ed7f4dc7326adfedbe5bf6918217841d4a01302f3f7",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.403879,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.7335,
+                          0.70314,
+                          0.7475,
+                          0.72837
+                        ]
+                      }
+                    },
+                    {
+                      "id": "cb0dd9da82e4909c5bf00dc5e3334e41f1b528bda2ffc73a3e0de556dc04cffe",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 0.461577,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.7945,
+                          0.70314,
+                          0.8105,
+                          0.72837
+                        ]
+                      }
+                    },
+                    {
+                      "id": "391be7ac561e383da5e946f79adda569dbfad7b06059c03ee920a00d9267d8ab",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 2.7911,
+                      "display_width": 0.387,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.677,
+                          0.73011,
+                          0.8705,
+                          0.78057
+                        ]
+                      }
+                    },
+                    {
+                      "id": "90d8a16ac4a02a38f56c9cc9fca9bd49e18020c4f6cf69e8340d2fe6b1920580",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 1.29973,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.7755,
+                          0.78666,
+                          0.819,
+                          0.81102
+                        ]
+                      }
+                    },
+                    {
+                      "id": "a3033e7baa8464bca96d48048ee98b4ab62217d409a1b16e34df7dcb71ac0a08",
+                      "kind": "pdf_crop",
+                      "aspect_ratio": 1.482736,
+                      "display_width": 0.1,
+                      "source": {
+                        "page": 21,
+                        "rect": [
+                          0.319,
+                          0.845847,
+                          0.3405,
+                          0.856401
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             },
             "151": {
@@ -3446,6 +4533,16 @@
             "engine_revision": 5,
             "question_count": 90,
             "pdf_sha256": "9707d9dae08c177dd27dcd5ac8d6ae97e6f9d45d46fb0892c84679838ff8a4ae"
+          },
+          "rich_extraction": {
+            "version": 2,
+            "status": "partial",
+            "question_count": 90,
+            "successful_question_count": 3,
+            "processed_question_count": 0,
+            "reused_question_count": 3,
+            "source_pdf_sha256": "9707d9dae08c177dd27dcd5ac8d6ae97e6f9d45d46fb0892c84679838ff8a4ae",
+            "method": "deterministic"
           }
         }
       },

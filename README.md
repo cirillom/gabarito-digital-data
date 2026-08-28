@@ -4,8 +4,10 @@ Each exam directory contains `prova.pdf`, `gabarito.pdf`, and a generated
 `data.json`. Besides the answer and discipline, the generator detects the
 original PDF region occupied by every question. It also reconstructs a
 versioned rich-content tree containing text, figures, exact formula crops, and
-the complete selectable alternatives. The Flutter app prefers that tree and
-falls back question-by-question to the original PDF crop.
+the complete selectable alternatives. Figures and formula fallbacks remain
+normalized references into `prova.pdf`; generation does not add PNG/JPG files
+to the repository. The Flutter app prefers that tree and falls back
+question-by-question to the original PDF crop.
 
 Run the complete repository update with:
 
@@ -82,7 +84,11 @@ uv run rich_content.py --directory "ENEM\provas\2024\2o dia" --question 91 --pre
 
 Add `--use-gemini` to inspect the AI-enhanced result, or `--write` when the
 validated result should be persisted. The preview contains selectable answer
-cards and references assets generated beside the preview.
+cards and embeds temporary renderings inside the HTML file; it does not create
+repository image assets.
+
+Useful ENEM 2024 day-two samples are question 91 for figure/caption ordering,
+question 109 for image-only alternatives, and question 150 for equations.
 
 For end-to-end Flutter testing against the checkout, first generate the local
 catalog, then serve it with CORS:
@@ -92,11 +98,12 @@ uv run folder_parser.py --output data.json
 uv run scripts\serve-local.py
 ```
 
-In a second terminal, run Flutter with the local catalog and asset origin:
+In a second terminal, run Flutter with the local catalog and repository origin:
 
 ```powershell
-flutter run -d chrome --dart-define=CATALOG_URL=http://127.0.0.1:8765/data.json --dart-define=DATA_ASSET_BASE_URL=http://127.0.0.1:8765/ --dart-define=FORCE_CATALOG_REFRESH=true
+flutter run -d chrome --dart-define=CATALOG_URL=http://127.0.0.1:8765/data.json --dart-define=DATA_REPOSITORY_BASE_URL=http://127.0.0.1:8765/ --dart-define=FORCE_CATALOG_REFRESH=true
 ```
 
-This path reads both JSON and extracted images from the local checkout. It
-does not depend on `raw.githubusercontent.com`.
+This path reads both JSON and source PDFs from the local checkout. It does not
+depend on `raw.githubusercontent.com`. The legacy `DATA_ASSET_BASE_URL` define
+remains accepted for existing local scripts.

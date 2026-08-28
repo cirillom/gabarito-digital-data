@@ -8,23 +8,24 @@ layout; its output is validated against the same contract before being saved.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import html
 import json
 import os
 import re
+import time
 import unicodedata
 from pathlib import Path
 from typing import Any, Literal
-from urllib.parse import quote
 
 import pymupdf
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
 
-RICH_CONTENT_VERSION = 1
-RICH_EXTRACTION_VERSION = 1
+RICH_CONTENT_VERSION = 2
+RICH_EXTRACTION_VERSION = 2
 DEFAULT_MODEL_NAME = "gemini-3.5-flash-lite"
 _INLINE_OPTION_AFTER_PUNCTUATION = re.compile(
     r"(?<=[.!?;:])\s*([A-Z])(?=\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ])"
@@ -55,6 +56,7 @@ class GeminiBlock(BaseModel):
     asset_ids: list[str] = Field(default_factory=list)
     source_crop: SourceCrop | None = None
     alt: str | None = None
+    caption: str | None = None
     align: Literal["left", "center", "right", "justify"] = "left"
 
 
@@ -138,6 +140,23 @@ def _split_statement_and_options(
     labels: list[str],
 ) -> tuple[str, dict[str, str]]:
     """Split alternatives by selecting the last complete ordered marker path."""
+    ordered = _select_option_matches(text, labels)
+    statement = text[: ordered[0].start()].strip()
+    options: dict[str, str] = {}
+    for index, label in enumerate(labels):
+        start = ordered[index].end()
+        end = ordered[index + 1].start() if index + 1 < len(ordered) else len(text)
+        option_text = text[start:end].strip()
+        if not option_text:
+            raise ValueError(f"Option {label} has no content.")
+        options[label] = option_text
+    return statement, options
+
+
+def _select_option_matches(
+    text: str,
+    labels: list[str],
+) -> list[re.Match[str]]:
     if not labels:
         raise ValueError("The exam has no answer-option labels.")
     candidates = {
@@ -155,17 +174,7 @@ def _split_statement_and_options(
     ordered = [selected[label] for label in labels]
     if any(current.start() >= following.start() for current, following in zip(ordered, ordered[1:])):
         raise ValueError("Answer-option markers are not in the expected order.")
-
-    statement = text[: ordered[0].start()].strip()
-    options: dict[str, str] = {}
-    for index, label in enumerate(labels):
-        start = ordered[index].end()
-        end = ordered[index + 1].start() if index + 1 < len(ordered) else len(text)
-        option_text = text[start:end].strip()
-        if not option_text:
-            raise ValueError(f"Option {label} has no content.")
-        options[label] = option_text
-    return statement, options
+    return ordered
 
 
 def _clean_question_statement(text: str, number: int) -> str:
@@ -206,51 +215,49 @@ def _paragraph_blocks(text: str, source: list[dict[str, Any]]) -> list[dict[str,
     return blocks
 
 
-def _asset_url(asset_path: Path, repository_root: Path | None) -> str:
-    if repository_root is None:
-        return asset_path.as_posix()
-    relative = asset_path.resolve().relative_to(repository_root.resolve())
-    return (
-        "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/"
-        f"refs/heads/main/{quote(relative.as_posix())}"
-    )
-
-
-def _save_crop_asset(
+def _pdf_crop_asset(
     page: pymupdf.Page,
     clip: pymupdf.Rect,
     *,
-    directory: Path,
-    assets_directory: Path | None,
-    repository_root: Path | None,
-    prefix: str,
+    segments: list[dict[str, Any]],
+    pdf_sha256: str,
 ) -> dict[str, Any]:
     clip = clip & page.rect
     if clip.width < 2 or clip.height < 2:
         raise ValueError("Asset crop is empty.")
-    pixmap = page.get_pixmap(matrix=pymupdf.Matrix(2, 2), clip=clip, alpha=False)
-    image_bytes = pixmap.tobytes("png")
-    digest = hashlib.sha256(image_bytes).hexdigest()
-    assets_directory = assets_directory or directory / "assets"
-    assets_directory.mkdir(parents=True, exist_ok=True)
-    asset_path = assets_directory / f"{prefix}-{digest[:20]}.png"
-    if not asset_path.exists():
-        asset_path.write_bytes(image_bytes)
     normalized = [
         clip.x0 / page.rect.width,
         clip.y0 / page.rect.height,
         clip.x1 / page.rect.width,
         clip.y1 / page.rect.height,
     ]
+    source = {
+        "page": page.number + 1,
+        "rect": _normalize_rect(normalized),
+    }
+    containing_segments = [
+        _segment_clip(page, segment)
+        for segment in segments
+        if int(segment["page"]) == page.number + 1
+        and _segment_clip(page, segment).contains(clip.tl)
+    ]
+    reference_width = min(
+        (segment.width for segment in containing_segments),
+        default=page.rect.width,
+    )
+    display_width = min(1.0, max(0.1, clip.width / reference_width))
+    identifier = hashlib.sha256(
+        (
+            f"pdf-crop-v2:{pdf_sha256}:{source['page']}:"
+            + ",".join(f"{coordinate:.6f}" for coordinate in source["rect"])
+        ).encode()
+    ).hexdigest()
     return {
-        "id": digest,
-        "path": os.path.relpath(asset_path, directory).replace("\\", "/"),
-        "url": _asset_url(asset_path, repository_root),
-        "sha256": digest,
-        "width": pixmap.width,
-        "height": pixmap.height,
-        "aspect_ratio": round(pixmap.width / pixmap.height, 6),
-        "source": {"page": page.number + 1, "rect": _normalize_rect(normalized)},
+        "id": identifier,
+        "kind": "pdf_crop",
+        "aspect_ratio": round(clip.width / clip.height, 6),
+        "display_width": round(display_width, 6),
+        "source": source,
     }
 
 
@@ -258,9 +265,7 @@ def _extract_figure_assets(
     document: pymupdf.Document,
     segments: list[dict[str, Any]],
     *,
-    directory: Path,
-    assets_directory: Path | None,
-    repository_root: Path | None,
+    pdf_sha256: str,
 ) -> list[dict[str, Any]]:
     assets: list[dict[str, Any]] = []
     seen: set[tuple[int, tuple[float, float, float, float]]] = set()
@@ -283,16 +288,193 @@ def _extract_figure_assets(
                 continue
             seen.add(key)
             assets.append(
-                _save_crop_asset(
+                _pdf_crop_asset(
                     page,
                     intersection,
-                    directory=directory,
-                    assets_directory=assets_directory,
-                    repository_root=repository_root,
-                    prefix="figure",
+                    segments=segments,
+                    pdf_sha256=pdf_sha256,
                 )
             )
+    assets.sort(
+        key=lambda asset: (
+            asset["source"]["page"],
+            int((asset["source"]["rect"][0] + asset["source"]["rect"][2]) / 2 >= 0.5),
+            asset["source"]["rect"][1],
+            asset["source"]["rect"][0],
+        )
+    )
     return assets
+
+
+def _page_source(page: pymupdf.Page, clip: pymupdf.Rect) -> dict[str, Any]:
+    return {
+        "page": page.number + 1,
+        "rect": _normalize_rect(
+            [
+                clip.x0 / page.rect.width,
+                clip.y0 / page.rect.height,
+                clip.x1 / page.rect.width,
+                clip.y1 / page.rect.height,
+            ]
+        ),
+    }
+
+
+def _visual_statement_blocks(
+    document: pymupdf.Document,
+    segments: list[dict[str, Any]],
+    assets: list[dict[str, Any]],
+    *,
+    number: int,
+    labels: list[str],
+    option_asset_ids: set[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Rebuild statement blocks in their source-PDF reading order."""
+    events: list[dict[str, Any]] = []
+    for segment_index, segment in enumerate(segments):
+        page = document[int(segment["page"]) - 1]
+        segment_clip = _segment_clip(page, segment)
+        blocks = page.get_text("dict", clip=segment_clip, sort=True)["blocks"]
+        for block in blocks:
+            if block.get("type") != 0:
+                continue
+            clip = pymupdf.Rect(block["bbox"]) & segment_clip
+            if clip.is_empty or clip.width < 2 or clip.height < 2:
+                continue
+            lines = []
+            font_sizes = []
+            for line in block.get("lines", []):
+                spans = line.get("spans", [])
+                line_text = "".join(str(span.get("text", "")) for span in spans)
+                if line_text.strip():
+                    lines.append(line_text.rstrip())
+                    font_sizes.extend(float(span.get("size", 0)) for span in spans)
+            text = "\n".join(lines).replace("\u00ad", "")
+            compact = re.sub(r"\s+", "", text)
+            if not text.strip() or re.fullmatch(
+                r"(?:E?NEM\d{4}){3,}", compact, flags=re.IGNORECASE
+            ):
+                continue
+            text = _INLINE_OPTION_AFTER_PUNCTUATION.sub(r"\n\1", text)
+            events.append(
+                {
+                    "kind": "text",
+                    "order": (segment_index, clip.y0, clip.x0),
+                    "text": text,
+                    "font_size": max(font_sizes, default=0),
+                    "source": _page_source(page, clip),
+                }
+            )
+
+    for asset in assets:
+        source = asset["source"]
+        page_number = int(source["page"])
+        page = document[page_number - 1]
+        clip = pymupdf.Rect(
+            source["rect"][0] * page.rect.width,
+            source["rect"][1] * page.rect.height,
+            source["rect"][2] * page.rect.width,
+            source["rect"][3] * page.rect.height,
+        )
+        segment_index = next(
+            (
+                index
+                for index, segment in enumerate(segments)
+                if int(segment["page"]) == page_number
+                and _segment_clip(page, segment).contains(clip.tl)
+            ),
+            len(segments),
+        )
+        events.append(
+            {
+                "kind": "figure",
+                "order": (segment_index, clip.y0, clip.x0),
+                "asset": asset,
+            }
+        )
+
+    events.sort(key=lambda event: event["order"])
+    text_events = [event for event in events if event["kind"] == "text"]
+    visual_text_parts: list[str] = []
+    cursor = 0
+    for event in text_events:
+        if visual_text_parts:
+            visual_text_parts.append("\n\n")
+            cursor += 2
+        event["text_start"] = cursor
+        visual_text_parts.append(event["text"])
+        cursor += len(event["text"])
+        event["text_end"] = cursor
+    visual_text = "".join(visual_text_parts)
+    try:
+        first_option_match = _select_option_matches(visual_text, labels)[0]
+        option_start = first_option_match.start()
+        option_anchor = first_option_match.end() - 1
+        option_order = next(
+            event["order"]
+            for event in text_events
+            if event["text_start"] <= option_anchor <= event["text_end"]
+        )
+    except (ValueError, StopIteration):
+        if not option_asset_ids:
+            raise
+        option_order = min(
+            event["order"]
+            for event in events
+            if event["kind"] == "figure"
+            and event["asset"]["id"] in option_asset_ids
+        )
+        option_start = min(
+            (
+                event["text_start"]
+                for event in text_events
+                if event["order"] >= option_order
+            ),
+            default=len(visual_text),
+        )
+
+    rich_blocks: list[dict[str, Any]] = []
+    for event in events:
+        if event["kind"] == "figure":
+            if event["order"] >= option_order:
+                continue
+            rich_blocks.append(
+                {
+                    "type": "figure",
+                    "asset_ids": [event["asset"]["id"]],
+                    "alt": "Figura da questão",
+                    "align": "center",
+                    "source": [event["asset"]["source"]],
+                }
+            )
+            continue
+
+        start = event["text_start"]
+        if start >= option_start:
+            continue
+        visible_text = event["text"][: max(0, option_start - start)]
+        visible_text = _clean_question_statement(visible_text, number)
+        if not visible_text:
+            continue
+        if (
+            rich_blocks
+            and rich_blocks[-1]["type"] == "figure"
+            and event["font_size"] <= 8.5
+        ):
+            caption = " ".join(
+                line.strip() for line in visible_text.splitlines() if line.strip()
+            )
+            if caption:
+                previous = rich_blocks[-1].get("caption")
+                rich_blocks[-1]["caption"] = (
+                    f"{previous} {caption}" if previous else caption
+                )
+            continue
+        rich_blocks.extend(_paragraph_blocks(visible_text, [event["source"]]))
+
+    if not rich_blocks:
+        raise ValueError("Question statement has no positioned content blocks.")
+    return rich_blocks
 
 
 def _render_segment_images(
@@ -338,10 +520,7 @@ def _materialize_model_crop(
     *,
     document: pymupdf.Document,
     segments: list[dict[str, Any]],
-    directory: Path,
-    assets_directory: Path | None,
-    repository_root: Path | None,
-    prefix: str,
+    pdf_sha256: str,
 ) -> dict[str, Any]:
     page_number, rect = _relative_crop_to_page(crop, segments)
     page = document[page_number - 1]
@@ -351,13 +530,11 @@ def _materialize_model_crop(
         rect[2] * page.rect.width,
         rect[3] * page.rect.height,
     )
-    return _save_crop_asset(
+    return _pdf_crop_asset(
         page,
         clip,
-        directory=directory,
-        assets_directory=assets_directory,
-        repository_root=repository_root,
-        prefix=prefix,
+        segments=segments,
+        pdf_sha256=pdf_sha256,
     )
 
 
@@ -385,6 +562,9 @@ Rules:
 - For an inline or display formula, include source_crop relative to its segment so an exact image fallback can be generated.
 - Reuse an asset_id only from AVAILABLE_ASSETS when it is the relevant figure.
 - If a relevant diagram/table is missing from AVAILABLE_ASSETS, return a figure block with source_crop and useful alt text.
+- Preserve the source reading order: text before a figure, the figure, then text after it.
+- Put a figure's source line or explanatory subtext in that figure block's caption, not in a disconnected paragraph.
+- For image-based alternatives, put the relevant figure crop inside that option's content.
 - source_crop.rect is [left, top, right, bottom], normalized 0..1 inside the referenced segment image.
 - Do not include the printed question number or option labels inside content text.
 
@@ -407,7 +587,7 @@ def _enrich_with_gemini(
     client: Any | None = None,
 ) -> GeminiQuestion:
     from google import genai
-    from google.genai import types
+    from google.genai import errors, types
 
     if client is None:
         load_dotenv()
@@ -428,15 +608,26 @@ def _enrich_with_gemini(
         types.Part.from_bytes(data=image, mime_type="image/png")
         for image in segment_images
     )
-    response = client.models.generate_content(
-        model=model_name,
-        contents=contents,
-        config=types.GenerateContentConfig(
-            temperature=0,
-            response_mime_type="application/json",
-            response_schema=GeminiQuestion,
-        ),
-    )
+    for attempt, delay in enumerate((2, 5, 10, 0)):
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=contents,
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                    response_mime_type="application/json",
+                    response_schema=GeminiQuestion,
+                ),
+            )
+            break
+        except errors.APIError as error:
+            if error.code not in {429, 500, 502, 503, 504} or delay == 0:
+                raise
+            print(
+                f"Gemini temporarily unavailable for question {number}; "
+                f"retrying in {delay}s ({attempt + 1}/3)."
+            )
+            time.sleep(delay)
     parsed = response.parsed
     if isinstance(parsed, GeminiQuestion):
         return parsed
@@ -451,9 +642,7 @@ def _materialize_gemini_document(
     known_assets: dict[str, dict[str, Any]],
     pdf_document: pymupdf.Document,
     segments: list[dict[str, Any]],
-    directory: Path,
-    assets_directory: Path | None,
-    repository_root: Path | None,
+    pdf_sha256: str,
 ) -> dict[str, Any]:
     blocks: list[dict[str, Any]] = []
     default_source = _source_refs(segments)
@@ -469,16 +658,19 @@ def _materialize_gemini_document(
                 crop,
                 document=pdf_document,
                 segments=segments,
-                directory=directory,
-                assets_directory=assets_directory,
-                repository_root=repository_root,
-                prefix="figure" if block["type"] == "figure" else "formula",
+                pdf_sha256=pdf_sha256,
             )
             known_assets[asset["id"]] = asset
             if block["type"] == "figure":
                 block["asset_ids"] = [asset["id"]]
             elif block["type"] == "formula":
                 block["fallback_asset_id"] = asset["id"]
+        elif (
+            block["type"] == "figure"
+            and not block.get("asset_ids")
+            and len(known_assets) == 1
+        ):
+            block["asset_ids"] = list(known_assets)
 
         materialized_inlines: list[dict[str, Any]] = []
         for inline_value in block.get("inlines", []):
@@ -490,10 +682,7 @@ def _materialize_gemini_document(
                     inline_crop,
                     document=pdf_document,
                     segments=segments,
-                    directory=directory,
-                    assets_directory=assets_directory,
-                    repository_root=repository_root,
-                    prefix="formula",
+                    pdf_sha256=pdf_sha256,
                 )
                 known_assets[asset["id"]] = asset
                 inline["fallback_asset_id"] = asset["id"]
@@ -527,20 +716,27 @@ def _validate_document(document: Any, *, assets: dict[str, dict[str, Any]]) -> N
                 if inline.get("type") == "formula" and not inline.get("latex", "").strip():
                     raise ValueError("Formula inline content needs LaTeX.")
                 fallback = inline.get("fallback_asset_id")
-                if inline.get("type") == "formula" and fallback not in assets:
-                    raise ValueError(
-                        "An inline formula needs an exact source-image fallback asset."
-                    )
+                if fallback is not None and fallback not in assets:
+                    raise ValueError("An inline formula references an unknown crop.")
         if block["type"] == "formula" and not block.get("latex", "").strip():
             raise ValueError("Formula blocks need LaTeX.")
-        if block["type"] == "formula" and block.get("fallback_asset_id") not in assets:
-            raise ValueError("A formula block needs an exact source-image fallback asset.")
+        if (
+            block["type"] == "formula"
+            and block.get("fallback_asset_id") is not None
+            and block["fallback_asset_id"] not in assets
+        ):
+            raise ValueError("A formula block references an unknown crop.")
         if block["type"] == "figure":
             asset_ids = block.get("asset_ids")
             if not isinstance(asset_ids, list) or not asset_ids:
                 raise ValueError("Figure blocks need at least one asset.")
             if any(asset_id not in assets for asset_id in asset_ids):
                 raise ValueError("A figure references an unknown asset.")
+            caption = block.get("caption")
+            if caption is not None and (
+                not isinstance(caption, str) or not caption.strip()
+            ):
+                raise ValueError("A figure caption must be non-empty text.")
 
 
 def validate_rich_content(content: dict[str, Any], labels: list[str]) -> None:
@@ -554,12 +750,44 @@ def validate_rich_content(content: dict[str, Any], labels: list[str]) -> None:
     assets = {asset.get("id"): asset for asset in assets_list if isinstance(asset, dict)}
     if len(assets) != len(assets_list) or None in assets:
         raise ValueError("Rich-content assets need unique IDs.")
+    for asset in assets.values():
+        if (
+            not isinstance(asset.get("id"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", asset["id"])
+            or asset.get("kind") != "pdf_crop"
+            or not isinstance(asset.get("aspect_ratio"), (int, float))
+            or not 0 < float(asset["aspect_ratio"])
+            or not isinstance(asset.get("display_width"), (int, float))
+            or not 0 < float(asset["display_width"]) <= 1
+            or not isinstance(asset.get("source"), dict)
+            or not isinstance(asset["source"].get("page"), int)
+            or asset["source"]["page"] < 1
+        ):
+            raise ValueError("Rich-content PDF crop metadata is invalid.")
+        _normalize_rect(asset["source"].get("rect"))
     _validate_document(content.get("statement"), assets=assets)
     options = content.get("options")
     if not isinstance(options, list) or [option.get("label") for option in options] != labels:
         raise ValueError("Rich option labels do not match the exam options.")
     for option in options:
         _validate_document(option.get("content"), assets=assets)
+
+
+def _referenced_asset_ids(
+    statement: dict[str, Any],
+    options: list[dict[str, Any]],
+) -> set[str]:
+    referenced: set[str] = set()
+    documents = [statement, *(option["content"] for option in options)]
+    for document in documents:
+        for block in document["blocks"]:
+            referenced.update(block.get("asset_ids", []))
+            if block.get("fallback_asset_id"):
+                referenced.add(block["fallback_asset_id"])
+            for inline in block.get("inlines", []):
+                if inline.get("fallback_asset_id"):
+                    referenced.add(inline["fallback_asset_id"])
+    return referenced
 
 
 def _can_reuse_rich_content(
@@ -579,11 +807,7 @@ def _can_reuse_rich_content(
         validate_rich_content(content, labels)
     except ValueError:
         return False
-    return all(
-        isinstance(asset.get("path"), str)
-        and (directory / asset["path"]).is_file()
-        for asset in content.get("assets", [])
-    )
+    return True
 
 
 def extract_question_rich_content(
@@ -608,10 +832,10 @@ def extract_question_rich_content(
     assets = _extract_figure_assets(
         document,
         segments,
-        directory=directory,
-        assets_directory=assets_directory,
-        repository_root=repository_root,
+        pdf_sha256=pdf_sha256,
     )
+    deterministic: dict[str, Any] | None = None
+    local_error: ValueError | None = None
     try:
         extracted_text = _extract_source_text(document, segments)
         statement_text, option_texts = _split_statement_and_options(
@@ -621,16 +845,13 @@ def extract_question_rich_content(
         if not statement_text:
             raise ValueError("Question statement is empty after removing its header.")
 
-        statement_blocks = _paragraph_blocks(statement_text, source)
-        if assets:
-            statement_blocks.append(
-                {
-                    "type": "figure",
-                    "asset_ids": [asset["id"] for asset in assets],
-                    "alt": "Figura da questão",
-                    "source": [asset["source"] for asset in assets],
-                }
-            )
+        statement_blocks = _visual_statement_blocks(
+            document,
+            segments,
+            assets,
+            number=number,
+            labels=labels,
+        )
         deterministic = {
             "statement": {"blocks": statement_blocks},
             "options": [
@@ -644,10 +865,46 @@ def extract_question_rich_content(
             ],
         }
     except ValueError as error:
+        local_error = error
+        if len(assets) >= len(labels):
+            option_assets = assets[-len(labels) :]
+            try:
+                statement_blocks = _visual_statement_blocks(
+                    document,
+                    segments,
+                    assets,
+                    number=number,
+                    labels=labels,
+                    option_asset_ids={asset["id"] for asset in option_assets},
+                )
+                deterministic = {
+                    "statement": {"blocks": statement_blocks},
+                    "options": [
+                        {
+                            "label": label,
+                            "content": {
+                                "blocks": [
+                                    {
+                                        "type": "figure",
+                                        "asset_ids": [asset["id"]],
+                                        "alt": f"Alternativa {label}",
+                                        "align": "center",
+                                        "source": [asset["source"]],
+                                    }
+                                ]
+                            },
+                        }
+                        for label, asset in zip(labels, option_assets, strict=True)
+                    ],
+                }
+            except (ValueError, StopIteration):
+                deterministic = None
+
+    if deterministic is None:
         if not use_gemini:
-            raise
+            raise local_error or ValueError("Local rich extraction failed.")
         deterministic = {
-            "warning": f"Local text extraction was unusable: {error}",
+            "warning": f"Local text extraction was unusable: {local_error}",
             "statement": {"blocks": []},
             "options": [],
         }
@@ -669,9 +926,7 @@ def extract_question_rich_content(
             known_assets=assets_by_id,
             pdf_document=document,
             segments=segments,
-            directory=directory,
-            assets_directory=assets_directory,
-            repository_root=repository_root,
+            pdf_sha256=pdf_sha256,
         )
         model_options = {option.label: option for option in model_content.options}
         if list(model_options) != labels:
@@ -684,9 +939,7 @@ def extract_question_rich_content(
                     known_assets=assets_by_id,
                     pdf_document=document,
                     segments=segments,
-                    directory=directory,
-                    assets_directory=assets_directory,
-                    repository_root=repository_root,
+                    pdf_sha256=pdf_sha256,
                 ),
             }
             for label in labels
@@ -696,6 +949,7 @@ def extract_question_rich_content(
         statement = deterministic["statement"]
         options = deterministic["options"]
 
+    referenced_assets = _referenced_asset_ids(statement, options)
     content = {
         "version": RICH_CONTENT_VERSION,
         "status": "success",
@@ -703,7 +957,11 @@ def extract_question_rich_content(
         "method": extraction_method,
         "statement": statement,
         "options": options,
-        "assets": list(assets_by_id.values()),
+        "assets": [
+            asset
+            for asset_id, asset in assets_by_id.items()
+            if asset_id in referenced_assets
+        ],
     }
     validate_rich_content(content, labels)
     return content
@@ -768,6 +1026,14 @@ def enrich_rich_data_file(
                 use_gemini=use_gemini,
                 model_name=model_name,
             ):
+                referenced = _referenced_asset_ids(
+                    existing_rich["statement"], existing_rich["options"]
+                )
+                existing_rich["assets"] = [
+                    asset
+                    for asset in existing_rich["assets"]
+                    if asset["id"] in referenced
+                ]
                 reused += 1
                 continue
             processed += 1
@@ -834,7 +1100,7 @@ def _render_inlines(inlines: list[dict[str, Any]], assets: dict[str, dict[str, A
             fallback = assets.get(inline.get("fallback_asset_id"))
             if fallback:
                 rendered.append(
-                    f'<img class="formula-inline" src="{html.escape(fallback["path"])}" '
+                    f'<img class="formula-inline" src="{html.escape(fallback["preview_uri"])}" '
                     f'alt="{html.escape(str(inline.get("latex", "formula")))}">'
                 )
             else:
@@ -853,22 +1119,54 @@ def _render_document(document: dict[str, Any], assets: dict[str, dict[str, Any]]
             fallback = assets.get(block.get("fallback_asset_id"))
             if fallback:
                 rendered.append(
-                    f'<img class="formula-block" src="{html.escape(fallback["path"])}" '
+                    f'<img class="formula-block" src="{html.escape(fallback["preview_uri"])}" '
                     f'alt="{html.escape(str(block.get("latex", "formula")))}">'
                 )
             else:
                 rendered.append(f'<pre class="formula">{html.escape(str(block.get("latex", "")))}</pre>')
         elif kind == "figure":
-            rendered.append('<div class="figures">')
+            width = max(
+                (
+                    float(assets[asset_id].get("display_width", 1))
+                    for asset_id in block.get("asset_ids", [])
+                ),
+                default=1,
+            )
+            rendered.append(
+                f'<figure style="--figure-width:{width * 100:.2f}%">'
+                '<div class="figures">'
+            )
             for asset_id in block.get("asset_ids", []):
                 asset = assets[asset_id]
                 rendered.append(
-                    f'<img src="{html.escape(asset["path"])}" '
-                    f'alt="{html.escape(str(block.get("alt", "Question figure")))}" '
-                    f'width="{asset["width"]}" height="{asset["height"]}">'
+                    f'<img src="{html.escape(asset["preview_uri"])}" '
+                    f'alt="{html.escape(str(block.get("alt", "Question figure")))}">'
                 )
             rendered.append("</div>")
+            if block.get("caption"):
+                rendered.append(
+                    f'<figcaption>{html.escape(str(block["caption"]))}</figcaption>'
+                )
+            rendered.append("</figure>")
     return "".join(rendered)
+
+
+def _preview_asset_data_uri(
+    document: pymupdf.Document,
+    asset: dict[str, Any],
+) -> str:
+    source = asset["source"]
+    page = document[int(source["page"]) - 1]
+    left, top, right, bottom = _normalize_rect(source["rect"])
+    clip = pymupdf.Rect(
+        left * page.rect.width,
+        top * page.rect.height,
+        right * page.rect.width,
+        bottom * page.rect.height,
+    )
+    pixmap = page.get_pixmap(matrix=pymupdf.Matrix(2, 2), clip=clip, alpha=False)
+    encoded = base64.b64encode(pixmap.tobytes("png")).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
 
 
 def write_html_preview(
@@ -883,6 +1181,7 @@ def write_html_preview(
     output_path = Path(output_path).resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     sections: list[str] = []
+    document = pymupdf.open(directory / "prova.pdf")
     for raw_number, question in data["questoes"].items():
         number = int(raw_number)
         if question_numbers is not None and number not in question_numbers:
@@ -892,8 +1191,7 @@ def write_html_preview(
             continue
         preview_rich = json.loads(json.dumps(rich))
         for asset in preview_rich.get("assets", []):
-            local_asset = directory / asset["path"]
-            asset["path"] = os.path.relpath(local_asset, output_path.parent).replace("\\", "/")
+            asset["preview_uri"] = _preview_asset_data_uri(document, asset)
         assets = {asset["id"]: asset for asset in preview_rich.get("assets", [])}
         options = "".join(
             '<label class="option">'
@@ -909,14 +1207,16 @@ def write_html_preview(
             f'<div class="options">{options}</div></section>'
         )
 
+    document.close()
+
     page = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>Gabarito Digital — rich content preview</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#19162d;color:#fff}
 body{max-width:920px;margin:auto;padding:24px}section{background:#24203d;padding:24px;border-radius:16px;margin:0 0 24px}
-p,blockquote{font-size:18px;line-height:1.55}.figures{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.figures img{max-width:100%;height:auto;background:white;border-radius:8px}.options{display:grid;gap:12px;margin-top:24px}
+p,blockquote{font-size:18px;line-height:1.55}figure{width:min(100%,var(--figure-width));margin:16px auto}.figures{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.figures img{width:100%;height:auto;background:white;border-radius:8px}figcaption{width:100%;margin-top:6px;color:#d6d2e8;font-size:13px;line-height:1.35}.options{display:grid;gap:12px;margin-top:24px}
 .option{display:flex;align-items:flex-start;gap:14px;padding:16px;border:2px solid #6d64ba;border-radius:12px;cursor:pointer}
 .option:has(input:checked){background:#4a3ba7;border-color:#a99fff}.option input{margin-top:7px}.label{font-size:20px;font-weight:700}
 .option-content{flex:1}.option-content p{margin:0}.formula{font-family:serif;background:#151225;padding:2px 5px;border-radius:4px}
