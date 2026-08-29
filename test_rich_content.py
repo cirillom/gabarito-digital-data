@@ -13,8 +13,10 @@ from rich_content import (
     GeminiInline,
     GeminiOption,
     GeminiQuestion,
+    DEFAULT_OPENAI_MODEL_NAME,
     RICH_CONTENT_VERSION,
     SourceCrop,
+    _enrich_with_openai,
     enrich_rich_data_file,
     validate_rich_content,
     write_html_preview,
@@ -90,6 +92,55 @@ def _write_image_option_pdf(path: Path) -> None:
 
 
 class RichContentTest(unittest.TestCase):
+    def test_openai_uses_structured_vision_input(self) -> None:
+        parsed = GeminiQuestion(
+            statement=GeminiDocument(
+                blocks=[
+                    GeminiBlock(
+                        type="paragraph",
+                        inlines=[GeminiInline(type="text", text="Question")],
+                    )
+                ]
+            ),
+            options=[
+                GeminiOption(
+                    label=label,
+                    content=GeminiDocument(
+                        blocks=[
+                            GeminiBlock(
+                                type="paragraph",
+                                inlines=[GeminiInline(type="text", text=label)],
+                            )
+                        ]
+                    ),
+                )
+                for label in ["A", "B"]
+            ],
+        )
+        responses = MagicMock()
+        responses.parse.return_value = MagicMock(
+            output_parsed=parsed,
+            output_text="",
+        )
+
+        result = _enrich_with_openai(
+            number=1,
+            labels=["A", "B"],
+            deterministic_content={"statement": {}, "options": []},
+            assets=[],
+            segment_images=[b"image-bytes"],
+            model_name=DEFAULT_OPENAI_MODEL_NAME,
+            client=MagicMock(responses=responses),
+        )
+
+        self.assertIs(result, parsed)
+        arguments = responses.parse.call_args.kwargs
+        self.assertEqual(arguments["model"], "gpt-5.6-luna")
+        self.assertIs(arguments["text_format"], GeminiQuestion)
+        image = arguments["input"][0]["content"][1]
+        self.assertEqual(image["type"], "input_image")
+        self.assertTrue(image["image_url"].startswith("data:image/png;base64,"))
+
     def test_extracts_local_text_options_images_and_preview_without_network(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)

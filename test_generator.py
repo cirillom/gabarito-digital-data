@@ -4,7 +4,8 @@ from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from main import partition_exam_directories
+from main import partition_exam_directories, run
+from rich_content import QuotaExceededError
 import json
 
 from pdf_parser import (
@@ -16,6 +17,32 @@ from pdf_parser import (
 
 
 class GeneratorTests(unittest.TestCase):
+    def test_repository_generation_stops_at_first_quota_error(self) -> None:
+        class QuotaError(Exception):
+            code = 429
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            directories = [root / "first", root / "second"]
+            for directory in directories:
+                directory.mkdir()
+            parser = MagicMock(side_effect=QuotaError("quota exhausted"))
+
+            with (
+                patch("main.ROOT_DIR", root),
+                patch("main.MAIN_DATA", root / "data.json"),
+                patch("main.parse_exam_directory", parser),
+                patch("main.write_gabarito_json") as write_catalog,
+            ):
+                with self.assertRaises(QuotaExceededError):
+                    run(
+                        directories=directories,
+                        rich_content=False,
+                    )
+
+            self.assertEqual(parser.call_count, 1)
+            write_catalog.assert_called_once()
+
     def test_default_generation_only_sends_missing_data_to_ai(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

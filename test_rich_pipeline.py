@@ -11,9 +11,11 @@ import pymupdf
 
 from rich_pipeline import (
     _RetryingGeminiClient,
+    _RetryingOpenAIClient,
     _StopRequested,
     enrich_rich_data_file,
 )
+from rich_content import QuotaExceededError
 
 
 def _write_pdf(path: Path) -> None:
@@ -78,6 +80,40 @@ def _write_data(path: Path, question_count: int = 2) -> None:
 
 
 class RichPipelineTest(unittest.TestCase):
+    def test_quota_error_is_not_retried(self) -> None:
+        class QuotaError(Exception):
+            code = 429
+
+        models = MagicMock()
+        models.generate_content.side_effect = QuotaError("quota exhausted")
+        client = _RetryingGeminiClient(
+            SimpleNamespace(models=models),
+            question_number=17,
+            max_attempts=5,
+        )
+
+        with self.assertRaises(QuotaExceededError):
+            client.models.generate_content(model="test", contents=[])
+
+        self.assertEqual(models.generate_content.call_count, 1)
+
+    def test_openai_quota_error_is_not_retried(self) -> None:
+        class QuotaError(Exception):
+            status_code = 429
+
+        responses = MagicMock()
+        responses.parse.side_effect = QuotaError("rate limit")
+        client = _RetryingOpenAIClient(
+            SimpleNamespace(responses=responses),
+            question_number=17,
+            max_attempts=5,
+        )
+
+        with self.assertRaises(QuotaExceededError):
+            client.responses.parse(model="test", input=[])
+
+        self.assertEqual(responses.parse.call_count, 1)
+
     def test_retries_503_with_bounded_backoff(self) -> None:
         class TemporaryError(Exception):
             code = 503
@@ -197,6 +233,70 @@ class RichPipelineTest(unittest.TestCase):
             rich = result["questoes"]["1"]["conteudo"]["rich"]
             self.assertEqual(rich["method"], "deterministic")
             self.assertIn("1", result["rich_extraction"]["failures"])
+
+    def test_openai_provider_is_forwarded_and_recorded(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            pdf_path = directory / "prova.pdf"
+            data_path = directory / "data.json"
+            _write_pdf(pdf_path)
+            _write_data(data_path, question_count=1)
+            digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
+            rich = _rich(digest, method="openai:gpt-5.6-luna")
+
+            with (
+                patch.dict("os.environ", {"OPENAI_API_KEY": "test-key"}),
+                patch("openai.OpenAI", return_value=MagicMock()),
+                patch(
+                    "rich_pipeline.extract_question_rich_content",
+                    return_value=rich,
+                ) as extractor,
+            ):
+                result = enrich_rich_data_file(
+                    data_path,
+                    pdf_path,
+                    provider="openai",
+                    write=False,
+                    max_workers=1,
+                    progress=False,
+                )
+
+            self.assertEqual(result["rich_extraction"]["method"], "openai:gpt-5.6-luna")
+            self.assertEqual(extractor.call_args.kwargs["provider"], "openai")
+            self.assertIsNotNone(extractor.call_args.kwargs["openai_client"])
+
+    def test_quota_error_stops_before_the_next_question(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            pdf_path = directory / "prova.pdf"
+            data_path = directory / "data.json"
+            _write_pdf(pdf_path)
+            _write_data(data_path)
+            extractor = MagicMock(side_effect=QuotaExceededError("quota exhausted"))
+
+            with (
+                patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}),
+                patch("google.genai.Client", return_value=MagicMock()),
+                patch(
+                    "rich_pipeline.extract_question_rich_content",
+                    extractor,
+                ),
+            ):
+                with self.assertRaises(QuotaExceededError):
+                    enrich_rich_data_file(
+                        data_path,
+                        pdf_path,
+                        use_gemini=True,
+                        write=True,
+                        max_workers=1,
+                        progress=False,
+                    )
+
+            self.assertEqual(extractor.call_count, 1)
+            checkpoint = json.loads(data_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                checkpoint["rich_extraction"]["processed_question_count"], 0
+            )
 
 
 if __name__ == "__main__":

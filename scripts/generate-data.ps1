@@ -2,6 +2,9 @@ param(
     [switch]$RegenerateAll,
     [switch]$SkipRichContent,
     [switch]$UseGeminiRich,
+    [ValidateSet('gemini', 'openai')]
+    [string]$RichProvider,
+    [string]$RichModel,
     [int[]]$Question,
     [string]$PreviewDir
 )
@@ -11,6 +14,9 @@ $repositoryRoot = Split-Path -Parent $PSScriptRoot
 
 Push-Location $repositoryRoot
 try {
+    if ($UseGeminiRich -and $RichProvider -and $RichProvider -ne 'gemini') {
+        throw '-UseGeminiRich cannot be combined with -RichProvider openai.'
+    }
     uv sync --locked
     uv run python -m unittest discover -v
     $arguments = @('main.py')
@@ -22,8 +28,12 @@ try {
     } else {
         $arguments += '--no-rich-content'
     }
-    if ($UseGeminiRich) {
-        $arguments += '--use-gemini-rich'
+    $selectedProvider = if ($RichProvider) { $RichProvider } elseif ($UseGeminiRich) { 'gemini' }
+    if ($selectedProvider) {
+        $arguments += @('--rich-provider', $selectedProvider)
+    }
+    if ($RichModel) {
+        $arguments += @('--rich-model', $RichModel)
     }
     foreach ($number in $Question) {
         $arguments += @('--rich-question', $number)

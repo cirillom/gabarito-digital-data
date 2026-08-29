@@ -22,16 +22,20 @@ from dotenv import load_dotenv
 from tqdm.auto import tqdm
 
 from rich_content import (
-    DEFAULT_MODEL_NAME,
+    QuotaExceededError,
     RICH_EXTRACTION_VERSION,
+    RichProvider,
+    default_model_for_provider,
     extract_question_rich_content,
+    is_quota_error,
+    resolve_rich_provider,
     validate_rich_content,
 )
 
 
 DEFAULT_RICH_WORKERS = 2
 MAX_RICH_WORKERS = 4
-_RETRYABLE_GEMINI_CODES = {408, 429, 500, 502, 503, 504}
+_RETRYABLE_API_CODES = {408, 500, 502, 503, 504}
 
 
 class _StopRequested(Exception):
@@ -74,12 +78,12 @@ def _can_reuse_rich_content(
     *,
     labels: list[str],
     pdf_sha256: str,
-    use_gemini: bool,
+    provider: RichProvider | None,
     model_name: str,
 ) -> bool:
     if not isinstance(content, dict) or content.get("source_pdf_sha256") != pdf_sha256:
         return False
-    if use_gemini and content.get("method") != f"gemini:{model_name}":
+    if provider is not None and content.get("method") != f"{provider}:{model_name}":
         return False
     try:
         validate_rich_content(content, labels)
@@ -135,10 +139,8 @@ def _is_timeout(error: BaseException) -> bool:
 
 def _retry_reason(error: BaseException) -> str | None:
     code = _error_code(error)
-    if code not in _RETRYABLE_GEMINI_CODES and not _is_timeout(error):
+    if code not in _RETRYABLE_API_CODES and not _is_timeout(error):
         return None
-    if code == 429:
-        return "quota/rate limit"
     if code == 503:
         return "service unavailable/model demand"
     if code is not None:
@@ -192,6 +194,11 @@ class _RetryingModels:
             except Exception as error:
                 if isinstance(error, _StopRequested):
                     raise
+                if is_quota_error(error):
+                    raise QuotaExceededError(
+                        f"Gemini quota/rate limit reached while extracting "
+                        f"question {self._question_number}."
+                    ) from error
                 reason = _retry_reason(error)
                 if reason is None:
                     raise
@@ -241,6 +248,92 @@ class _RetryingGeminiClient:
         )
 
 
+class _RetryingResponses:
+    def __init__(
+        self,
+        responses: Any,
+        *,
+        question_number: int,
+        max_attempts: int,
+        base_delay: float,
+        max_delay: float,
+        stop_event: threading.Event | None = None,
+        status_callback: Callable[[str], None] | None = None,
+    ) -> None:
+        self._responses = responses
+        self._question_number = question_number
+        self._max_attempts = max_attempts
+        self._base_delay = base_delay
+        self._max_delay = max_delay
+        self._stop_event = stop_event
+        self._status_callback = status_callback
+
+    def _check_stop(self) -> None:
+        if self._stop_event is not None and self._stop_event.is_set():
+            raise _StopRequested()
+
+    def parse(self, *args: Any, **kwargs: Any) -> Any:
+        for attempt in range(1, self._max_attempts + 1):
+            self._check_stop()
+            try:
+                return self._responses.parse(*args, **kwargs)
+            except Exception as error:
+                if isinstance(error, _StopRequested):
+                    raise
+                if is_quota_error(error):
+                    raise QuotaExceededError(
+                        f"OpenAI quota/rate limit reached while extracting "
+                        f"question {self._question_number}."
+                    ) from error
+                reason = _retry_reason(error)
+                if reason is None:
+                    raise
+                if attempt >= self._max_attempts:
+                    raise RuntimeError(
+                        f"OpenAI {reason} for question {self._question_number} "
+                        f"after {attempt} attempts: {error}"
+                    ) from error
+
+                self._check_stop()
+                delay = _retry_delay(
+                    attempt - 1,
+                    base_delay=self._base_delay,
+                    max_delay=self._max_delay,
+                )
+                if self._status_callback is not None:
+                    self._status_callback(
+                        f"q{self._question_number}: {reason}; retry in {delay:.1f}s"
+                    )
+                if self._stop_event is None:
+                    time.sleep(delay)
+                elif self._stop_event.wait(delay):
+                    raise _StopRequested()
+        raise AssertionError("unreachable")
+
+
+class _RetryingOpenAIClient:
+    def __init__(
+        self,
+        client: Any,
+        *,
+        question_number: int,
+        max_attempts: int = 5,
+        base_delay: float = 2.0,
+        max_delay: float = 20.0,
+        stop_event: threading.Event | None = None,
+        status_callback: Callable[[str], None] | None = None,
+    ) -> None:
+        self.responses = _RetryingResponses(
+            client.responses,
+            question_number=question_number,
+            max_attempts=max_attempts,
+            base_delay=base_delay,
+            max_delay=max_delay,
+            stop_event=stop_event,
+            status_callback=status_callback,
+        )
+
+
 def _successful_question_count(
     questions: dict[str, Any],
     *,
@@ -259,7 +352,7 @@ def _successful_question_count(
             rich,
             labels=labels,
             pdf_sha256=pdf_sha256,
-            use_gemini=False,
+            provider=None,
             model_name=model_name,
         ):
             successful += 1
@@ -275,7 +368,7 @@ def _set_metadata(
     processed: int,
     reused: int,
     failures: dict[str, str],
-    use_gemini: bool,
+    provider: RichProvider | None,
     model_name: str,
 ) -> None:
     successful = _successful_question_count(
@@ -293,7 +386,7 @@ def _set_metadata(
         "processed_question_count": processed,
         "reused_question_count": reused,
         "source_pdf_sha256": pdf_sha256,
-        "method": f"gemini:{model_name}" if use_gemini else "deterministic",
+        "method": f"{provider}:{model_name}" if provider else "deterministic",
         **({"failures": failures} if failures else {}),
     }
 
@@ -305,7 +398,8 @@ def enrich_rich_data_file(
     repository_root: str | Path | None = None,
     question_numbers: set[int] | None = None,
     use_gemini: bool = False,
-    model_name: str = DEFAULT_MODEL_NAME,
+    provider: RichProvider | None = None,
+    model_name: str | None = None,
     assets_directory: str | Path | None = None,
     write: bool = True,
     force: bool = False,
@@ -315,6 +409,8 @@ def enrich_rich_data_file(
     progress_desc: str | None = None,
 ) -> dict[str, Any]:
     """Extract rich content with durable resume points and bounded concurrency."""
+    provider = resolve_rich_provider(provider, use_gemini=use_gemini)
+    model_name = model_name or default_model_for_provider(provider)
     data_path = Path(data_path).resolve()
     pdf_path = Path(pdf_path).resolve()
     directory = data_path.parent
@@ -365,7 +461,7 @@ def enrich_rich_data_file(
             existing_rich,
             labels=labels,
             pdf_sha256=pdf_digest,
-            use_gemini=use_gemini,
+            provider=provider,
             model_name=model_name,
         ):
             _trim_unused_assets(existing_rich)
@@ -378,7 +474,7 @@ def enrich_rich_data_file(
                 existing_rich,
                 labels=labels,
                 pdf_sha256=pdf_digest,
-                use_gemini=False,
+                provider=None,
                 model_name=model_name,
             )
             else None
@@ -423,7 +519,7 @@ def enrich_rich_data_file(
             processed=processed,
             reused=reused,
             failures=failures,
-            use_gemini=use_gemini,
+            provider=provider,
             model_name=model_name,
         )
         if write:
@@ -460,28 +556,53 @@ def enrich_rich_data_file(
             return data
 
         api_key: str | None = None
-        if use_gemini:
+        if provider is not None:
             load_dotenv()
-            api_key = os.getenv("GEMINI_API_KEY")
+            key_name = "GEMINI_API_KEY" if provider == "gemini" else "OPENAI_API_KEY"
+            api_key = os.getenv(key_name)
             if not api_key:
-                raise RuntimeError("GEMINI_API_KEY is required for --use-gemini.")
+                raise RuntimeError(f"{key_name} is required for the {provider} provider.")
 
-        if use_gemini and workers > 1:
-            from google import genai
+        def create_api_client() -> Any:
+            if provider == "gemini":
+                from google import genai
+
+                return genai.Client(api_key=api_key)
+            if provider == "openai":
+                from openai import OpenAI
+
+                # The pipeline owns retries so a 429 is never retried inside the SDK.
+                return OpenAI(api_key=api_key, max_retries=0)
+            return None
+
+        def retrying_client(client: Any, number: int) -> Any:
+            wrapper = (
+                _RetryingGeminiClient if provider == "gemini" else _RetryingOpenAIClient
+            )
+            return wrapper(
+                client,
+                question_number=number,
+                stop_event=stop_event,
+                status_callback=set_progress_status,
+            )
+
+        def extraction_client_arguments(client: Any) -> dict[str, Any]:
+            if provider == "gemini":
+                return {"gemini_client": client}
+            if provider == "openai":
+                return {"openai_client": client}
+            return {}
+
+        if provider is not None and workers > 1:
 
             thread_state = threading.local()
 
-            def client_for_question(number: int) -> _RetryingGeminiClient:
-                client = getattr(thread_state, "gemini_client", None)
+            def client_for_question(number: int) -> Any:
+                client = getattr(thread_state, "provider_client", None)
                 if client is None:
-                    client = genai.Client(api_key=api_key)
-                    thread_state.gemini_client = client
-                return _RetryingGeminiClient(
-                    client,
-                    question_number=number,
-                    stop_event=stop_event,
-                    status_callback=set_progress_status,
-                )
+                    client = create_api_client()
+                    thread_state.provider_client = client
+                return retrying_client(client, number)
 
             def process_one(
                 raw_number: str,
@@ -492,6 +613,9 @@ def enrich_rich_data_file(
                 if stop_event.is_set():
                     raise _StopRequested()
                 with pymupdf.open(pdf_path) as document:
+                    client_arguments = extraction_client_arguments(
+                        client_for_question(number)
+                    )
                     rich = extract_question_rich_content(
                         document=document,
                         directory=directory,
@@ -501,9 +625,9 @@ def enrich_rich_data_file(
                         question=question,
                         labels=labels,
                         pdf_sha256=pdf_digest,
-                        use_gemini=True,
+                        provider=provider,
                         model_name=model_name,
-                        gemini_client=client_for_question(number),
+                        **client_arguments,
                     )
                 return raw_number, question, fallback, rich
 
@@ -514,6 +638,7 @@ def enrich_rich_data_file(
             handled: set[Future[Any]] = set()
             executor = ThreadPoolExecutor(max_workers=workers)
             interrupted = False
+            quota_error: QuotaExceededError | None = None
             try:
                 for raw_number, number, question, fallback in pending:
                     future = executor.submit(
@@ -531,6 +656,14 @@ def enrich_rich_data_file(
                             _, _, _, rich = future.result()
                         except _StopRequested:
                             continue
+                        except QuotaExceededError as error:
+                            quota_error = error
+                            stop_event.set()
+                            set_progress_status("quota reached; stopping")
+                            for queued in futures:
+                                if queued not in handled:
+                                    queued.cancel()
+                            break
                         except Exception as error:
                             apply_result(raw_number, question, fallback, None, error)
                         else:
@@ -568,24 +701,18 @@ def enrich_rich_data_file(
 
             if interrupted:
                 raise KeyboardInterrupt
+            if quota_error is not None:
+                checkpoint()
+                raise quota_error
         else:
-            gemini_client: Any | None = None
-            if use_gemini:
-                from google import genai
-
-                gemini_client = genai.Client(api_key=api_key)
+            api_client = create_api_client()
 
             with pymupdf.open(pdf_path) as document:
                 for raw_number, number, question, fallback in pending:
                     try:
                         client = (
-                            _RetryingGeminiClient(
-                                gemini_client,
-                                question_number=number,
-                                stop_event=stop_event,
-                                status_callback=set_progress_status,
-                            )
-                            if use_gemini
+                            retrying_client(api_client, number)
+                            if provider is not None
                             else None
                         )
                         rich = extract_question_rich_content(
@@ -597,17 +724,23 @@ def enrich_rich_data_file(
                             question=question,
                             labels=labels,
                             pdf_sha256=pdf_digest,
-                            use_gemini=use_gemini,
+                            provider=provider,
                             model_name=model_name,
-                            gemini_client=client,
+                            **extraction_client_arguments(client),
                         )
                     except KeyboardInterrupt:
                         stop_event.set()
                         set_progress_status("stopped")
                         checkpoint()
                         tqdm.write(
-                            "Ctrl-C received: saved completed rich questions; resume with the same command."
+                            "Ctrl-C received: saved completed rich questions; "
+                            "resume with the same command."
                         )
+                        raise
+                    except QuotaExceededError:
+                        stop_event.set()
+                        set_progress_status("quota reached; stopping")
+                        checkpoint()
                         raise
                     except Exception as error:
                         apply_result(raw_number, question, fallback, None, error)

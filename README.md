@@ -19,17 +19,23 @@ uv run main.py
 The default mode generates missing exams, refreshes PDF layout metadata, and
 builds deterministic rich content for missing or stale questions. Existing
 rich content is reused when the source PDF digest is unchanged. To add the
-Gemini vision pass for faithful formulas and complex layouts, run:
+AI vision pass for faithful formulas and complex layouts, choose a provider:
 
 ```powershell
-uv run main.py --use-gemini-rich
+uv run main.py --rich-provider gemini
+uv run main.py --rich-provider openai
 ```
+
+Gemini uses `GEMINI_API_KEY`. OpenAI uses `OPENAI_API_KEY` and defaults to
+`gpt-5.6-luna`; override either provider's model with `--rich-model`. A quota or
+rate-limit response stops extraction immediately after saving completed
+question checkpoints. Re-run the same command to resume.
 
 To regenerate every exam with Gemini—including answers, official subject
 research, question classification, and rich content—run:
 
 ```powershell
-uv run main.py --regenerate-all --use-gemini-rich
+uv run main.py --regenerate-all --rich-provider gemini
 uv run main.py --check-rich-content
 ```
 
@@ -42,7 +48,8 @@ suite, and then generates the catalog:
 
 ```powershell
 .\scripts\generate-data.ps1
-.\scripts\generate-data.ps1 -RegenerateAll -UseGeminiRich
+.\scripts\generate-data.ps1 -RegenerateAll -RichProvider gemini
+.\scripts\generate-data.ps1 -RichProvider openai
 ```
 
 ## Generate data from GitHub
@@ -53,13 +60,15 @@ then open **Actions > Generate exam data > Run workflow**. The workflow tests
 the extractor, rebuilds the root `data.json`, and commits the generated files
 to the selected branch. Enable **Regenerate every exam data.json with Gemini**
 to replace all per-exam JSON files instead of generating only missing exams.
-Rich reconstruction and **Use Gemini vision** are enabled by default. For a
+Rich reconstruction and the **Gemini** provider are enabled by default. Choose
+**OpenAI** to use `gpt-5.6-luna`, or **deterministic** to avoid AI calls. For a
 full refresh, enable **Regenerate every exam data.json with Gemini**. Before
 committing, the workflow validates every rich question against its current
 PDF and stops without publishing if any exam is incomplete.
 
 Before its first run, create an Actions repository secret named
-`GEMINI_API_KEY` under **Settings > Secrets and variables > Actions**. The
+`GEMINI_API_KEY` and/or `OPENAI_API_KEY` under **Settings > Secrets and
+variables > Actions**, depending on the selected provider. The
 workflow's `contents: write` permission is used only to commit generated JSON
 files back to the branch.
 
@@ -89,7 +98,8 @@ exam JSON or downloading the catalog from GitHub:
 uv run rich_content.py --directory "ENEM\provas\2024\2o dia" --question 91 --preview ".rich-preview\enem-91.html"
 ```
 
-Add `--use-gemini` to inspect the AI-enhanced result, or `--write` when the
+Add `--provider gemini` or `--provider openai` to inspect an AI-enhanced result,
+or `--write` when the
 validated result should be persisted. The preview contains selectable answer
 cards, renders LaTeX as browser-native MathML, and embeds temporary figure
 renderings inside the HTML file; it does not create repository image assets.

@@ -18,11 +18,19 @@ on:
         required: true
         default: true
         type: boolean
-      use_gemini_rich:
-        description: Use Gemini vision for formulas and complex rich layouts
+      rich_provider:
+        description: AI vision provider for formulas and complex rich layouts
         required: true
-        default: true
-        type: boolean
+        default: gemini
+        type: choice
+        options:
+          - gemini
+          - openai
+          - deterministic
+      rich_model:
+        description: Optional provider model override
+        required: false
+        type: string
 
 concurrency:
   group: generate-data-${{ github.ref }}
@@ -59,9 +67,11 @@ jobs:
       - name: Generate exam data and catalog
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REGENERATE_ALL: ${{ inputs.regenerate_all }}
           RICH_CONTENT: ${{ inputs.rich_content }}
-          USE_GEMINI_RICH: ${{ inputs.use_gemini_rich }}
+          RICH_PROVIDER: ${{ inputs.rich_provider }}
+          RICH_MODEL: ${{ inputs.rich_model }}
         run: |
           args=()
           if [ "$REGENERATE_ALL" = "true" ]; then
@@ -72,8 +82,11 @@ jobs:
           else
             args+=(--no-rich-content)
           fi
-          if [ "$USE_GEMINI_RICH" = "true" ]; then
-            args+=(--use-gemini-rich)
+          if [ "$RICH_PROVIDER" != "deterministic" ]; then
+            args+=(--rich-provider "$RICH_PROVIDER")
+          fi
+          if [ -n "$RICH_MODEL" ]; then
+            args+=(--rich-model "$RICH_MODEL")
           fi
           uv run main.py "${args[@]}"
 

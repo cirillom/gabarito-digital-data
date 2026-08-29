@@ -11,7 +11,10 @@ from folder_parser import write_gabarito_json
 from pdf_parser import parse_exam_directory
 from question_layout import enrich_data_file
 from rich_content import (
+    QuotaExceededError,
     RICH_EXTRACTION_VERSION,
+    RichProvider,
+    is_quota_error,
     validate_rich_content,
     write_html_preview,
 )
@@ -134,7 +137,8 @@ def run(
     directories: list[Path] | None = None,
     regenerate_all: bool = False,
     rich_content: bool = True,
-    use_gemini_rich: bool = False,
+    rich_provider: RichProvider | None = None,
+    rich_model: str | None = None,
     rich_questions: set[int] | None = None,
     preview_dir: Path | None = None,
     rich_workers: int = DEFAULT_RICH_WORKERS,
@@ -198,6 +202,11 @@ def run(
             try:
                 parse_exam_directory(directory, repository_root=ROOT_DIR)
             except Exception as error:
+                if is_quota_error(error):
+                    raise QuotaExceededError(
+                        "Gemini quota/rate limit reached while generating "
+                        f"{relative_directory}."
+                    ) from error
                 # Keep processing so one network/API failure cannot prevent the
                 # deterministic aggregate from being rebuilt for valid exams.
                 failures.append((relative_directory, str(error)))
@@ -224,7 +233,8 @@ def run(
                         directory / "prova.pdf",
                         repository_root=ROOT_DIR,
                         question_numbers=rich_questions,
-                        use_gemini=use_gemini_rich,
+                        provider=rich_provider,
+                        model_name=rich_model,
                         force=regenerate_all,
                         max_workers=rich_workers,
                         progress=True,
@@ -246,6 +256,8 @@ def run(
                             output_path=preview_path,
                             question_numbers=rich_questions,
                         )
+                except QuotaExceededError:
+                    raise
                 except (OSError, ValueError, RuntimeError) as error:
                     failures.append((relative_directory, f"rich extraction: {error}"))
                     tqdm.write(f"{relative_directory}: rich extraction failed: {error}")
@@ -254,9 +266,18 @@ def run(
 
         write_gabarito_json(ROOT_DIR, MAIN_DATA)
         tqdm.write(f"Updated {MAIN_DATA.relative_to(ROOT_DIR)}")
-    except KeyboardInterrupt:
-        overall.set_postfix_str("interrupted", refresh=True)
-        tqdm.write("Ctrl-C received: rebuilding the aggregate from saved checkpoints...")
+    except (KeyboardInterrupt, QuotaExceededError) as error:
+        interrupted = isinstance(error, KeyboardInterrupt)
+        overall.set_postfix_str(
+            "interrupted" if interrupted else "quota reached",
+            refresh=True,
+        )
+        message = (
+            "Ctrl-C received"
+            if interrupted
+            else f"{error} No further AI requests will be made"
+        )
+        tqdm.write(f"{message}; rebuilding the aggregate from saved checkpoints...")
         try:
             write_gabarito_json(ROOT_DIR, MAIN_DATA)
             tqdm.write(f"Saved checkpoints and refreshed {MAIN_DATA.relative_to(ROOT_DIR)}.")
@@ -297,7 +318,16 @@ def main() -> None:
     parser.add_argument(
         "--use-gemini-rich",
         action="store_true",
-        help="Use Gemini vision to enhance rich content (requires --rich-content).",
+        help="Deprecated alias for --rich-provider gemini.",
+    )
+    parser.add_argument(
+        "--rich-provider",
+        choices=("gemini", "openai"),
+        help="AI vision provider for rich content; omit for deterministic extraction.",
+    )
+    parser.add_argument(
+        "--rich-model",
+        help="Override the provider's default rich extraction model.",
     )
     parser.add_argument(
         "--rich-question",
@@ -311,7 +341,7 @@ def main() -> None:
         default=DEFAULT_RICH_WORKERS,
         choices=range(1, MAX_RICH_WORKERS + 1),
         metavar="1-4",
-        help=f"Maximum concurrent Gemini rich requests (default: {DEFAULT_RICH_WORKERS}).",
+        help=f"Maximum concurrent AI rich requests (default: {DEFAULT_RICH_WORKERS}).",
     )
     parser.add_argument(
         "--preview-dir",
@@ -324,8 +354,15 @@ def main() -> None:
         help="Validate existing rich content for every exam without regenerating it.",
     )
     args = parser.parse_args()
-    if args.use_gemini_rich and not args.rich_content:
-        parser.error("--use-gemini-rich requires --rich-content")
+    if args.use_gemini_rich and args.rich_provider not in {None, "gemini"}:
+        parser.error("--use-gemini-rich cannot be combined with --rich-provider openai")
+    rich_provider = args.rich_provider or (
+        "gemini" if args.use_gemini_rich else None
+    )
+    if rich_provider and not args.rich_content:
+        parser.error("--rich-provider requires --rich-content")
+    if args.rich_model and rich_provider is None:
+        parser.error("--rich-model requires --rich-provider")
     if args.rich_question and not args.rich_content:
         parser.error("--rich-question requires --rich-content")
 
@@ -355,7 +392,8 @@ def main() -> None:
             directories=directories,
             regenerate_all=args.regenerate_all,
             rich_content=args.rich_content,
-            use_gemini_rich=args.use_gemini_rich,
+            rich_provider=rich_provider,
+            rich_model=args.rich_model,
             rich_questions=set(args.rich_question) if args.rich_question else None,
             preview_dir=args.preview_dir.resolve() if args.preview_dir else None,
             rich_workers=args.rich_workers,
@@ -363,6 +401,12 @@ def main() -> None:
     except KeyboardInterrupt:
         tqdm.write("Generation stopped cleanly. Re-run the same command to resume.")
         raise SystemExit(130)
+    except QuotaExceededError:
+        tqdm.write(
+            "Generation stopped at the first quota/rate-limit response. "
+            "Re-run to resume."
+        )
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
