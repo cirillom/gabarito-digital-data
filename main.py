@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from tqdm.auto import tqdm
+
 from folder_parser import write_gabarito_json
 from pdf_parser import parse_exam_directory
 from question_layout import enrich_data_file
@@ -99,29 +101,32 @@ def check_repository_rich_content(
 ) -> None:
     """Exit unsuccessfully unless every discovered exam has valid rich content."""
     failures: list[tuple[Path, list[str]]] = []
-    for directory in directories:
+    for directory in tqdm(
+        directories,
+        desc="Validating rich content",
+        unit="exam",
+        dynamic_ncols=True,
+    ):
         relative_directory = directory.relative_to(root_dir)
         data_path = directory / "data.json"
         try:
             data = json.loads(data_path.read_text(encoding="utf-8"))
-            errors = validate_complete_rich_data(
-                data, directory / "prova.pdf"
-            )
+            errors = validate_complete_rich_data(data, directory / "prova.pdf")
             if errors:
                 failures.append((relative_directory, errors))
         except (OSError, ValueError, json.JSONDecodeError) as error:
             failures.append((relative_directory, [str(error)]))
 
     if failures:
-        print("Rich-content validation failed:")
+        tqdm.write("Rich-content validation failed:")
         for directory, errors in failures:
-            print(f"  {directory}: {len(errors)} issue(s)")
+            tqdm.write(f"  {directory}: {len(errors)} issue(s)")
             for error in errors[:5]:
-                print(f"    - {error}")
+                tqdm.write(f"    - {error}")
             if len(errors) > 5:
-                print(f"    - ... and {len(errors) - 5} more")
+                tqdm.write(f"    - ... and {len(errors) - 5} more")
         raise SystemExit(1)
-    print(f"Rich content is complete and valid for all {len(directories)} exams.")
+    tqdm.write(f"Rich content is complete and valid for all {len(directories)} exams.")
 
 
 def run(
@@ -134,93 +139,137 @@ def run(
     preview_dir: Path | None = None,
     rich_workers: int = DEFAULT_RICH_WORKERS,
 ) -> None:
-    print("Scanning repository for exams...\n")
     directories = directories if directories is not None else find_exam_directories()
 
     if not directories:
-        print("No directories containing prova.pdf and gabarito.pdf were found.")
+        tqdm.write("No directories containing prova.pdf and gabarito.pdf were found.")
         return
 
-    print(f"Found {len(directories)} exam director{'y' if len(directories) == 1 else 'ies'}:\n")
     existing_directories, generation_directories = partition_exam_directories(
         directories, regenerate_all=regenerate_all
     )
     failures: list[tuple[Path, str]] = []
+    total_steps = (
+        len(existing_directories)
+        + len(generation_directories)
+        + (len(directories) if rich_content else 0)
+    )
 
-    # Refresh every existing exam before attempting network-backed Gemini work.
-    # This keeps layout backfills deterministic even when one new exam fails.
-    for directory in existing_directories:
-        relative_directory = directory.relative_to(ROOT_DIR)
-        data_file = directory / "data.json"
-        print(f"{relative_directory}")
-        print("  Extracting question layout from prova.pdf...")
-        try:
-            succeeded = enrich_data_file(data_file, directory / "prova.pdf")
-            print(
-                "  Layout extraction "
-                f"{'succeeded' if succeeded else 'failed; PDF mode disabled'}"
-            )
-            if not succeeded:
-                failures.append((relative_directory, "layout extraction failed"))
-        except (OSError, ValueError) as error:
-            failures.append((relative_directory, str(error)))
-            print(f"  Failed: {error}")
-
-    for directory in generation_directories:
-        relative_directory = directory.relative_to(ROOT_DIR)
-        print(f"{relative_directory}")
-        print("  Generating data.json...")
-        try:
-            parse_exam_directory(directory, repository_root=ROOT_DIR)
-        except Exception as error:
-            # Keep processing so one network/API failure cannot prevent the
-            # deterministic aggregate from being rebuilt for valid exams.
-            failures.append((relative_directory, str(error)))
-            print(f"  Failed: {error}")
-
-    if rich_content:
-        print("\nExtracting rich question content...")
-        for directory in directories:
+    overall = tqdm(
+        total=total_steps,
+        desc="Repository",
+        unit="exam-step",
+        position=0,
+        dynamic_ncols=True,
+    )
+    try:
+        # Refresh every existing exam before attempting network-backed Gemini work.
+        # This keeps layout backfills deterministic even when one new exam fails.
+        for directory in tqdm(
+            existing_directories,
+            desc="Layouts",
+            unit="exam",
+            position=1,
+            leave=False,
+            dynamic_ncols=True,
+        ):
             relative_directory = directory.relative_to(ROOT_DIR)
             data_file = directory / "data.json"
-            if not data_file.is_file():
-                continue
-            print(f"{relative_directory}")
             try:
-                enriched = enrich_rich_data_file(
-                    data_file,
-                    directory / "prova.pdf",
-                    repository_root=ROOT_DIR,
-                    question_numbers=rich_questions,
-                    use_gemini=use_gemini_rich,
-                    force=regenerate_all,
-                    max_workers=rich_workers,
-                )
-                metadata = enriched["rich_extraction"]
-                print(
-                    "  Rich extraction "
-                    f"{metadata['successful_question_count']}/"
-                    f"{metadata['question_count']} ({metadata['status']})"
-                )
-                if preview_dir is not None:
-                    preview_path = preview_dir / relative_directory / "index.html"
-                    write_html_preview(
-                        enriched,
-                        directory=directory,
-                        output_path=preview_path,
-                        question_numbers=rich_questions,
-                    )
-                    print(f"  Preview: {preview_path}")
-            except (OSError, ValueError, RuntimeError) as error:
-                failures.append((relative_directory, f"rich extraction: {error}"))
-                print(f"  Rich extraction failed: {error}")
+                succeeded = enrich_data_file(data_file, directory / "prova.pdf")
+                if not succeeded:
+                    failures.append((relative_directory, "layout extraction failed"))
+                    tqdm.write(f"{relative_directory}: layout extraction failed")
+            except (OSError, ValueError) as error:
+                failures.append((relative_directory, str(error)))
+                tqdm.write(f"{relative_directory}: {error}")
+            finally:
+                overall.update(1)
 
-    write_gabarito_json(ROOT_DIR, MAIN_DATA)
-    print(f"\nUpdated {MAIN_DATA.relative_to(ROOT_DIR)}")
+        for directory in tqdm(
+            generation_directories,
+            desc="Generating base data",
+            unit="exam",
+            position=1,
+            leave=False,
+            dynamic_ncols=True,
+        ):
+            relative_directory = directory.relative_to(ROOT_DIR)
+            try:
+                parse_exam_directory(directory, repository_root=ROOT_DIR)
+            except Exception as error:
+                # Keep processing so one network/API failure cannot prevent the
+                # deterministic aggregate from being rebuilt for valid exams.
+                failures.append((relative_directory, str(error)))
+                tqdm.write(f"{relative_directory}: generation failed: {error}")
+            finally:
+                overall.update(1)
+
+        if rich_content:
+            for directory in tqdm(
+                directories,
+                desc="Rich exams",
+                unit="exam",
+                position=1,
+                leave=False,
+                dynamic_ncols=True,
+            ):
+                relative_directory = directory.relative_to(ROOT_DIR)
+                data_file = directory / "data.json"
+                try:
+                    if not data_file.is_file():
+                        continue
+                    enriched = enrich_rich_data_file(
+                        data_file,
+                        directory / "prova.pdf",
+                        repository_root=ROOT_DIR,
+                        question_numbers=rich_questions,
+                        use_gemini=use_gemini_rich,
+                        force=regenerate_all,
+                        max_workers=rich_workers,
+                        progress=True,
+                        progress_position=2,
+                        progress_desc=f"{relative_directory} questions",
+                    )
+                    metadata = enriched["rich_extraction"]
+                    if metadata["status"] != "success":
+                        tqdm.write(
+                            f"{relative_directory}: rich extraction "
+                            f"{metadata['successful_question_count']}/"
+                            f"{metadata['question_count']} ({metadata['status']})"
+                        )
+                    if preview_dir is not None:
+                        preview_path = preview_dir / relative_directory / "index.html"
+                        write_html_preview(
+                            enriched,
+                            directory=directory,
+                            output_path=preview_path,
+                            question_numbers=rich_questions,
+                        )
+                except (OSError, ValueError, RuntimeError) as error:
+                    failures.append((relative_directory, f"rich extraction: {error}"))
+                    tqdm.write(f"{relative_directory}: rich extraction failed: {error}")
+                finally:
+                    overall.update(1)
+
+        write_gabarito_json(ROOT_DIR, MAIN_DATA)
+        tqdm.write(f"Updated {MAIN_DATA.relative_to(ROOT_DIR)}")
+    except KeyboardInterrupt:
+        overall.set_postfix_str("interrupted", refresh=True)
+        tqdm.write("Ctrl-C received: rebuilding the aggregate from saved checkpoints...")
+        try:
+            write_gabarito_json(ROOT_DIR, MAIN_DATA)
+            tqdm.write(f"Saved checkpoints and refreshed {MAIN_DATA.relative_to(ROOT_DIR)}.")
+        except Exception as error:
+            tqdm.write(f"Could not refresh aggregate after interruption: {error}")
+        raise
+    finally:
+        overall.close()
+
     if failures:
-        print("\nCompleted with failures:")
+        tqdm.write("Completed with failures:")
         for directory, error in failures:
-            print(f"  {directory}: {error}")
+            tqdm.write(f"  {directory}: {error}")
         raise SystemExit(1)
 
 
@@ -279,6 +328,7 @@ def main() -> None:
         parser.error("--use-gemini-rich requires --rich-content")
     if args.rich_question and not args.rich_content:
         parser.error("--rich-question requires --rich-content")
+
     directories = None
     if args.directory:
         scopes = []
@@ -296,18 +346,23 @@ def main() -> None:
                 for exam_directory in find_exam_directories(scope)
             }
         )
-    if args.check_rich_content:
-        check_repository_rich_content(directories or find_exam_directories())
-        return
-    run(
-        directories=directories,
-        regenerate_all=args.regenerate_all,
-        rich_content=args.rich_content,
-        use_gemini_rich=args.use_gemini_rich,
-        rich_questions=set(args.rich_question) if args.rich_question else None,
-        preview_dir=args.preview_dir.resolve() if args.preview_dir else None,
-        rich_workers=args.rich_workers,
-    )
+
+    try:
+        if args.check_rich_content:
+            check_repository_rich_content(directories or find_exam_directories())
+            return
+        run(
+            directories=directories,
+            regenerate_all=args.regenerate_all,
+            rich_content=args.rich_content,
+            use_gemini_rich=args.use_gemini_rich,
+            rich_questions=set(args.rich_question) if args.rich_question else None,
+            preview_dir=args.preview_dir.resolve() if args.preview_dir else None,
+            rich_workers=args.rich_workers,
+        )
+    except KeyboardInterrupt:
+        tqdm.write("Generation stopped cleanly. Re-run the same command to resume.")
+        raise SystemExit(130)
 
 
 if __name__ == "__main__":
