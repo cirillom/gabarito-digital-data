@@ -91,21 +91,33 @@ def _trim_unused_assets(content: dict[str, Any]) -> None:
 
 
 def _normalize_structured_config(config: Any) -> Any:
-    """Prefer explicit JSON Schema output over SDK model-schema conversion.
+    """Use explicit structured output and explicitly disable unused AFC.
 
-    Rich extraction does not use tools or function calling. Sending the JSON
-    schema explicitly keeps this request on the structured-output path and
-    avoids conflating Pydantic schema conversion with AFC/tool workflows.
+    google-genai 2.19.0 currently enters its AFC path, and emits the AFC warning,
+    even when ``tools`` is empty. Rich extraction never uses tools, so make that
+    intent explicit while also preferring a standard JSON Schema when supported.
     """
-    schema = getattr(config, "response_schema", None)
-    if schema is None or not hasattr(schema, "model_json_schema"):
-        return config
-    fields = getattr(type(config), "model_fields", {})
-    if "response_json_schema" not in fields:
-        return config
-    normalized = config.model_copy(deep=True)
-    normalized.response_schema = None
-    normalized.response_json_schema = schema.model_json_schema()
+    from google.genai import types
+
+    normalized = (
+        config.model_copy(deep=True)
+        if hasattr(config, "model_copy")
+        else config
+    )
+    fields = getattr(type(normalized), "model_fields", {})
+    if "automatic_function_calling" in fields:
+        normalized.automatic_function_calling = types.AutomaticFunctionCallingConfig(
+            disable=True
+        )
+
+    schema = getattr(normalized, "response_schema", None)
+    if (
+        schema is not None
+        and hasattr(schema, "model_json_schema")
+        and "response_json_schema" in fields
+    ):
+        normalized.response_schema = None
+        normalized.response_json_schema = schema.model_json_schema()
     return normalized
 
 
