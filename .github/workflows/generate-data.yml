@@ -48,8 +48,10 @@ jobs:
           enable-cache: true
           python-version: "3.12"
 
-      - name: Install locked dependencies
-        run: uv sync --locked
+      - name: Resolve and install dependencies
+        run: |
+          uv lock
+          uv sync --locked
 
       - name: Run tests
         run: uv run python -m unittest discover -v
