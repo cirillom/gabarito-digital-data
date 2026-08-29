@@ -1,6 +1,7 @@
 import hashlib
 import json
 import tempfile
+import threading
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -8,7 +9,11 @@ from unittest.mock import MagicMock, patch
 
 import pymupdf
 
-from rich_pipeline import _RetryingGeminiClient, enrich_rich_data_file
+from rich_pipeline import (
+    _RetryingGeminiClient,
+    _StopRequested,
+    enrich_rich_data_file,
+)
 
 
 def _write_pdf(path: Path) -> None:
@@ -101,6 +106,33 @@ class RichPipelineTest(unittest.TestCase):
         self.assertEqual(models.generate_content.call_count, 3)
         self.assertEqual(sleep.call_count, 2)
 
+    def test_stop_request_prevents_another_retry(self) -> None:
+        class TemporaryError(Exception):
+            code = 503
+
+        stop_event = threading.Event()
+        models = MagicMock()
+        models.generate_content.side_effect = TemporaryError("busy")
+
+        def request_stop(_: str) -> None:
+            stop_event.set()
+
+        client = _RetryingGeminiClient(
+            SimpleNamespace(models=models),
+            question_number=17,
+            max_attempts=5,
+            base_delay=10,
+            max_delay=20,
+            stop_event=stop_event,
+            status_callback=request_stop,
+        )
+
+        with patch("rich_pipeline.random.uniform", return_value=0.0):
+            with self.assertRaises(_StopRequested):
+                client.models.generate_content(model="test", contents=[])
+
+        self.assertEqual(models.generate_content.call_count, 1)
+
     def test_successful_question_is_checkpointed_before_later_interrupt(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
@@ -115,7 +147,13 @@ class RichPipelineTest(unittest.TestCase):
                 side_effect=[_rich(digest), KeyboardInterrupt()],
             ):
                 with self.assertRaises(KeyboardInterrupt):
-                    enrich_rich_data_file(data_path, pdf_path, write=True, max_workers=1)
+                    enrich_rich_data_file(
+                        data_path,
+                        pdf_path,
+                        write=True,
+                        max_workers=1,
+                        progress=False,
+                    )
 
             checkpoint = json.loads(data_path.read_text(encoding="utf-8"))
             self.assertEqual(
@@ -153,6 +191,7 @@ class RichPipelineTest(unittest.TestCase):
                     use_gemini=True,
                     write=True,
                     max_workers=1,
+                    progress=False,
                 )
 
             rich = result["questoes"]["1"]["conteudo"]["rich"]
