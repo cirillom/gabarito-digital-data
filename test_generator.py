@@ -7,7 +7,12 @@ from unittest.mock import MagicMock, patch
 from main import partition_exam_directories
 import json
 
-from pdf_parser import build_prompt, normalize_answer_keys, parse_exam_directory
+from pdf_parser import (
+    build_prompt,
+    normalize_answer_keys,
+    normalize_exam_description,
+    parse_exam_directory,
+)
 
 
 class GeneratorTests(unittest.TestCase):
@@ -44,6 +49,22 @@ class GeneratorTests(unittest.TestCase):
         self.assertIn('"disciplinas"', prompt)
         self.assertIn("Every questoes[*].disciplina value", prompt)
         self.assertIn("OAB questions must use the legal disciplines", prompt)
+
+    def test_prompt_requires_the_exact_exam_variant(self) -> None:
+        prompt = build_prompt()
+
+        self.assertIn('"descricao": "Caderno 7 - Azul"', prompt)
+        self.assertIn("every distinguishing booklet color", prompt)
+        self.assertIn("Do not invent a color or version", prompt)
+
+    def test_exam_description_is_required_and_trimmed(self) -> None:
+        data = {"descricao": "  Tipo 1 - Branca  "}
+
+        normalize_exam_description(data)
+
+        self.assertEqual(data["descricao"], "Tipo 1 - Branca")
+        with self.assertRaisesRegex(ValueError, "exact exam variant"):
+            normalize_exam_description({})
 
     def test_normalizes_annulments_and_rejects_malformed_answers(self) -> None:
         data = {
@@ -103,6 +124,7 @@ class GeneratorTests(unittest.TestCase):
                 text=json.dumps(
                     {
                         "data": "2026-01-01",
+                        "descricao": "Versão única",
                         "qtd_questoes": 1,
                         "opcoes_resposta": ["A", "B"],
                         "disciplinas": ["Teste"],
@@ -126,6 +148,7 @@ class GeneratorTests(unittest.TestCase):
             self.assertEqual(client.files.upload.call_count, 2)
             client.models.generate_content.assert_called_once()
             self.assertEqual(data["questoes"]["1"]["resposta"], "A")
+            self.assertEqual(data["descricao"], "Versão única")
             self.assertTrue((directory / "data.json").is_file())
 
 
