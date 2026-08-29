@@ -10,9 +10,13 @@ from pdf_parser import parse_exam_directory
 from question_layout import enrich_data_file
 from rich_content import (
     RICH_EXTRACTION_VERSION,
-    enrich_rich_data_file,
     validate_rich_content,
     write_html_preview,
+)
+from rich_pipeline import (
+    DEFAULT_RICH_WORKERS,
+    MAX_RICH_WORKERS,
+    enrich_rich_data_file,
 )
 
 
@@ -128,6 +132,7 @@ def run(
     use_gemini_rich: bool = False,
     rich_questions: set[int] | None = None,
     preview_dir: Path | None = None,
+    rich_workers: int = DEFAULT_RICH_WORKERS,
 ) -> None:
     print("Scanning repository for exams...\n")
     directories = directories if directories is not None else find_exam_directories()
@@ -189,6 +194,7 @@ def run(
                     question_numbers=rich_questions,
                     use_gemini=use_gemini_rich,
                     force=regenerate_all,
+                    max_workers=rich_workers,
                 )
                 metadata = enriched["rich_extraction"]
                 print(
@@ -251,6 +257,14 @@ def main() -> None:
         help="Limit rich extraction to one or more question numbers.",
     )
     parser.add_argument(
+        "--rich-workers",
+        type=int,
+        default=DEFAULT_RICH_WORKERS,
+        choices=range(1, MAX_RICH_WORKERS + 1),
+        metavar="1-4",
+        help=f"Maximum concurrent Gemini rich requests (default: {DEFAULT_RICH_WORKERS}).",
+    )
+    parser.add_argument(
         "--preview-dir",
         type=Path,
         help="Write local HTML previews beneath this directory.",
@@ -292,6 +306,7 @@ def main() -> None:
         use_gemini_rich=args.use_gemini_rich,
         rich_questions=set(args.rich_question) if args.rich_question else None,
         preview_dir=args.preview_dir.resolve() if args.preview_dir else None,
+        rich_workers=args.rich_workers,
     )
 
 
