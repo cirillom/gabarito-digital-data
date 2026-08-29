@@ -2,7 +2,7 @@
 
 The low-level rich-content extractor stays focused on one question. This module
 adds exam-level concerns: durable per-question checkpoints, bounded Gemini
-retries, limited concurrency, and safe reuse of already-valid content.
+retries, limited concurrency, progress reporting, and graceful interruption.
 """
 
 from __future__ import annotations
@@ -15,10 +15,11 @@ import random
 import threading
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import pymupdf
 from dotenv import load_dotenv
+from tqdm.auto import tqdm
 
 from rich_content import (
     DEFAULT_MODEL_NAME,
@@ -31,6 +32,10 @@ from rich_content import (
 DEFAULT_RICH_WORKERS = 2
 MAX_RICH_WORKERS = 4
 _RETRYABLE_GEMINI_CODES = {408, 429, 500, 502, 503, 504}
+
+
+class _StopRequested(Exception):
+    """Internal cooperative-cancellation signal for worker threads."""
 
 
 def _sha256(path: Path) -> str:
@@ -91,12 +96,7 @@ def _trim_unused_assets(content: dict[str, Any]) -> None:
 
 
 def _normalize_structured_config(config: Any) -> Any:
-    """Use explicit structured output and explicitly disable unused AFC.
-
-    google-genai 2.19.0 currently enters its AFC path, and emits the AFC warning,
-    even when ``tools`` is empty. Rich extraction never uses tools, so make that
-    intent explicit while also preferring a standard JSON Schema when supported.
-    """
+    """Use explicit structured output and explicitly disable unused AFC."""
     from google.genai import types
 
     normalized = (
@@ -166,21 +166,32 @@ class _RetryingModels:
         max_attempts: int,
         base_delay: float,
         max_delay: float,
+        stop_event: threading.Event | None = None,
+        status_callback: Callable[[str], None] | None = None,
     ) -> None:
         self._models = models
         self._question_number = question_number
         self._max_attempts = max_attempts
         self._base_delay = base_delay
         self._max_delay = max_delay
+        self._stop_event = stop_event
+        self._status_callback = status_callback
+
+    def _check_stop(self) -> None:
+        if self._stop_event is not None and self._stop_event.is_set():
+            raise _StopRequested()
 
     def generate_content(self, *args: Any, **kwargs: Any) -> Any:
         if "config" in kwargs:
             kwargs["config"] = _normalize_structured_config(kwargs["config"])
 
         for attempt in range(1, self._max_attempts + 1):
+            self._check_stop()
             try:
                 return self._models.generate_content(*args, **kwargs)
             except Exception as error:
+                if isinstance(error, _StopRequested):
+                    raise
                 reason = _retry_reason(error)
                 if reason is None:
                     raise
@@ -189,16 +200,21 @@ class _RetryingModels:
                         f"Gemini {reason} for question {self._question_number} "
                         f"after {attempt} attempts: {error}"
                     ) from error
+
+                self._check_stop()
                 delay = _retry_delay(
                     attempt - 1,
                     base_delay=self._base_delay,
                     max_delay=self._max_delay,
                 )
-                print(
-                    f"  Question {self._question_number}: Gemini {reason}; "
-                    f"retry {attempt}/{self._max_attempts - 1} in {delay:.1f}s."
-                )
-                time.sleep(delay)
+                if self._status_callback is not None:
+                    self._status_callback(
+                        f"q{self._question_number}: {reason}; retry in {delay:.1f}s"
+                    )
+                if self._stop_event is None:
+                    time.sleep(delay)
+                elif self._stop_event.wait(delay):
+                    raise _StopRequested()
         raise AssertionError("unreachable")
 
 
@@ -211,6 +227,8 @@ class _RetryingGeminiClient:
         max_attempts: int = 5,
         base_delay: float = 2.0,
         max_delay: float = 20.0,
+        stop_event: threading.Event | None = None,
+        status_callback: Callable[[str], None] | None = None,
     ) -> None:
         self.models = _RetryingModels(
             client.models,
@@ -218,6 +236,8 @@ class _RetryingGeminiClient:
             max_attempts=max_attempts,
             base_delay=base_delay,
             max_delay=max_delay,
+            stop_event=stop_event,
+            status_callback=status_callback,
         )
 
 
@@ -290,6 +310,9 @@ def enrich_rich_data_file(
     write: bool = True,
     force: bool = False,
     max_workers: int = DEFAULT_RICH_WORKERS,
+    progress: bool = True,
+    progress_position: int = 0,
+    progress_desc: str | None = None,
 ) -> dict[str, Any]:
     """Extract rich content with durable resume points and bounded concurrency."""
     data_path = Path(data_path).resolve()
@@ -316,17 +339,23 @@ def enrich_rich_data_file(
         if isinstance(previous_metadata, dict)
         else {}
     )
-    failures = {
-        str(number): str(message)
-        for number, message in previous_failures.items()
-    } if isinstance(previous_failures, dict) else {}
+    failures = (
+        {
+            str(number): str(message)
+            for number, message in previous_failures.items()
+        }
+        if isinstance(previous_failures, dict)
+        else {}
+    )
     reused = 0
+    selected_keys: set[str] = set()
     pending: list[tuple[str, int, dict[str, Any], dict[str, Any] | None]] = []
 
     for raw_number, question in questions.items():
         number = int(raw_number)
         if question_numbers is not None and number not in question_numbers:
             continue
+        selected_keys.add(raw_number)
         if not isinstance(question, dict):
             failures[raw_number] = "Question is not an object."
             continue
@@ -343,16 +372,45 @@ def enrich_rich_data_file(
             failures.pop(raw_number, None)
             reused += 1
             continue
-        fallback = existing_rich if _can_reuse_rich_content(
-            existing_rich,
-            labels=labels,
-            pdf_sha256=pdf_digest,
-            use_gemini=False,
-            model_name=model_name,
-        ) else None
+        fallback = (
+            existing_rich
+            if _can_reuse_rich_content(
+                existing_rich,
+                labels=labels,
+                pdf_sha256=pdf_digest,
+                use_gemini=False,
+                model_name=model_name,
+            )
+            else None
+        )
         pending.append((raw_number, number, question, fallback))
 
     processed = len(pending)
+    selected_count = len(selected_keys)
+    already_complete = selected_count - processed
+    stop_event = threading.Event()
+    question_bar = tqdm(
+        total=selected_count,
+        initial=already_complete,
+        desc=progress_desc or f"{directory.name} questions",
+        unit="question",
+        position=progress_position,
+        leave=False,
+        dynamic_ncols=True,
+        disable=not progress,
+    )
+
+    def current_failure_count() -> int:
+        return sum(number in failures for number in selected_keys)
+
+    def set_progress_status(status: str | None = None) -> None:
+        postfix: dict[str, Any] = {
+            "reused": reused,
+            "failed": current_failure_count(),
+        }
+        if status:
+            postfix["status"] = status
+        question_bar.set_postfix(postfix, refresh=True)
 
     def checkpoint() -> None:
         _set_metadata(
@@ -387,89 +445,48 @@ def enrich_rich_data_file(
                 content["rich"] = fallback
             failures[raw_number] = str(error or "Unknown rich extraction failure.")
         checkpoint()
+        question_bar.update(1)
+        set_progress_status()
 
-    if not pending:
-        checkpoint()
-        return data
+    try:
+        set_progress_status()
+        if not pending:
+            checkpoint()
+            return data
 
-    api_key: str | None = None
-    if use_gemini:
-        load_dotenv()
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            raise RuntimeError("GEMINI_API_KEY is required for --use-gemini.")
-
-    if use_gemini and workers > 1:
-        from google import genai
-
-        thread_state = threading.local()
-
-        def client_for_question(number: int) -> _RetryingGeminiClient:
-            client = getattr(thread_state, "gemini_client", None)
-            if client is None:
-                client = genai.Client(api_key=api_key)
-                thread_state.gemini_client = client
-            return _RetryingGeminiClient(client, question_number=number)
-
-        def process_one(
-            raw_number: str,
-            number: int,
-            question: dict[str, Any],
-            fallback: dict[str, Any] | None,
-        ) -> tuple[str, dict[str, Any], dict[str, Any] | None, dict[str, Any]]:
-            with pymupdf.open(pdf_path) as document:
-                rich = extract_question_rich_content(
-                    document=document,
-                    directory=directory,
-                    assets_directory=asset_output,
-                    repository_root=root,
-                    number=number,
-                    question=question,
-                    labels=labels,
-                    pdf_sha256=pdf_digest,
-                    use_gemini=True,
-                    model_name=model_name,
-                    gemini_client=client_for_question(number),
-                )
-            return raw_number, question, fallback, rich
-
-        futures: dict[
-            Future[tuple[str, dict[str, Any], dict[str, Any] | None, dict[str, Any]]],
-            tuple[str, dict[str, Any], dict[str, Any] | None],
-        ] = {}
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            for raw_number, number, question, fallback in pending:
-                future = executor.submit(
-                    process_one, raw_number, number, question, fallback
-                )
-                futures[future] = (raw_number, question, fallback)
-
-            for future in as_completed(futures):
-                raw_number, question, fallback = futures[future]
-                try:
-                    _, _, _, rich = future.result()
-                except Exception as error:
-                    apply_result(raw_number, question, fallback, None, error)
-                else:
-                    apply_result(raw_number, question, fallback, rich, None)
-    else:
-        gemini_client: Any | None = None
+        api_key: str | None = None
         if use_gemini:
+            load_dotenv()
+            api_key = os.getenv("GEMINI_API_KEY")
+            if not api_key:
+                raise RuntimeError("GEMINI_API_KEY is required for --use-gemini.")
+
+        if use_gemini and workers > 1:
             from google import genai
 
-            gemini_client = genai.Client(api_key=api_key)
+            thread_state = threading.local()
 
-        with pymupdf.open(pdf_path) as document:
-            for raw_number, number, question, fallback in pending:
-                try:
-                    client = (
-                        _RetryingGeminiClient(
-                            gemini_client,
-                            question_number=number,
-                        )
-                        if use_gemini
-                        else None
-                    )
+            def client_for_question(number: int) -> _RetryingGeminiClient:
+                client = getattr(thread_state, "gemini_client", None)
+                if client is None:
+                    client = genai.Client(api_key=api_key)
+                    thread_state.gemini_client = client
+                return _RetryingGeminiClient(
+                    client,
+                    question_number=number,
+                    stop_event=stop_event,
+                    status_callback=set_progress_status,
+                )
+
+            def process_one(
+                raw_number: str,
+                number: int,
+                question: dict[str, Any],
+                fallback: dict[str, Any] | None,
+            ) -> tuple[str, dict[str, Any], dict[str, Any] | None, dict[str, Any]]:
+                if stop_event.is_set():
+                    raise _StopRequested()
+                with pymupdf.open(pdf_path) as document:
                     rich = extract_question_rich_content(
                         document=document,
                         directory=directory,
@@ -479,14 +496,120 @@ def enrich_rich_data_file(
                         question=question,
                         labels=labels,
                         pdf_sha256=pdf_digest,
-                        use_gemini=use_gemini,
+                        use_gemini=True,
                         model_name=model_name,
-                        gemini_client=client,
+                        gemini_client=client_for_question(number),
                     )
-                except Exception as error:
-                    apply_result(raw_number, question, fallback, None, error)
-                else:
-                    apply_result(raw_number, question, fallback, rich, None)
+                return raw_number, question, fallback, rich
 
-    checkpoint()
-    return data
+            futures: dict[
+                Future[tuple[str, dict[str, Any], dict[str, Any] | None, dict[str, Any]]],
+                tuple[str, dict[str, Any], dict[str, Any] | None],
+            ] = {}
+            handled: set[Future[Any]] = set()
+            executor = ThreadPoolExecutor(max_workers=workers)
+            interrupted = False
+            try:
+                for raw_number, number, question, fallback in pending:
+                    future = executor.submit(
+                        process_one, raw_number, number, question, fallback
+                    )
+                    futures[future] = (raw_number, question, fallback)
+
+                try:
+                    for future in as_completed(futures):
+                        handled.add(future)
+                        raw_number, question, fallback = futures[future]
+                        if future.cancelled():
+                            continue
+                        try:
+                            _, _, _, rich = future.result()
+                        except _StopRequested:
+                            continue
+                        except Exception as error:
+                            apply_result(raw_number, question, fallback, None, error)
+                        else:
+                            apply_result(raw_number, question, fallback, rich, None)
+                except KeyboardInterrupt:
+                    interrupted = True
+                    stop_event.set()
+                    set_progress_status("stopping; waiting for in-flight requests")
+                    tqdm.write(
+                        "Ctrl-C received: cancelling queued questions and preserving checkpoints."
+                    )
+                    for future in futures:
+                        if future not in handled:
+                            future.cancel()
+
+                    remaining = [
+                        future
+                        for future in futures
+                        if future not in handled and not future.cancelled()
+                    ]
+                    for future in as_completed(remaining):
+                        handled.add(future)
+                        raw_number, question, fallback = futures[future]
+                        try:
+                            _, _, _, rich = future.result()
+                        except _StopRequested:
+                            continue
+                        except Exception as error:
+                            apply_result(raw_number, question, fallback, None, error)
+                        else:
+                            apply_result(raw_number, question, fallback, rich, None)
+                    checkpoint()
+            finally:
+                executor.shutdown(wait=True, cancel_futures=True)
+
+            if interrupted:
+                raise KeyboardInterrupt
+        else:
+            gemini_client: Any | None = None
+            if use_gemini:
+                from google import genai
+
+                gemini_client = genai.Client(api_key=api_key)
+
+            with pymupdf.open(pdf_path) as document:
+                for raw_number, number, question, fallback in pending:
+                    try:
+                        client = (
+                            _RetryingGeminiClient(
+                                gemini_client,
+                                question_number=number,
+                                stop_event=stop_event,
+                                status_callback=set_progress_status,
+                            )
+                            if use_gemini
+                            else None
+                        )
+                        rich = extract_question_rich_content(
+                            document=document,
+                            directory=directory,
+                            assets_directory=asset_output,
+                            repository_root=root,
+                            number=number,
+                            question=question,
+                            labels=labels,
+                            pdf_sha256=pdf_digest,
+                            use_gemini=use_gemini,
+                            model_name=model_name,
+                            gemini_client=client,
+                        )
+                    except KeyboardInterrupt:
+                        stop_event.set()
+                        set_progress_status("stopped")
+                        checkpoint()
+                        tqdm.write(
+                            "Ctrl-C received: saved completed rich questions; resume with the same command."
+                        )
+                        raise
+                    except Exception as error:
+                        apply_result(raw_number, question, fallback, None, error)
+                    else:
+                        apply_result(raw_number, question, fallback, rich, None)
+
+        checkpoint()
+        return data
+    finally:
+        question_bar.close()
