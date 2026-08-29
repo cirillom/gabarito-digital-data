@@ -385,10 +385,11 @@ def enrich_rich_data_file(
         )
         pending.append((raw_number, number, question, fallback))
 
-    processed = len(pending)
+    processed = 0
     selected_count = len(selected_keys)
-    already_complete = selected_count - processed
+    already_complete = selected_count - len(pending)
     stop_event = threading.Event()
+    progress_lock = threading.RLock()
     question_bar = tqdm(
         total=selected_count,
         initial=already_complete,
@@ -410,7 +411,8 @@ def enrich_rich_data_file(
         }
         if status:
             postfix["status"] = status
-        question_bar.set_postfix(postfix, refresh=True)
+        with progress_lock:
+            question_bar.set_postfix(postfix, refresh=True)
 
     def checkpoint() -> None:
         _set_metadata(
@@ -434,6 +436,7 @@ def enrich_rich_data_file(
         rich: dict[str, Any] | None,
         error: BaseException | None,
     ) -> None:
+        nonlocal processed
         if error is None and rich is not None:
             question.setdefault("conteudo", {})["rich"] = rich
             failures.pop(raw_number, None)
@@ -444,8 +447,10 @@ def enrich_rich_data_file(
             else:
                 content["rich"] = fallback
             failures[raw_number] = str(error or "Unknown rich extraction failure.")
+        processed += 1
         checkpoint()
-        question_bar.update(1)
+        with progress_lock:
+            question_bar.update(1)
         set_progress_status()
 
     try:
