@@ -14,6 +14,7 @@ from urllib.parse import quote
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
+from tqdm.auto import tqdm
 
 from question_layout import apply_layout_to_data
 
@@ -166,7 +167,7 @@ def parse_exam_directory(
     uploaded_files = []
     for filename in PDF_FILENAMES:
         file_path = directory / filename
-        print(f"Uploading {file_path}...")
+        tqdm.write(f"Uploading {file_path}...")
         uploaded_files.append(
             client.files.upload(
                 file=file_path,
@@ -193,7 +194,7 @@ def parse_exam_directory(
         if state_name == "PROCESSING":
             raise RuntimeError(f"Timed out while processing {uploaded_file.display_name}.")
 
-    print("Sending prompt to Gemini...")
+    tqdm.write("Sending prompt to Gemini...")
     response = client.models.generate_content(
         model=MODEL_NAME,
         contents=[build_prompt(), *uploaded_files],
@@ -210,7 +211,7 @@ def parse_exam_directory(
     normalize_answer_keys(data)
     data["pdf_link"] = build_pdf_link(directory, repository_root)
     layout_succeeded = apply_layout_to_data(data, directory / "prova.pdf")
-    print(
+    tqdm.write(
         "Question layout extraction "
         f"{'succeeded' if layout_succeeded else 'failed; PDF mode will stay disabled'}."
     )
@@ -231,6 +232,9 @@ def main() -> None:
 
     try:
         parse_exam_directory(args.directory)
+    except KeyboardInterrupt:
+        tqdm.write("Generation stopped cleanly.")
+        raise SystemExit(130)
     except (FileNotFoundError, RuntimeError, ValueError, json.JSONDecodeError) as error:
         parser.exit(1, f"Error: {error}\n")
     except Exception as error:
