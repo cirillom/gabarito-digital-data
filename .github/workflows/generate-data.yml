@@ -21,7 +21,7 @@ on:
       use_gemini_rich:
         description: Use Gemini vision for formulas and complex rich layouts
         required: true
-        default: false
+        default: true
         type: boolean
 
 concurrency:
@@ -74,6 +74,10 @@ jobs:
             args+=(--use-gemini-rich)
           fi
           uv run main.py "${args[@]}"
+
+      - name: Validate complete rich content
+        if: ${{ inputs.rich_content }}
+        run: uv run main.py --check-rich-content
 
       - name: Commit generated files
         env:

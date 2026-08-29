@@ -32,6 +32,9 @@ try {
         $arguments += @('--preview-dir', $PreviewDir)
     }
     uv run @arguments
+    if (-not $SkipRichContent -and -not $Question) {
+        uv run main.py --check-rich-content
+    }
 }
 finally {
     Pop-Location

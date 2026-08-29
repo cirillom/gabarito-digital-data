@@ -30,7 +30,12 @@ research, question classification, and rich content—run:
 
 ```powershell
 uv run main.py --regenerate-all --use-gemini-rich
+uv run main.py --check-rich-content
 ```
+
+The second command performs no API calls. It fails unless every question in
+every discovered exam has structurally valid rich content generated from the
+current `prova.pdf`, with the complete expected alternative list.
 
 On Windows, the checked-in helper installs locked dependencies, runs the test
 suite, and then generates the catalog:
@@ -48,8 +53,10 @@ then open **Actions > Generate exam data > Run workflow**. The workflow tests
 the extractor, rebuilds the root `data.json`, and commits the generated files
 to the selected branch. Enable **Regenerate every exam data.json with Gemini**
 to replace all per-exam JSON files instead of generating only missing exams.
-Rich reconstruction is enabled by default; enable **Use Gemini vision** when
-the source has formulas, encoded text, or a complex visual layout.
+Rich reconstruction and **Use Gemini vision** are enabled by default. For a
+full refresh, enable **Regenerate every exam data.json with Gemini**. Before
+committing, the workflow validates every rich question against its current
+PDF and stops without publishing if any exam is incomplete.
 
 Before its first run, create an Actions repository secret named
 `GEMINI_API_KEY` under **Settings > Secrets and variables > Actions**. The

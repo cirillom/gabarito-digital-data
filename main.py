@@ -1,12 +1,19 @@
 """Generate exam data and rebuild the repository-wide data file."""
 
 import argparse
+import hashlib
+import json
 from pathlib import Path
 
 from folder_parser import write_gabarito_json
 from pdf_parser import parse_exam_directory
 from question_layout import enrich_data_file
-from rich_content import enrich_rich_data_file, write_html_preview
+from rich_content import (
+    RICH_EXTRACTION_VERSION,
+    enrich_rich_data_file,
+    validate_rich_content,
+    write_html_preview,
+)
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -32,6 +39,85 @@ def partition_exam_directories(
         [directory for directory in directories if (directory / "data.json").exists()],
         [directory for directory in directories if not (directory / "data.json").exists()],
     )
+
+
+def validate_complete_rich_data(data: dict, pdf_path: Path) -> list[str]:
+    """Return every structural or source mismatch in one rich exam document."""
+    errors: list[str] = []
+    questions = data.get("questoes")
+    labels = data.get("opcoes_resposta")
+    metadata = data.get("rich_extraction")
+    if not isinstance(questions, dict) or not isinstance(labels, list):
+        return ["exam data has no valid questions or answer-option list"]
+
+    digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
+    successful = 0
+    for number, question in questions.items():
+        rich = (
+            question.get("conteudo", {}).get("rich")
+            if isinstance(question, dict)
+            else None
+        )
+        if not isinstance(rich, dict):
+            errors.append(f"question {number} has no rich content")
+            continue
+        try:
+            validate_rich_content(rich, labels)
+        except ValueError as error:
+            errors.append(f"question {number}: {error}")
+            continue
+        if rich.get("source_pdf_sha256") != digest:
+            errors.append(f"question {number} was extracted from a different PDF")
+            continue
+        successful += 1
+
+    expected = len(questions)
+    if data.get("qtd_questoes") != expected:
+        errors.append("qtd_questoes does not match the question object")
+    if not isinstance(metadata, dict):
+        errors.append("rich_extraction metadata is missing")
+    else:
+        if metadata.get("version") != RICH_EXTRACTION_VERSION:
+            errors.append("rich_extraction uses an unsupported version")
+        if metadata.get("source_pdf_sha256") != digest:
+            errors.append("rich_extraction metadata references a different PDF")
+        if metadata.get("status") != "success":
+            errors.append("rich_extraction status is not success")
+        if metadata.get("question_count") != expected:
+            errors.append("rich_extraction question_count is incorrect")
+        if metadata.get("successful_question_count") != successful:
+            errors.append("rich_extraction successful_question_count is incorrect")
+    return errors
+
+
+def check_repository_rich_content(
+    directories: list[Path], *, root_dir: Path = ROOT_DIR
+) -> None:
+    """Exit unsuccessfully unless every discovered exam has valid rich content."""
+    failures: list[tuple[Path, list[str]]] = []
+    for directory in directories:
+        relative_directory = directory.relative_to(root_dir)
+        data_path = directory / "data.json"
+        try:
+            data = json.loads(data_path.read_text(encoding="utf-8"))
+            errors = validate_complete_rich_data(
+                data, directory / "prova.pdf"
+            )
+            if errors:
+                failures.append((relative_directory, errors))
+        except (OSError, ValueError, json.JSONDecodeError) as error:
+            failures.append((relative_directory, [str(error)]))
+
+    if failures:
+        print("Rich-content validation failed:")
+        for directory, errors in failures:
+            print(f"  {directory}: {len(errors)} issue(s)")
+            for error in errors[:5]:
+                print(f"    - {error}")
+            if len(errors) > 5:
+                print(f"    - ... and {len(errors) - 5} more")
+        raise SystemExit(1)
+    print(f"Rich content is complete and valid for all {len(directories)} exams.")
 
 
 def run(
@@ -162,11 +248,19 @@ def main() -> None:
         type=Path,
         help="Write local HTML previews beneath this directory.",
     )
+    parser.add_argument(
+        "--check-rich-content",
+        action="store_true",
+        help="Validate existing rich content for every exam without regenerating it.",
+    )
     args = parser.parse_args()
     if args.use_gemini_rich and not args.rich_content:
         parser.error("--use-gemini-rich requires --rich-content")
     if args.rich_question and not args.rich_content:
         parser.error("--rich-question requires --rich-content")
+    if args.check_rich_content:
+        check_repository_rich_content(find_exam_directories())
+        return
     run(
         regenerate_all=args.regenerate_all,
         rich_content=args.rich_content,

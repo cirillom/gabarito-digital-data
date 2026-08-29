@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 
 import pymupdf
 
+from main import validate_complete_rich_data
 from rich_content import (
     GeminiBlock,
     GeminiDocument,
@@ -131,6 +132,7 @@ class RichContentTest(unittest.TestCase):
             self.assertEqual(rich["assets"][0]["kind"], "pdf_crop")
             self.assertFalse((directory / "assets").exists())
             validate_rich_content(rich, ["A", "B", "C", "D"])
+            self.assertEqual(validate_complete_rich_data(data, pdf_path), [])
 
             preview = write_html_preview(
                 data,
@@ -142,6 +144,12 @@ class RichContentTest(unittest.TestCase):
             self.assertIn('type="radio"', preview_text)
             self.assertIn("data:image/png;base64,", preview_text)
             self.assertIn("<figcaption>SOURCE: Example (adapted).</figcaption>", preview_text)
+
+            del data["questoes"]["1"]["conteudo"]["rich"]
+            self.assertIn(
+                "question 1 has no rich content",
+                validate_complete_rich_data(data, pdf_path),
+            )
 
     def test_uses_ordered_pdf_crops_for_image_only_options(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
