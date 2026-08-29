@@ -200,6 +200,9 @@ def parse_exam_directory(
         config=types.GenerateContentConfig(
             temperature=0,
             response_mime_type="application/json",
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                disable=True
+            ),
         ),
     )
     data = extract_json(response.text)
