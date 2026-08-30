@@ -77,12 +77,12 @@ def normalize_answer_keys(data: dict) -> None:
             )
 
 
-def normalize_exam_description(data: dict) -> None:
+def normalize_exam_variant(data: dict) -> None:
     """Require the user-facing identifier for the exact exam variant."""
-    description = data.get("descricao")
-    if not isinstance(description, str) or not description.strip():
-        raise ValueError("descricao must identify the exact exam variant.")
-    data["descricao"] = description.strip()
+    variant = data.get("variante")
+    if not isinstance(variant, str) or not variant.strip():
+        raise ValueError("variante must identify the exact exam booklet.")
+    data["variante"] = variant.strip()
 
 
 def build_prompt() -> str:
@@ -106,7 +106,7 @@ Instructions:
 JSON Output Structure:
 {
     "data": "2024-01-01",
-    "descricao": "Caderno 7 - Azul",
+    "variante": "Caderno 7 - Azul",
     "qtd_questoes": 2,
     "opcoes_resposta": ["A", "B", "C", "D"],
     "disciplinas": ["Matemática", "História"],
@@ -118,7 +118,7 @@ JSON Output Structure:
 
 Field Population Rules:
   - data: Extract the exam date from the documents and format it as YYYY-MM-DD.
-  - descricao: Return a concise, user-facing identifier for this exact exam variant. Preserve the official wording printed on the cover or answer key, including every distinguishing booklet color, number, name, version, type, model, day, phase, or area that applies (for example, "Caderno 7 - Azul", "Tipo 1 - Branca", or "Prova V"). Never return only the institution and year. If the exam officially has no parallel variants, return "Versão única" followed by its printed phase, day, or area when applicable. Do not invent a color or version.
+  - variante: Return the concise identifier printed on this exact exam booklet, such as "Caderno 7 - Azul", "Tipo 1 - Branca", or "Prova V". Include only the distinguishing booklet color, number, name, version, type, or model; the directory already supplies the edition, year, day, and phase. If there are no parallel booklets, return "Versão única". Do not invent a color or version.
   - qtd_questoes: Determine the total count of questions in the exam.
   - opcoes_resposta: Inspect the alternatives printed in prova.pdf and return exactly the selectable labels used by that exam, in order. Do not assume five alternatives. For example, OAB exams normally use ["A", "B", "C", "D"], while exams that actually print an E alternative should use ["A", "B", "C", "D", "E"].
   - disciplinas: Return the canonical official subject list researched for this exact exam and edition. Use consistent spelling and granularity. Every questoes[*].disciplina value must be one of these entries, except "Interdisciplinar".
@@ -201,7 +201,7 @@ def parse_exam_directory(
         status_callback=tqdm.write,
     )
     data = extract_json(response.text)
-    normalize_exam_description(data)
+    normalize_exam_variant(data)
     normalize_answer_keys(data)
     layout_succeeded = apply_layout_to_data(data, directory / "prova.pdf")
     tqdm.write(

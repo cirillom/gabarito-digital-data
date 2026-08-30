@@ -21,6 +21,7 @@ from catalog_db import (
     prepare_release,
     replace_exam,
     replace_layout,
+    update_exam_metadata,
     validate_catalog,
     write_rich_content,
 )
@@ -154,6 +155,7 @@ def run(
     directories: list[Path] | None = None,
     database_path: Path = CATALOG_PATH,
     regenerate_all: bool = False,
+    force_rich: bool = False,
     rich_content: bool = False,
     gemini_rich: bool = False,
     rich_model: str | None = None,
@@ -200,6 +202,7 @@ def run(
                 connection, directory, repository_root=ROOT_DIR
             )
             assert exam_id is not None
+            update_exam_metadata(connection, exam_id, directory)
             label = exam_label(connection, exam_id)
             if label not in processed_exams:
                 processed_exams.append(label)
@@ -313,7 +316,7 @@ def run(
                         question_numbers=rich_questions,
                         use_gemini=gemini_rich,
                         model_name=rich_model,
-                        force=regenerate_all,
+                        force=regenerate_all or force_rich,
                         max_workers=rich_workers,
                         progress=True,
                         progress_position=2,
@@ -421,6 +424,11 @@ def main() -> None:
     parser.add_argument("--database", type=Path, default=CATALOG_PATH)
     parser.add_argument("--regenerate-all", action="store_true")
     parser.add_argument(
+        "--force-rich",
+        action="store_true",
+        help="Rebuild selected rich questions without regenerating base exam data.",
+    )
+    parser.add_argument(
         "--directory",
         type=Path,
         action="append",
@@ -486,12 +494,15 @@ def main() -> None:
         parser.error("--rich-model requires --gemini-rich")
     if args.rich_question and not args.rich_content:
         parser.error("--rich-question requires --rich-content")
+    if args.force_rich and not args.rich_content:
+        parser.error("--force-rich requires --rich-content")
 
     try:
         run(
             directories=_scoped_directories(args.directory, parser),
             database_path=database_path,
             regenerate_all=args.regenerate_all,
+            force_rich=args.force_rich,
             rich_content=args.rich_content,
             gemini_rich=args.gemini_rich,
             rich_model=args.rich_model,

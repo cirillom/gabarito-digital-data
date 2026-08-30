@@ -28,12 +28,18 @@ skipped:
 ```powershell
 uv run main.py --rich-content
 uv run main.py --rich-content --gemini-rich
-uv run main.py --regenerate-all --rich-content --gemini-rich
+uv run main.py --rich-content --force-rich
 ```
 
-`--regenerate-all` explicitly forces all base and rich extraction. Gemini calls
-use limited concurrency, stop immediately on quota/rate limits, and retry
-timeouts and temporary 408/500/502/503/504 errors with bounded backoff.
+The first command generates every rich question that is still missing, using
+the local deterministic extractor. `--gemini-rich` asks Gemini vision to improve
+those results. `--force-rich` rebuilds already completed rich questions without
+also regenerating the base answer data. `--regenerate-all` is the expensive
+option that explicitly regenerates both base and rich data.
+
+Gemini calls use limited concurrency, stop immediately on quota/rate limits,
+and retry timeouts and temporary 408/500/502/503/504 errors with bounded
+backoff.
 
 The PowerShell helper installs locked dependencies, tests, generates, and
 validates:
@@ -44,16 +50,47 @@ validates:
 .\scripts\generate-data.ps1 -RegenerateAll -RichContent -GeminiRich
 ```
 
-## Retry failures
+## Generate rich exams by scope
 
-Limit a run to one exam with `--directory`. Repeat `--rich-question` to retry
-several failed questions; completed questions are skipped unless
-`--regenerate-all` is present.
+Run these commands from `gabarito-digital-data`. A directory may identify one
+exam or any parent scope, such as an institution. Repeat `--directory` to combine
+scopes.
 
 ```powershell
-uv run main.py --rich-content --directory "OAB\provas\46" --rich-question 17
-uv run main.py --rich-content --directory "ENEM\provas\2024\2o dia" --rich-question 17 --rich-question 42 --gemini-rich
+# Every question that does not have rich content yet
+uv run main.py --rich-content
+
+# Every remaining OAB question
+uv run main.py --rich-content --directory OAB
+
+# One exact exam
+uv run main.py --rich-content --directory "OAB\provas\46"
+
+# Selected questions from one exam
+uv run main.py --rich-content --directory "ENEM\provas\2024\2o dia" --rich-question 92 --rich-question 93
+
+# Two institutions in one resumable run
+uv run main.py --rich-content --directory OAB --directory Fuvest
+
+# Improve missing questions with Gemini vision and write a browser preview
+$env:GEMINI_API_KEY = "your-key"
+uv run main.py --rich-content --gemini-rich --directory Fuvest --rich-workers 2 --preview-dir .rich-preview
+
+# Rebuild a completed question after fixing the extractor
+uv run main.py --rich-content --force-rich --directory "ENEM\provas\2024\2o dia" --rich-question 92
 ```
+
+`--rich-question` is repeatable and requires `--rich-content`. Successful
+questions are committed immediately and skipped on the next run, so an
+interrupted or quota-limited command can be resumed unchanged. Use
+`--rich-model MODEL_NAME` with `--gemini-rich` to override the model, and keep
+`--rich-workers` between 1 and 4.
+
+To add a completely new exam, create
+`<institution>\provas\<title>\prova.pdf` and `gabarito.pdf`, set
+`GEMINI_API_KEY`, and run `uv run main.py --directory "<exam-directory>"` once
+for answers, disciplines, metadata, and PDF crops. Then run the same scope with
+`--rich-content` for the rich representation.
 
 Every generation run prints the processed exams, attempted/successful/failed
 question counts, and the exact failed-question list. Failure-only diagnostic

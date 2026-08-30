@@ -55,7 +55,7 @@ class CatalogDatabaseTest(unittest.TestCase):
         digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
         data = {
             "data": "2026-08-30",
-            "descricao": "Caderno 1 - Azul",
+            "variante": "Caderno 1 - Azul",
             "qtd_questoes": 1,
             "opcoes_resposta": ["A", "B"],
             "questoes": {
@@ -87,6 +87,9 @@ class CatalogDatabaseTest(unittest.TestCase):
                 connection, directory, data, repository_root=root
             )
             loaded = load_exam(connection, exam_id)
+            exam_columns = {
+                row["name"] for row in connection.execute("PRAGMA table_info(exam)")
+            }
             connection.close()
 
             validate_catalog(database, repository_root=root)
@@ -95,6 +98,10 @@ class CatalogDatabaseTest(unittest.TestCase):
             self.assertEqual(stats["questions"], 1)
             self.assertEqual(stats["question_content"], 1)
             self.assertEqual(stats["question_rich_content"], 1)
+            self.assertNotIn("year", exam_columns)
+            self.assertIn("description", exam_columns)
+            self.assertEqual(loaded["titulo"], "2026 | 1º dia | Caderno 1 - Azul")
+            self.assertIn("acesso ao ensino superior", loaded["descricao"])
             self.assertEqual(loaded["questoes"]["1"]["resposta"], "A")
             self.assertEqual(loaded["questoes"]["1"]["conteudo"]["segments"][0]["page"], 1)
 
@@ -155,7 +162,7 @@ class CatalogDatabaseTest(unittest.TestCase):
                 artifacts,
                 ["catalog-manifest.json", "catalog.sqlite3", "catalog.sqlite3.sha256"],
             )
-            self.assertEqual(manifest["schema_version"], 1)
+            self.assertEqual(manifest["schema_version"], 2)
             self.assertEqual(manifest["size"], (root / "dist" / CATALOG_FILENAME).stat().st_size)
             stored_manifest = json.loads(
                 (root / "dist" / "catalog-manifest.json").read_text(encoding="utf-8")

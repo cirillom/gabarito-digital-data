@@ -28,6 +28,20 @@ DEFAULT_GEMINI_MODEL_NAME = "gemini-3.5-flash-lite"
 _INLINE_OPTION_AFTER_PUNCTUATION = re.compile(
     r"(?<=[.!?;:])\s*([A-Z])(?=\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ])"
 )
+_ENEM_WATERMARK = re.compile(
+    r"(?:ENEM\d{4}){3,}(?:E(?:N(?:E(?:M\d{0,4})?)?)?)?",
+    re.IGNORECASE,
+)
+
+
+def _remove_enem_watermarks(text: str) -> str:
+    def replacement(match: re.Match[str]) -> str:
+        remainder = text[match.end() :]
+        if match.group().upper().endswith("E") and re.match(r"\s+\S", remainder):
+            return "\nE"
+        return ""
+
+    return _ENEM_WATERMARK.sub(replacement, text)
 
 
 class SourceCrop(BaseModel):
@@ -47,7 +61,7 @@ class GeminiInline(BaseModel):
 
 
 class GeminiBlock(BaseModel):
-    type: Literal["paragraph", "formula", "figure", "quote"]
+    type: Literal["paragraph", "formula", "figure", "quote", "caption"]
     inlines: list[GeminiInline] = Field(default_factory=list)
     latex: str | None = None
     asset_ids: list[str] = Field(default_factory=list)
@@ -148,7 +162,7 @@ def _extract_source_text(
         page = document[int(segment["page"]) - 1]
         text_parts.append(page.get_text("text", clip=_segment_clip(page, segment), sort=True))
     text = "\n\n".join(text_parts).replace("\u00ad", "")
-    text = re.sub(r"(?:E?NEM\d{4}){3,}", "", text, flags=re.IGNORECASE)
+    text = _remove_enem_watermarks(text)
     # Some PDFs place the next ENEM alternative in the same text line.
     return _INLINE_OPTION_AFTER_PUNCTUATION.sub(r"\n\1", text)
 
@@ -223,7 +237,12 @@ def _clean_question_statement(text: str, number: int) -> str:
     return "\n".join(cleaned).strip()
 
 
-def _paragraph_blocks(text: str, source: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _paragraph_blocks(
+    text: str,
+    source: list[dict[str, Any]],
+    *,
+    block_type: str = "paragraph",
+) -> list[dict[str, Any]]:
     blocks: list[dict[str, Any]] = []
     for raw_paragraph in re.split(r"\n\s*\n", text):
         lines = [line.strip() for line in raw_paragraph.splitlines() if line.strip()]
@@ -232,7 +251,7 @@ def _paragraph_blocks(text: str, source: list[dict[str, Any]]) -> list[dict[str,
         paragraph = " ".join(lines)
         blocks.append(
             {
-                "type": "paragraph",
+                "type": block_type,
                 "inlines": [{"type": "text", "text": paragraph}],
                 "source": source,
             }
@@ -376,8 +395,8 @@ def _visual_statement_blocks(
                     font_sizes.extend(float(span.get("size", 0)) for span in spans)
             text = "\n".join(lines).replace("\u00ad", "")
             compact = re.sub(r"\s+", "", text)
-            if not text.strip() or re.fullmatch(
-                r"(?:E?NEM\d{4}){3,}", compact, flags=re.IGNORECASE
+            if not text.strip() or (
+                len(compact) >= 24 and _ENEM_WATERMARK.fullmatch(compact)
             ):
                 continue
             text = _INLINE_OPTION_AFTER_PUNCTUATION.sub(r"\n\1", text)
@@ -495,6 +514,16 @@ def _visual_statement_blocks(
                     f"{previous} {caption}" if previous else caption
                 )
             continue
+        if event["font_size"] <= 8.5:
+            rich_blocks.extend(
+                _paragraph_blocks(
+                    visible_text,
+                    [event["source"]],
+                    block_type="caption",
+                )
+            )
+            rich_blocks[-1]["align"] = "center"
+            continue
         rich_blocks.extend(_paragraph_blocks(visible_text, [event["source"]]))
 
     if not rich_blocks:
@@ -583,6 +612,7 @@ Rules:
 - The option labels must be exactly {json.dumps(labels, ensure_ascii=False)} and in that order.
 - Separate the statement from each selectable option.
 - Use text in paragraph/quote blocks, preserving bold and italic marks when visually meaningful.
+- Use caption blocks for a source credit, citation, or small explanatory line that belongs to nearby text rather than to a figure.
 - Convert every mathematical expression to a LaTeX formula node. Formula nodes
   contain LaTeX only and must never be represented by a figure or source_crop.
 - Reuse an asset_id only from AVAILABLE_ASSETS when it is the relevant figure.
@@ -720,9 +750,10 @@ def _validate_document(document: Any, *, assets: dict[str, dict[str, Any]]) -> N
             "quote",
             "formula",
             "figure",
+            "caption",
         }:
             raise ValueError("Unsupported rich-content block.")
-        if block["type"] in {"paragraph", "quote"}:
+        if block["type"] in {"paragraph", "quote", "caption"}:
             inlines = block.get("inlines")
             if not isinstance(inlines, list) or not inlines:
                 raise ValueError("Paragraph and quote blocks need inline content.")
@@ -984,9 +1015,12 @@ def _render_document(document: dict[str, Any], assets: dict[str, dict[str, Any]]
     rendered: list[str] = []
     for block in document.get("blocks", []):
         kind = block.get("type")
-        if kind in {"paragraph", "quote"}:
+        if kind in {"paragraph", "quote", "caption"}:
             tag = "blockquote" if kind == "quote" else "p"
-            rendered.append(f"<{tag}>{_render_inlines(block.get('inlines', []), assets)}</{tag}>")
+            css_class = ' class="caption"' if kind == "caption" else ""
+            rendered.append(
+                f"<{tag}{css_class}>{_render_inlines(block.get('inlines', []), assets)}</{tag}>"
+            )
         elif kind == "formula":
             rendered.append(_render_formula(str(block.get("latex", "")), display=True))
         elif kind == "figure":
@@ -1080,7 +1114,7 @@ def write_html_preview(
 <style>
 :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#19162d;color:#fff}
 body{max-width:920px;margin:auto;padding:24px}section{background:#24203d;padding:24px;border-radius:16px;margin:0 0 24px}
-p,blockquote{font-size:18px;line-height:1.55}figure{width:min(100%,var(--figure-width));margin:16px auto}.figures{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+p,blockquote{font-size:18px;line-height:1.55}.caption{color:#d6d2e8;font-size:13px;line-height:1.35;text-align:center}figure{width:min(100%,var(--figure-width));margin:16px auto}.figures{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
 .figures img{width:100%;height:auto;background:white;border-radius:8px}figcaption{width:100%;margin-top:6px;color:#d6d2e8;font-size:13px;line-height:1.35}.options{display:grid;gap:12px;margin-top:24px}
 .option{display:flex;align-items:flex-start;gap:14px;padding:16px;border:2px solid #6d64ba;border-radius:12px;cursor:pointer}
 .option:has(input:checked){background:#4a3ba7;border-color:#a99fff}.option input{margin-top:7px}.label{font-size:20px;font-weight:700}

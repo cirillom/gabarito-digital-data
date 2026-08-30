@@ -10,7 +10,7 @@ from main import partition_exam_directories, run
 from pdf_parser import (
     build_prompt,
     normalize_answer_keys,
-    normalize_exam_description,
+    normalize_exam_variant,
     parse_exam_directory,
 )
 from rich_content import QuotaExceededError
@@ -19,7 +19,7 @@ from rich_content import QuotaExceededError
 def _exam_data() -> dict:
     return {
         "data": "2026-01-01",
-        "descricao": "Caderno 1 - Azul",
+        "variante": "Caderno 1 - Azul",
         "qtd_questoes": 1,
         "opcoes_resposta": ["A", "B"],
         "disciplinas": ["Teste"],
@@ -96,16 +96,16 @@ class GeneratorTests(unittest.TestCase):
 
     def test_prompt_requires_the_exact_exam_variant(self) -> None:
         prompt = build_prompt()
-        self.assertIn('"descricao": "Caderno 7 - Azul"', prompt)
-        self.assertIn("every distinguishing booklet color", prompt)
+        self.assertIn('"variante": "Caderno 7 - Azul"', prompt)
+        self.assertIn("distinguishing booklet color", prompt)
         self.assertIn("Do not invent a color or version", prompt)
 
-    def test_exam_description_is_required_and_trimmed(self) -> None:
-        data = {"descricao": "  Tipo 1 - Branca  "}
-        normalize_exam_description(data)
-        self.assertEqual(data["descricao"], "Tipo 1 - Branca")
-        with self.assertRaisesRegex(ValueError, "exact exam variant"):
-            normalize_exam_description({})
+    def test_exam_variant_is_required_and_trimmed(self) -> None:
+        data = {"variante": "  Tipo 1 - Branca  "}
+        normalize_exam_variant(data)
+        self.assertEqual(data["variante"], "Tipo 1 - Branca")
+        with self.assertRaisesRegex(ValueError, "exact exam booklet"):
+            normalize_exam_variant({})
 
     def test_normalizes_annulments_and_rejects_malformed_answers(self) -> None:
         data = {
@@ -125,7 +125,7 @@ class GeneratorTests(unittest.TestCase):
     def test_oab_answer_data_matches_official_annulments(self) -> None:
         connection = connect(Path(__file__).resolve().parent / "catalog.sqlite3", read_only=True)
         rows = connection.execute(
-            "SELECT exam.year, question.number FROM question "
+            "SELECT exam.title, question.number FROM question "
             "JOIN exam ON exam.id = question.exam_id "
             "JOIN institution ON institution.id = exam.institution_id "
             "WHERE institution.name = 'OAB' AND question.answer = 'N/A'"
@@ -133,7 +133,8 @@ class GeneratorTests(unittest.TestCase):
         connection.close()
         actual: dict[int, set[int]] = {}
         for row in rows:
-            actual.setdefault(row["year"], set()).add(row["number"])
+            edition = int(row["title"].split(" | ", 1)[0])
+            actual.setdefault(edition, set()).add(row["number"])
         self.assertEqual(actual.get(32), {3, 45, 55, 61, 74})
         self.assertEqual(actual.get(33), {59})
 

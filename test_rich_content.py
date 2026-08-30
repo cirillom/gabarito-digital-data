@@ -59,6 +59,18 @@ def _write_image_option_pdf(path: Path) -> None:
         document.save(path)
 
 
+def _write_text_caption_pdf(path: Path) -> None:
+    with pymupdf.open() as document:
+        page = document.new_page(width=600, height=800)
+        page.insert_text((40, 55), "QUESTAO 1", fontsize=12)
+        page.insert_text((40, 90), "Read the source text.", fontsize=11)
+        page.insert_text((40, 112), "SOURCE: Example (adapted).", fontsize=7)
+        page.insert_text((40, 145), "What does the text show?", fontsize=11)
+        for index, label in enumerate("ABCD"):
+            page.insert_text((40, 180 + index * 30), f"{label}) Option {label}", fontsize=11)
+        document.save(path)
+
+
 def _data(*, bottom: float = 0.5) -> dict:
     return {
         "qtd_questoes": 1,
@@ -130,6 +142,59 @@ class RichContentTest(unittest.TestCase):
             self.assertIn("What is shown", preview_text)
             self.assertIn('type="radio"', preview_text)
             self.assertIn("data:image/png;base64,", preview_text)
+
+    def test_styles_a_text_source_line_as_a_caption(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            pdf_path = Path(temporary_directory) / "prova.pdf"
+            _write_text_caption_pdf(pdf_path)
+            rich = _extract(_data(), pdf_path)
+
+            blocks = rich["statement"]["blocks"]
+            self.assertEqual(
+                [block["type"] for block in blocks],
+                ["paragraph", "caption", "paragraph"],
+            )
+            self.assertEqual(blocks[1]["align"], "center")
+
+    def test_enem_question_92_ignores_the_clipped_vertical_watermark(self) -> None:
+        pdf_path = (
+            Path(__file__).resolve().parent
+            / "ENEM"
+            / "provas"
+            / "2024"
+            / "2o dia"
+            / "prova.pdf"
+        )
+        question = {
+            "conteudo": {
+                "segments": [
+                    {
+                        "page": 2,
+                        "rect": [0.0, 0.657281, 0.5, 0.945],
+                    }
+                ]
+            }
+        }
+        with pymupdf.open(pdf_path) as document:
+            rich = extract_question_rich_content(
+                document=document,
+                directory=pdf_path.parent,
+                assets_directory=None,
+                repository_root=pdf_path.parent,
+                number=92,
+                question=question,
+                labels=list("ABCDE"),
+                pdf_sha256=hashlib.sha256(pdf_path.read_bytes()).hexdigest(),
+            )
+
+        self.assertEqual(
+            [option["label"] for option in rich["options"]],
+            list("ABCDE"),
+        )
+        self.assertEqual(
+            rich["options"][-1]["content"]["blocks"][0]["inlines"][0]["text"],
+            "evaporação.",
+        )
 
     def test_uses_ordered_pdf_crops_for_image_only_options(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
