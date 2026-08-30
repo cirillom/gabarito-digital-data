@@ -7,14 +7,12 @@ layout; its output is validated against the same contract before being saved.
 
 from __future__ import annotations
 
-import argparse
 import base64
 import hashlib
 import html
 import json
 import os
 import re
-import time
 import unicodedata
 from pathlib import Path
 from typing import Any, Literal
@@ -26,12 +24,7 @@ from pydantic import BaseModel, Field, model_validator
 
 
 RICH_CONTENT_VERSION = 2
-RICH_EXTRACTION_VERSION = 2
 DEFAULT_GEMINI_MODEL_NAME = "gemini-3.5-flash-lite"
-DEFAULT_OPENAI_MODEL_NAME = "gpt-5.6-luna"
-# Kept for callers that still use the original Gemini-only API.
-DEFAULT_MODEL_NAME = DEFAULT_GEMINI_MODEL_NAME
-RichProvider = Literal["gemini", "openai"]
 _INLINE_OPTION_AFTER_PUNCTUATION = re.compile(
     r"(?<=[.!?;:])\s*([A-Z])(?=\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ])"
 )
@@ -88,7 +81,7 @@ class GeminiQuestion(BaseModel):
 
 
 class QuotaExceededError(RuntimeError):
-    """Raised when an AI provider refuses work because quota/rate limits were hit."""
+    """Raised when Gemini refuses work because quota/rate limits were hit."""
 
 
 def is_quota_error(error: BaseException) -> bool:
@@ -112,32 +105,6 @@ def is_quota_error(error: BaseException) -> bool:
             "resource_exhausted",
         )
     )
-
-
-def resolve_rich_provider(
-    provider: RichProvider | None = None,
-    *,
-    use_gemini: bool = False,
-) -> RichProvider | None:
-    if provider is not None and provider not in {"gemini", "openai"}:
-        raise ValueError(f"Unsupported rich extraction provider: {provider}")
-    if use_gemini and provider not in {None, "gemini"}:
-        raise ValueError("use_gemini cannot be combined with a different provider.")
-    return "gemini" if use_gemini else provider
-
-
-def default_model_for_provider(provider: RichProvider | None) -> str:
-    if provider == "openai":
-        return DEFAULT_OPENAI_MODEL_NAME
-    return DEFAULT_GEMINI_MODEL_NAME
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as source:
-        for chunk in iter(lambda: source.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _normalize_rect(value: Any) -> list[float]:
@@ -698,63 +665,6 @@ def _enrich_with_gemini(
     raise ValueError("Gemini returned no structured rich question content.")
 
 
-def _enrich_with_openai(
-    *,
-    number: int,
-    labels: list[str],
-    deterministic_content: dict[str, Any],
-    assets: list[dict[str, Any]],
-    segment_images: list[bytes],
-    model_name: str,
-    client: Any | None = None,
-) -> GeminiQuestion:
-    from openai import OpenAI, RateLimitError
-
-    if client is None:
-        load_dotenv()
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            raise RuntimeError("OPENAI_API_KEY is required for the OpenAI provider.")
-        client = OpenAI(api_key=api_key, max_retries=0)
-
-    prompt = _rich_prompt(
-        number=number,
-        labels=labels,
-        deterministic_content=deterministic_content,
-        assets=assets,
-        segment_count=len(segment_images),
-    )
-    content: list[dict[str, Any]] = [{"type": "input_text", "text": prompt}]
-    content.extend(
-        {
-            "type": "input_image",
-            "image_url": (
-                "data:image/png;base64," + base64.b64encode(image).decode("ascii")
-            ),
-            "detail": "high",
-        }
-        for image in segment_images
-    )
-    try:
-        response = client.responses.parse(
-            model=model_name,
-            input=[{"role": "user", "content": content}],
-            text_format=GeminiQuestion,
-            store=False,
-        )
-    except RateLimitError as error:
-        raise QuotaExceededError(
-            f"OpenAI quota/rate limit reached while extracting question {number}."
-        ) from error
-
-    parsed = response.output_parsed
-    if isinstance(parsed, GeminiQuestion):
-        return parsed
-    if response.output_text:
-        return GeminiQuestion.model_validate_json(response.output_text)
-    raise ValueError("OpenAI returned no structured rich question content.")
-
-
 def _materialize_gemini_document(
     document_model: GeminiDocument,
     *,
@@ -882,26 +792,6 @@ def _referenced_asset_ids(
     return referenced
 
 
-def _can_reuse_rich_content(
-    content: Any,
-    *,
-    labels: list[str],
-    pdf_sha256: str,
-    directory: Path,
-    provider: RichProvider | None,
-    model_name: str,
-) -> bool:
-    if not isinstance(content, dict) or content.get("source_pdf_sha256") != pdf_sha256:
-        return False
-    if provider is not None and content.get("method") != f"{provider}:{model_name}":
-        return False
-    try:
-        validate_rich_content(content, labels)
-    except ValueError:
-        return False
-    return True
-
-
 def extract_question_rich_content(
     *,
     document: pymupdf.Document,
@@ -913,13 +803,10 @@ def extract_question_rich_content(
     labels: list[str],
     pdf_sha256: str,
     use_gemini: bool = False,
-    provider: RichProvider | None = None,
     model_name: str | None = None,
     gemini_client: Any | None = None,
-    openai_client: Any | None = None,
 ) -> dict[str, Any]:
-    provider = resolve_rich_provider(provider, use_gemini=use_gemini)
-    model_name = model_name or default_model_for_provider(provider)
+    model_name = model_name or DEFAULT_GEMINI_MODEL_NAME
     raw_content = question.get("conteudo")
     if not isinstance(raw_content, dict) or not isinstance(raw_content.get("segments"), list):
         raise ValueError("Question has no validated PDF segments.")
@@ -997,7 +884,7 @@ def extract_question_rich_content(
                 deterministic = None
 
     if deterministic is None:
-        if provider is None:
+        if not use_gemini:
             raise local_error or ValueError("Local rich extraction failed.")
         deterministic = {
             "warning": f"Local text extraction was unusable: {local_error}",
@@ -1007,16 +894,15 @@ def extract_question_rich_content(
 
     assets_by_id = {asset["id"]: asset for asset in assets}
     extraction_method = "deterministic"
-    if provider is not None:
-        enrich = _enrich_with_gemini if provider == "gemini" else _enrich_with_openai
-        model_content = enrich(
+    if use_gemini:
+        model_content = _enrich_with_gemini(
             number=number,
             labels=labels,
             deterministic_content=deterministic,
             assets=assets,
             segment_images=_render_segment_images(document, segments),
             model_name=model_name,
-            client=gemini_client if provider == "gemini" else openai_client,
+            client=gemini_client,
         )
         statement = _materialize_gemini_document(
             model_content.statement,
@@ -1041,7 +927,7 @@ def extract_question_rich_content(
             }
             for label in labels
         ]
-        extraction_method = f"{provider}:{model_name}"
+        extraction_method = f"gemini:{model_name}"
     else:
         statement = deterministic["statement"]
         options = deterministic["options"]
@@ -1062,138 +948,6 @@ def extract_question_rich_content(
     }
     validate_rich_content(content, labels)
     return content
-
-
-def enrich_rich_data_file(
-    data_path: str | Path,
-    pdf_path: str | Path,
-    *,
-    repository_root: str | Path | None = None,
-    question_numbers: set[int] | None = None,
-    use_gemini: bool = False,
-    provider: RichProvider | None = None,
-    model_name: str | None = None,
-    assets_directory: str | Path | None = None,
-    write: bool = True,
-    force: bool = False,
-) -> dict[str, Any]:
-    """Extract rich content for local questions and optionally persist it."""
-    provider = resolve_rich_provider(provider, use_gemini=use_gemini)
-    model_name = model_name or default_model_for_provider(provider)
-    data_path = Path(data_path).resolve()
-    pdf_path = Path(pdf_path).resolve()
-    directory = data_path.parent
-    root = Path(repository_root).resolve() if repository_root is not None else None
-    asset_output = Path(assets_directory).resolve() if assets_directory is not None else None
-    data = json.loads(data_path.read_text(encoding="utf-8"))
-    labels = [str(label).strip() for label in data.get("opcoes_resposta", [])]
-    if not labels:
-        raise ValueError("opcoes_resposta is missing or empty.")
-    questions = data.get("questoes")
-    if not isinstance(questions, dict):
-        raise ValueError("questoes must be an object.")
-    pdf_digest = _sha256(pdf_path)
-    failures: dict[str, str] = {}
-    processed = 0
-    reused = 0
-    provider_client: Any | None = None
-    if provider is not None:
-        load_dotenv()
-        key_name = "GEMINI_API_KEY" if provider == "gemini" else "OPENAI_API_KEY"
-        api_key = os.getenv(key_name)
-        if not api_key:
-            raise RuntimeError(f"{key_name} is required for the {provider} provider.")
-        if provider == "gemini":
-            from google import genai
-
-            provider_client = genai.Client(api_key=api_key)
-        else:
-            from openai import OpenAI
-
-            provider_client = OpenAI(api_key=api_key, max_retries=0)
-
-    with pymupdf.open(pdf_path) as document:
-        for raw_number, question in questions.items():
-            number = int(raw_number)
-            if question_numbers is not None and number not in question_numbers:
-                continue
-            if not isinstance(question, dict):
-                failures[raw_number] = "Question is not an object."
-                continue
-            raw_content = question.get("conteudo")
-            existing_rich = (
-                raw_content.get("rich") if isinstance(raw_content, dict) else None
-            )
-            if not force and _can_reuse_rich_content(
-                existing_rich,
-                labels=labels,
-                pdf_sha256=pdf_digest,
-                directory=directory,
-                provider=provider,
-                model_name=model_name,
-            ):
-                referenced = _referenced_asset_ids(
-                    existing_rich["statement"], existing_rich["options"]
-                )
-                existing_rich["assets"] = [
-                    asset
-                    for asset in existing_rich["assets"]
-                    if asset["id"] in referenced
-                ]
-                reused += 1
-                continue
-            processed += 1
-            try:
-                question.setdefault("conteudo", {})["rich"] = extract_question_rich_content(
-                    document=document,
-                    directory=directory,
-                    assets_directory=asset_output,
-                    repository_root=root,
-                    number=number,
-                    question=question,
-                    labels=labels,
-                    pdf_sha256=pdf_digest,
-                    provider=provider,
-                    model_name=model_name,
-                    gemini_client=(
-                        provider_client if provider == "gemini" else None
-                    ),
-                    openai_client=(
-                        provider_client if provider == "openai" else None
-                    ),
-                )
-            except QuotaExceededError:
-                raise
-            except (OSError, ValueError, RuntimeError) as error:
-                question.setdefault("conteudo", {}).pop("rich", None)
-                failures[raw_number] = str(error)
-
-    successful = sum(
-        1
-        for question in questions.values()
-        if isinstance(question, dict)
-        and isinstance(question.get("conteudo"), dict)
-        and question["conteudo"].get("rich", {}).get("status") == "success"
-    )
-    expected = len(questions)
-    data["rich_extraction"] = {
-        "version": RICH_EXTRACTION_VERSION,
-        "status": "success" if successful == expected else "partial",
-        "question_count": expected,
-        "successful_question_count": successful,
-        "processed_question_count": processed,
-        "reused_question_count": reused,
-        "source_pdf_sha256": pdf_digest,
-        "method": f"{provider}:{model_name}" if provider else "deterministic",
-        **({"failures": failures} if failures else {}),
-    }
-    if write:
-        data_path.write_text(
-            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-            newline="\n",
-        )
-    return data
 
 
 def _render_inlines(inlines: list[dict[str, Any]], assets: dict[str, dict[str, Any]]) -> str:
@@ -1334,55 +1088,3 @@ p,blockquote{font-size:18px;line-height:1.55}figure{width:min(100%,var(--figure-
 </style></head><body><h1>Rich question preview</h1>""" + "".join(sections) + "</body></html>"
     output_path.write_text(page, encoding="utf-8", newline="\n")
     return output_path
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Extract and preview rich question content from local PDFs."
-    )
-    parser.add_argument("--directory", "-d", type=Path, required=True)
-    parser.add_argument("--question", "-q", type=int, action="append")
-    parser.add_argument("--use-gemini", action="store_true")
-    parser.add_argument("--provider", choices=("gemini", "openai"))
-    parser.add_argument("--model")
-    parser.add_argument("--write", action="store_true", help="Update the exam data.json.")
-    parser.add_argument("--preview", type=Path, help="Write a local HTML preview.")
-    args = parser.parse_args()
-    if args.use_gemini and args.provider not in {None, "gemini"}:
-        parser.error("--use-gemini cannot be combined with --provider openai")
-    provider = args.provider or ("gemini" if args.use_gemini else None)
-    if args.model and provider is None:
-        parser.error("--model requires --provider")
-
-    directory = args.directory.resolve()
-    data = enrich_rich_data_file(
-        directory / "data.json",
-        directory / "prova.pdf",
-        repository_root=Path(__file__).resolve().parent,
-        question_numbers=set(args.question) if args.question else None,
-        provider=provider,
-        model_name=args.model,
-        assets_directory=(
-            args.preview.resolve().parent / "assets"
-            if args.preview is not None and not args.write
-            else None
-        ),
-        write=args.write,
-    )
-    if args.preview:
-        preview = write_html_preview(
-            data,
-            directory=directory,
-            output_path=args.preview,
-            question_numbers=set(args.question) if args.question else None,
-        )
-        print(f"Preview written to {preview}")
-    metadata = data["rich_extraction"]
-    print(
-        f"Rich extraction: {metadata['successful_question_count']}/"
-        f"{metadata['question_count']} successful ({metadata['status']})."
-    )
-
-
-if __name__ == "__main__":
-    main()

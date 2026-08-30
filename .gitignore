@@ -3,3 +3,5 @@
 __pycache__/
 *.py[cod]
 .rich-preview/
+dist/
+logs/

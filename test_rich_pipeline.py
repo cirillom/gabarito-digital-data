@@ -1,28 +1,25 @@
 import hashlib
-import json
+from pathlib import Path
 import tempfile
 import threading
 import unittest
-from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pymupdf
 
+from rich_content import QuotaExceededError
 from rich_pipeline import (
     _RetryingGeminiClient,
-    _RetryingOpenAIClient,
     _StopRequested,
-    enrich_rich_data_file,
+    enrich_rich_exam,
 )
-from rich_content import QuotaExceededError
 
 
 def _write_pdf(path: Path) -> None:
-    document = pymupdf.open()
-    document.new_page(width=200, height=200)
-    document.save(path)
-    document.close()
+    with pymupdf.open() as document:
+        document.new_page(width=200, height=200)
+        document.save(path)
 
 
 def _rich(pdf_sha256: str, *, method: str = "deterministic") -> dict:
@@ -51,32 +48,27 @@ def _rich(pdf_sha256: str, *, method: str = "deterministic") -> dict:
     }
 
 
-def _write_data(path: Path, question_count: int = 2) -> None:
-    path.write_text(
-        json.dumps(
-            {
-                "qtd_questoes": question_count,
-                "opcoes_resposta": ["A", "B"],
-                "questoes": {
-                    str(number): {
-                        "resposta": "A",
-                        "disciplina": "Test",
-                        "conteudo": {
-                            "segments": [
-                                {
-                                    "page": 1,
-                                    "rect": [0.0, 0.0, 1.0, 1.0],
-                                    "kind": "question",
-                                }
-                            ]
-                        },
-                    }
-                    for number in range(1, question_count + 1)
+def _data(question_count: int = 2) -> dict:
+    return {
+        "qtd_questoes": question_count,
+        "opcoes_resposta": ["A", "B"],
+        "questoes": {
+            str(number): {
+                "resposta": "A",
+                "disciplina": "Test",
+                "conteudo": {
+                    "segments": [
+                        {
+                            "page": 1,
+                            "rect": [0.0, 0.0, 1.0, 1.0],
+                            "kind": "question",
+                        }
+                    ]
                 },
             }
-        ),
-        encoding="utf-8",
-    )
+            for number in range(1, question_count + 1)
+        },
+    }
 
 
 class RichPipelineTest(unittest.TestCase):
@@ -87,32 +79,11 @@ class RichPipelineTest(unittest.TestCase):
         models = MagicMock()
         models.generate_content.side_effect = QuotaError("quota exhausted")
         client = _RetryingGeminiClient(
-            SimpleNamespace(models=models),
-            question_number=17,
-            max_attempts=5,
+            SimpleNamespace(models=models), question_number=17, max_attempts=5
         )
-
         with self.assertRaises(QuotaExceededError):
             client.models.generate_content(model="test", contents=[])
-
         self.assertEqual(models.generate_content.call_count, 1)
-
-    def test_openai_quota_error_is_not_retried(self) -> None:
-        class QuotaError(Exception):
-            status_code = 429
-
-        responses = MagicMock()
-        responses.parse.side_effect = QuotaError("rate limit")
-        client = _RetryingOpenAIClient(
-            SimpleNamespace(responses=responses),
-            question_number=17,
-            max_attempts=5,
-        )
-
-        with self.assertRaises(QuotaExceededError):
-            client.responses.parse(model="test", input=[])
-
-        self.assertEqual(responses.parse.call_count, 1)
 
     def test_retries_503_with_bounded_backoff(self) -> None:
         class TemporaryError(Exception):
@@ -131,13 +102,11 @@ class RichPipelineTest(unittest.TestCase):
             base_delay=0.01,
             max_delay=0.02,
         )
-
         with (
             patch("rich_pipeline.time.sleep") as sleep,
             patch("rich_pipeline.random.uniform", return_value=0.0),
         ):
             response = client.models.generate_content(model="test", contents=[])
-
         self.assertEqual(response.text, "ok")
         self.assertEqual(models.generate_content.call_count, 3)
         self.assertEqual(sleep.call_count, 2)
@@ -162,56 +131,44 @@ class RichPipelineTest(unittest.TestCase):
             stop_event=stop_event,
             status_callback=request_stop,
         )
-
         with patch("rich_pipeline.random.uniform", return_value=0.0):
             with self.assertRaises(_StopRequested):
                 client.models.generate_content(model="test", contents=[])
-
         self.assertEqual(models.generate_content.call_count, 1)
 
     def test_successful_question_is_checkpointed_before_later_interrupt(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
             pdf_path = directory / "prova.pdf"
-            data_path = directory / "data.json"
             _write_pdf(pdf_path)
-            _write_data(data_path)
             digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
+            checkpoints: dict[int, dict | None] = {}
 
             with patch(
                 "rich_pipeline.extract_question_rich_content",
                 side_effect=[_rich(digest), KeyboardInterrupt()],
             ):
                 with self.assertRaises(KeyboardInterrupt):
-                    enrich_rich_data_file(
-                        data_path,
+                    enrich_rich_exam(
+                        _data(),
                         pdf_path,
-                        write=True,
+                        directory=directory,
+                        checkpoint=checkpoints.__setitem__,
                         max_workers=1,
                         progress=False,
                     )
+            self.assertEqual(checkpoints[1]["status"], "success")
+            self.assertNotIn(2, checkpoints)
 
-            checkpoint = json.loads(data_path.read_text(encoding="utf-8"))
-            self.assertEqual(
-                checkpoint["questoes"]["1"]["conteudo"]["rich"]["status"],
-                "success",
-            )
-            self.assertNotIn("rich", checkpoint["questoes"]["2"]["conteudo"])
-            self.assertEqual(
-                checkpoint["rich_extraction"]["successful_question_count"], 1
-            )
-
-    def test_failed_gemini_upgrade_preserves_valid_deterministic_fallback(self) -> None:
+    def test_failed_gemini_upgrade_preserves_deterministic_fallback(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
             pdf_path = directory / "prova.pdf"
-            data_path = directory / "data.json"
             _write_pdf(pdf_path)
-            _write_data(data_path, question_count=1)
             digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
-            data = json.loads(data_path.read_text(encoding="utf-8"))
+            data = _data(question_count=1)
             data["questoes"]["1"]["conteudo"]["rich"] = _rich(digest)
-            data_path.write_text(json.dumps(data), encoding="utf-8")
+            checkpoints: dict[int, dict | None] = {}
 
             with (
                 patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}),
@@ -221,82 +178,49 @@ class RichPipelineTest(unittest.TestCase):
                     side_effect=RuntimeError("Gemini unavailable"),
                 ),
             ):
-                result = enrich_rich_data_file(
-                    data_path,
+                result = enrich_rich_exam(
+                    data,
                     pdf_path,
+                    directory=directory,
                     use_gemini=True,
-                    write=True,
+                    checkpoint=checkpoints.__setitem__,
                     max_workers=1,
                     progress=False,
                 )
+            self.assertEqual(checkpoints[1]["method"], "deterministic")
+            self.assertIn("1", result["failures"])
 
-            rich = result["questoes"]["1"]["conteudo"]["rich"]
-            self.assertEqual(rich["method"], "deterministic")
-            self.assertIn("1", result["rich_extraction"]["failures"])
-
-    def test_openai_provider_is_forwarded_and_recorded(self) -> None:
+    def test_quota_error_is_checkpointed_and_stops_before_next_question(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
             pdf_path = directory / "prova.pdf"
-            data_path = directory / "data.json"
             _write_pdf(pdf_path)
-            _write_data(data_path, question_count=1)
-            digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
-            rich = _rich(digest, method="openai:gpt-5.6-luna")
-
-            with (
-                patch.dict("os.environ", {"OPENAI_API_KEY": "test-key"}),
-                patch("openai.OpenAI", return_value=MagicMock()),
-                patch(
-                    "rich_pipeline.extract_question_rich_content",
-                    return_value=rich,
-                ) as extractor,
-            ):
-                result = enrich_rich_data_file(
-                    data_path,
-                    pdf_path,
-                    provider="openai",
-                    write=False,
-                    max_workers=1,
-                    progress=False,
-                )
-
-            self.assertEqual(result["rich_extraction"]["method"], "openai:gpt-5.6-luna")
-            self.assertEqual(extractor.call_args.kwargs["provider"], "openai")
-            self.assertIsNotNone(extractor.call_args.kwargs["openai_client"])
-
-    def test_quota_error_stops_before_the_next_question(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary_directory:
-            directory = Path(temporary_directory)
-            pdf_path = directory / "prova.pdf"
-            data_path = directory / "data.json"
-            _write_pdf(pdf_path)
-            _write_data(data_path)
             extractor = MagicMock(side_effect=QuotaExceededError("quota exhausted"))
+            checkpoints: dict[int, dict | None] = {}
+            results: list[tuple[int, BaseException | None]] = []
 
             with (
                 patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}),
                 patch("google.genai.Client", return_value=MagicMock()),
-                patch(
-                    "rich_pipeline.extract_question_rich_content",
-                    extractor,
-                ),
+                patch("rich_pipeline.extract_question_rich_content", extractor),
             ):
                 with self.assertRaises(QuotaExceededError):
-                    enrich_rich_data_file(
-                        data_path,
+                    enrich_rich_exam(
+                        _data(),
                         pdf_path,
+                        directory=directory,
                         use_gemini=True,
-                        write=True,
+                        checkpoint=checkpoints.__setitem__,
+                        result_callback=lambda number, error: results.append(
+                            (number, error)
+                        ),
                         max_workers=1,
                         progress=False,
                     )
-
             self.assertEqual(extractor.call_count, 1)
-            checkpoint = json.loads(data_path.read_text(encoding="utf-8"))
-            self.assertEqual(
-                checkpoint["rich_extraction"]["processed_question_count"], 0
-            )
+            self.assertEqual(checkpoints, {1: None})
+            self.assertEqual(results[0][0], 1)
+            self.assertIsInstance(results[0][1], QuotaExceededError)
 
 
 if __name__ == "__main__":

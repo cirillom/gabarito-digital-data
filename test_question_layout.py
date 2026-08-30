@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import json
 import tempfile
 import unittest
 from pathlib import Path
 
 import pymupdf
 
+from catalog_db import connect, validate_catalog
 from question_layout import _normalize_text, apply_layout_to_data, extract_question_layout
 
 
@@ -166,31 +166,21 @@ class QuestionLayoutTest(unittest.TestCase):
         self.assertEqual(data["layout_extraction"]["status"], "failed")
         self.assertNotIn("conteudo", data["questoes"]["1"])
 
-    def test_all_tracked_exams_have_a_complete_success_manifest(self) -> None:
+    def test_all_catalog_questions_have_pdf_content(self) -> None:
         repository_root = Path(__file__).resolve().parent
-        manifests = []
-        for data_path in repository_root.rglob("data.json"):
-            if "provas" not in data_path.parts or not data_path.with_name("prova.pdf").is_file():
-                continue
-            data = json.loads(data_path.read_text(encoding="utf-8"))
-            if "questoes" not in data:
-                continue
-            manifests.append(data_path)
-            questions = data["questoes"]
-            layout = data.get("layout_extraction")
-            self.assertEqual(layout.get("status"), "success", data_path)
-            self.assertEqual(layout.get("version"), 1, data_path)
-            self.assertEqual(layout.get("question_count"), len(questions), data_path)
-            self.assertEqual(data.get("qtd_questoes"), len(questions), data_path)
-            for number, question in questions.items():
-                segments = question.get("conteudo", {}).get("segments", [])
-                self.assertTrue(segments, f"{data_path}: question {number}")
-                self.assertTrue(
-                    any(segment.get("kind") == "question" for segment in segments),
-                    f"{data_path}: question {number}",
-                )
-
-        self.assertTrue(manifests, "No exam manifests were discovered.")
+        database = repository_root / "catalog.sqlite3"
+        validate_catalog(database, repository_root=repository_root)
+        connection = connect(database, read_only=True)
+        missing = connection.execute(
+            "SELECT question.exam_id, question.number FROM question "
+            "LEFT JOIN question_content content ON content.exam_id = question.exam_id "
+            "AND content.question_number = question.number "
+            "GROUP BY question.exam_id, question.number HAVING COUNT(content.sequence) = 0"
+        ).fetchall()
+        question_count = connection.execute("SELECT COUNT(*) FROM question").fetchone()[0]
+        connection.close()
+        self.assertGreater(question_count, 0)
+        self.assertEqual(missing, [])
 
 
 if __name__ == "__main__":

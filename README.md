@@ -1,126 +1,100 @@
 # Gabarito Digital data
 
-Each exam directory contains `prova.pdf`, `gabarito.pdf`, and a generated
-`data.json`. Besides the answer and discipline, the generator detects the
-original PDF region occupied by every question. It also reconstructs a
-versioned rich-content tree containing text, LaTeX formulas, figures, and the
-complete selectable alternatives. Figures remain normalized references into
-`prova.pdf`; formulas are never stored as image crops, and generation does not
-add PNG/JPG files to the repository. The Flutter app prefers that tree and
-falls back question-by-question to the original PDF crop.
+`catalog.sqlite3` is the canonical generated exam catalog. PDFs remain in their
+exam directories and the database stores only relative PDF paths, compact
+question metadata, normalized PDF crops, and optional rich documents.
 
-Run the complete repository update with:
+The tables are deliberately separated so answer-only modes can query
+`question` without loading `question_content` or `question_rich_content`.
+
+## Generate
 
 ```powershell
 uv sync --locked
 uv run main.py
 ```
 
-The default mode generates missing exams, refreshes PDF layout metadata, and
-builds deterministic rich content for missing or stale questions. Existing
-rich content is reused when the source PDF digest is unchanged. To add the
-AI vision pass for faithful formulas and complex layouts, choose a provider:
+The default run:
+
+- refreshes PDF crops for exams already in the database;
+- sends only missing exams to Gemini for answer and discipline extraction;
+- commits every completed exam directly to SQLite;
+- validates the final database and prints its size and row counts.
+
+Set `GEMINI_API_KEY` to generate missing base data. Rich reconstruction is
+optional and opt-in; completed rich questions whose PDF is unchanged are
+skipped:
 
 ```powershell
-uv run main.py --rich-provider gemini
-uv run main.py --rich-provider openai
+uv run main.py --rich-content
+uv run main.py --rich-content --gemini-rich
+uv run main.py --regenerate-all --rich-content --gemini-rich
 ```
 
-Gemini uses `GEMINI_API_KEY`. OpenAI uses `OPENAI_API_KEY` and defaults to
-`gpt-5.6-luna`; override either provider's model with `--rich-model`. A quota or
-rate-limit response stops extraction immediately after saving completed
-question checkpoints. Re-run the same command to resume.
+`--regenerate-all` explicitly forces all base and rich extraction. Gemini calls
+use limited concurrency, stop immediately on quota/rate limits, and retry
+timeouts and temporary 408/500/502/503/504 errors with bounded backoff.
 
-To regenerate every exam with Gemini—including answers, official subject
-research, question classification, and rich content—run:
-
-```powershell
-uv run main.py --regenerate-all --rich-provider gemini
-uv run main.py --check-rich-content
-```
-
-The second command performs no API calls. It fails unless every question in
-every discovered exam has structurally valid rich content generated from the
-current `prova.pdf`, with the complete expected alternative list.
-
-On Windows, the checked-in helper installs locked dependencies, runs the test
-suite, and then generates the catalog:
+The PowerShell helper installs locked dependencies, tests, generates, and
+validates:
 
 ```powershell
 .\scripts\generate-data.ps1
-.\scripts\generate-data.ps1 -RegenerateAll -RichProvider gemini
-.\scripts\generate-data.ps1 -RichProvider openai
+.\scripts\generate-data.ps1 -RichContent -GeminiRich
+.\scripts\generate-data.ps1 -RegenerateAll -RichContent -GeminiRich
 ```
 
-## Generate data from GitHub
+## Retry failures
 
-The **Generate exam data** workflow can run the same process without a local
-checkout. Add `prova.pdf` and `gabarito.pdf` under the desired exam directory,
-then open **Actions > Generate exam data > Run workflow**. The workflow tests
-the extractor, rebuilds the root `data.json`, and commits the generated files
-to the selected branch. Enable **Regenerate every exam data.json with Gemini**
-to replace all per-exam JSON files instead of generating only missing exams.
-Rich reconstruction and the **Gemini** provider are enabled by default. Choose
-**OpenAI** to use `gpt-5.6-luna`, or **deterministic** to avoid AI calls. For a
-full refresh, enable **Regenerate every exam data.json with Gemini**. Before
-committing, the workflow validates every rich question against its current
-PDF and stops without publishing if any exam is incomplete.
-
-Before its first run, create an Actions repository secret named
-`GEMINI_API_KEY` and/or `OPENAI_API_KEY` under **Settings > Secrets and
-variables > Actions**, depending on the selected provider. The
-workflow's `contents: write` permission is used only to commit generated JSON
-files back to the branch.
-
-To add or refresh layout metadata without calling Gemini again:
+Limit a run to one exam with `--directory`. Repeat `--rich-question` to retry
+several failed questions; completed questions are skipped unless
+`--regenerate-all` is present.
 
 ```powershell
-uv run question_layout.py --directory "path\to\exam"
+uv run main.py --rich-content --directory "OAB\provas\46" --rich-question 17
+uv run main.py --rich-content --directory "ENEM\provas\2024\2o dia" --rich-question 17 --rich-question 42 --gemini-rich
 ```
 
-An exam receives `layout_extraction.status: "success"` only when every
-question has a validated, normalized `conteudo.segments` region. On failure,
-the JSON is still usable for answer-only modes and the PDF mode remains
-disabled in the app.
+Every generation run prints the processed exams, attempted/successful/failed
+question counts, and the exact failed-question list. Failure-only diagnostic
+logs are written beneath `logs/`; the path is printed in the summary.
 
-Each segment stores a 1-based PDF page, a normalized
-`[left, top, right, bottom]` rectangle, and a `kind` of `question` or
-`shared`. Shared passages are attached to every question that references
-them, so a question remains complete even when its source text appears in a
-different column or on a preceding page.
-
-## Preview without GitHub
-
-Generate a browser preview from the checked-out PDFs without changing the
-exam JSON or downloading the catalog from GitHub:
+## Validate
 
 ```powershell
-uv run rich_content.py --directory "ENEM\provas\2024\2o dia" --question 91 --preview ".rich-preview\enem-91.html"
+uv run main.py --validate
 ```
 
-Add `--provider gemini` or `--provider openai` to inspect an AI-enhanced result,
-or `--write` when the
-validated result should be persisted. The preview contains selectable answer
-cards, renders LaTeX as browser-native MathML, and embeds temporary figure
-renderings inside the HTML file; it does not create repository image assets.
+Validation includes `PRAGMA integrity_check`, `PRAGMA foreign_key_check`,
+natural exam and question uniqueness, answer labels, normalized coordinates,
+PDF page bounds, rich-document structure, and orphan checks.
 
-Useful ENEM 2024 day-two samples are question 91 for figure/caption ordering,
-question 109 for image-only alternatives, and question 150 for equations.
+## Release
 
-For end-to-end Flutter testing against the checkout, first generate the local
-catalog, then serve it with CORS:
+The deliberately triggered **Release catalog** workflow runs tests, validates
+the checked-in database, prepares checksums, and publishes exactly:
+
+```text
+catalog.sqlite3
+catalog.sqlite3.sha256
+catalog-manifest.json
+```
+
+The release workflow never invokes Gemini. A local release bundle can be built
+with:
 
 ```powershell
-uv run folder_parser.py --output data.json
+uv run main.py --release-version 2026.08.1 --source-commit <commit-id>
+```
+
+The tiny manifest contains only `version`, `schema_version`, `sha256`, `size`,
+and `source_commit`.
+
+## Local serving
+
+The existing static server exposes the SQLite catalog and source PDFs for local
+application development:
+
+```powershell
 uv run scripts\serve-local.py
 ```
-
-In a second terminal, run Flutter with the local catalog and repository origin:
-
-```powershell
-flutter run -d chrome --dart-define=CATALOG_URL=http://127.0.0.1:8765/data.json --dart-define=DATA_REPOSITORY_BASE_URL=http://127.0.0.1:8765/ --dart-define=FORCE_CATALOG_REFRESH=true
-```
-
-This path reads both JSON and source PDFs from the local checkout. It does not
-depend on `raw.githubusercontent.com`. The legacy `DATA_ASSET_BASE_URL` define
-remains accepted for existing local scripts.

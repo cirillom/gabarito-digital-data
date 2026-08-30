@@ -1,13 +1,12 @@
 [project]
 name = "gabarito-digital-data"
 version = "0.1.0"
-description = "Add your description here"
+description = "Generate the Gabarito Digital SQLite exam catalog"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "google-genai>=1.0.0",
     "latex2mathml>=3.81.0",
-    "openai>=2.0.0",
     "pydantic>=2.0",
     "pymupdf>=1.26.3",
     "python-dotenv>=1.2.2",

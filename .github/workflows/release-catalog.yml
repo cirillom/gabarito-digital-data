@@ -1,0 +1,53 @@
+name: Release catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Dataset version (for example 2026.08.1)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Install locked dependencies
+        run: uv sync --locked
+
+      - name: Run tests
+        run: uv run python -m unittest discover -v
+
+      - name: Validate catalog
+        run: uv run main.py --validate
+
+      - name: Create release artifacts
+        env:
+          VERSION: ${{ inputs.version }}
+        run: >-
+          uv run main.py
+          --release-version "$VERSION"
+          --source-commit "$GITHUB_SHA"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: >-
+          gh release create "catalog-$VERSION"
+          dist/catalog.sqlite3
+          dist/catalog.sqlite3.sha256
+          dist/catalog-manifest.json
+          --title "Catalog $VERSION"
+          --generate-notes

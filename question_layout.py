@@ -3,14 +3,12 @@
 The extractor deliberately keeps the PDF as the visual source of truth.  It
 stores normalized page rectangles instead of trying to recreate text,
 equations, tables, or images.  A layout is only marked as successful when an
-ordered anchor was found for every question in ``data.json``.
+ordered anchor was found for every question in an exam.
 """
 
 from __future__ import annotations
 
-import argparse
 import hashlib
-import json
 import math
 import re
 import unicodedata
@@ -810,38 +808,3 @@ def apply_layout_to_data(data: dict[str, Any], pdf_path: str | Path) -> bool:
         }
         return False
 
-
-def enrich_data_file(data_path: str | Path, pdf_path: str | Path | None = None) -> bool:
-    """Extract and persist layout metadata for an existing per-exam JSON file."""
-    data_path = Path(data_path)
-    pdf_path = Path(pdf_path) if pdf_path is not None else data_path.with_name("prova.pdf")
-    with data_path.open("r", encoding="utf-8") as data_file:
-        data = json.load(data_file)
-    if not isinstance(data, dict):
-        raise LayoutExtractionError(f"{data_path} does not contain a JSON object.")
-    success = apply_layout_to_data(data, pdf_path)
-    with data_path.open("w", encoding="utf-8", newline="\n") as data_file:
-        json.dump(data, data_file, indent=2, ensure_ascii=False)
-        data_file.write("\n")
-    return success
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Extract question regions from prova.pdf.")
-    parser.add_argument(
-        "--directory",
-        "-d",
-        type=Path,
-        required=True,
-        help="Directory containing prova.pdf and data.json.",
-    )
-    args = parser.parse_args()
-    directory = args.directory.resolve()
-    success = enrich_data_file(directory / "data.json", directory / "prova.pdf")
-    if not success:
-        parser.exit(1, f"Layout extraction failed for {directory}.\n")
-    print(f"Layout extraction succeeded for {directory}.")
-
-
-if __name__ == "__main__":
-    main()

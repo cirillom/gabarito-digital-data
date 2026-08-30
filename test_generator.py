@@ -1,19 +1,30 @@
+import json
+from pathlib import Path
 import tempfile
 import unittest
 from types import SimpleNamespace
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from catalog_db import connect, open_catalog, replace_exam
 from main import partition_exam_directories, run
-from rich_content import QuotaExceededError
-import json
-
 from pdf_parser import (
     build_prompt,
     normalize_answer_keys,
     normalize_exam_description,
     parse_exam_directory,
 )
+from rich_content import QuotaExceededError
+
+
+def _exam_data() -> dict:
+    return {
+        "data": "2026-01-01",
+        "descricao": "Caderno 1 - Azul",
+        "qtd_questoes": 1,
+        "opcoes_resposta": ["A", "B"],
+        "disciplinas": ["Teste"],
+        "questoes": {"1": {"disciplina": "Teste", "resposta": "A"}},
+    }
 
 
 class GeneratorTests(unittest.TestCase):
@@ -23,47 +34,54 @@ class GeneratorTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
-            directories = [root / "first", root / "second"]
+            directories = [
+                root / "ENEM" / "provas" / "2025",
+                root / "ENEM" / "provas" / "2026",
+            ]
             for directory in directories:
-                directory.mkdir()
+                directory.mkdir(parents=True)
             parser = MagicMock(side_effect=QuotaError("quota exhausted"))
 
             with (
                 patch("main.ROOT_DIR", root),
-                patch("main.MAIN_DATA", root / "data.json"),
+                patch("main.LOG_DIR", root / "logs"),
                 patch("main.parse_exam_directory", parser),
-                patch("main.write_gabarito_json") as write_catalog,
             ):
                 with self.assertRaises(QuotaExceededError):
                     run(
                         directories=directories,
+                        database_path=root / "catalog.sqlite3",
                         rich_content=False,
                     )
-
             self.assertEqual(parser.call_count, 1)
-            write_catalog.assert_called_once()
 
-    def test_default_generation_only_sends_missing_data_to_ai(self) -> None:
+    def test_default_generation_only_sends_missing_database_exam_to_ai(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
-            existing = root / "existing"
-            missing = root / "missing"
-            existing.mkdir()
-            missing.mkdir()
-            (existing / "data.json").write_text("{}", encoding="utf-8")
+            existing = root / "ENEM" / "provas" / "2025"
+            missing = root / "ENEM" / "provas" / "2026"
+            existing.mkdir(parents=True)
+            missing.mkdir(parents=True)
+            connection = open_catalog(root / "catalog.sqlite3")
+            replace_exam(connection, existing, _exam_data(), repository_root=root)
 
             refresh, generate = partition_exam_directories(
-                [existing, missing], regenerate_all=False
+                connection,
+                [existing, missing],
+                regenerate_all=False,
+                repository_root=root,
             )
+            connection.close()
 
             self.assertEqual(refresh, [existing])
             self.assertEqual(generate, [missing])
 
     def test_regenerate_all_sends_every_exam_to_ai(self) -> None:
         directories = [Path("first"), Path("second")]
+        connection = MagicMock()
 
         refresh, generate = partition_exam_directories(
-            directories, regenerate_all=True
+            connection, directories, regenerate_all=True
         )
 
         self.assertEqual(refresh, [])
@@ -71,7 +89,6 @@ class GeneratorTests(unittest.TestCase):
 
     def test_prompt_requires_official_subject_research(self) -> None:
         prompt = build_prompt()
-
         self.assertIn("research the official subject list", prompt)
         self.assertIn('"disciplinas"', prompt)
         self.assertIn("Every questoes[*].disciplina value", prompt)
@@ -79,16 +96,13 @@ class GeneratorTests(unittest.TestCase):
 
     def test_prompt_requires_the_exact_exam_variant(self) -> None:
         prompt = build_prompt()
-
         self.assertIn('"descricao": "Caderno 7 - Azul"', prompt)
         self.assertIn("every distinguishing booklet color", prompt)
         self.assertIn("Do not invent a color or version", prompt)
 
     def test_exam_description_is_required_and_trimmed(self) -> None:
         data = {"descricao": "  Tipo 1 - Branca  "}
-
         normalize_exam_description(data)
-
         self.assertEqual(data["descricao"], "Tipo 1 - Branca")
         with self.assertRaisesRegex(ValueError, "exact exam variant"):
             normalize_exam_description({})
@@ -101,9 +115,7 @@ class GeneratorTests(unittest.TestCase):
                 "2": {"resposta": " b "},
             },
         }
-
         normalize_answer_keys(data)
-
         self.assertEqual(data["questoes"]["1"]["resposta"], "N/A")
         self.assertEqual(data["questoes"]["2"]["resposta"], "B")
         data["questoes"]["3"] = {"resposta": "Aidão"}
@@ -111,25 +123,21 @@ class GeneratorTests(unittest.TestCase):
             normalize_answer_keys(data)
 
     def test_oab_answer_data_matches_official_annulments(self) -> None:
-        root = Path(__file__).resolve().parent
-        expected = {
-            "32": {3, 45, 55, 61, 74},
-            "33": {59},
-        }
-        for edition, expected_questions in expected.items():
-            data = json.loads(
-                (root / "OAB" / "provas" / edition / "data.json").read_text(
-                    encoding="utf-8"
-                )
-            )
-            invalidated = {
-                int(number)
-                for number, question in data["questoes"].items()
-                if question["resposta"] == "N/A"
-            }
-            self.assertEqual(invalidated, expected_questions)
+        connection = connect(Path(__file__).resolve().parent / "catalog.sqlite3", read_only=True)
+        rows = connection.execute(
+            "SELECT exam.year, question.number FROM question "
+            "JOIN exam ON exam.id = question.exam_id "
+            "JOIN institution ON institution.id = exam.institution_id "
+            "WHERE institution.name = 'OAB' AND question.answer = 'N/A'"
+        ).fetchall()
+        connection.close()
+        actual: dict[int, set[int]] = {}
+        for row in rows:
+            actual.setdefault(row["year"], set()).add(row["number"])
+        self.assertEqual(actual.get(32), {3, 45, 55, 61, 74})
+        self.assertEqual(actual.get(33), {59})
 
-    def test_parser_uses_google_genai_client_files_and_models_apis(self) -> None:
+    def test_parser_uses_google_genai_client_without_writing_json(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
             (directory / "prova.pdf").write_bytes(b"test prova")
@@ -148,18 +156,7 @@ class GeneratorTests(unittest.TestCase):
                 ),
             ]
             client.models.generate_content.return_value = SimpleNamespace(
-                text=json.dumps(
-                    {
-                        "data": "2026-01-01",
-                        "descricao": "Versão única",
-                        "qtd_questoes": 1,
-                        "opcoes_resposta": ["A", "B"],
-                        "disciplinas": ["Teste"],
-                        "questoes": {
-                            "1": {"disciplina": "Teste", "resposta": "A"}
-                        },
-                    }
-                )
+                text=json.dumps(_exam_data())
             )
 
             with (
@@ -167,16 +164,12 @@ class GeneratorTests(unittest.TestCase):
                 patch("pdf_parser.genai.Client", return_value=client),
                 patch("pdf_parser.apply_layout_to_data", return_value=True),
             ):
-                data = parse_exam_directory(
-                    directory,
-                    repository_root=directory,
-                )
+                data = parse_exam_directory(directory)
 
             self.assertEqual(client.files.upload.call_count, 2)
             client.models.generate_content.assert_called_once()
             self.assertEqual(data["questoes"]["1"]["resposta"], "A")
-            self.assertEqual(data["descricao"], "Versão única")
-            self.assertTrue((directory / "data.json").is_file())
+            self.assertFalse((directory / "data.json").exists())
 
 
 if __name__ == "__main__":

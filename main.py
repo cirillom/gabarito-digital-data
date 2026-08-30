@@ -1,32 +1,42 @@
-"""Generate exam data and rebuild the repository-wide data file."""
+"""Generate, validate, and package the SQLite exam catalog."""
+
+from __future__ import annotations
 
 import argparse
-import hashlib
-import json
+from datetime import datetime
+import os
 from pathlib import Path
+from typing import Any, TextIO
 
 from tqdm.auto import tqdm
 
-from folder_parser import write_gabarito_json
-from pdf_parser import parse_exam_directory
-from question_layout import enrich_data_file
-from rich_content import (
-    QuotaExceededError,
-    RICH_EXTRACTION_VERSION,
-    RichProvider,
-    is_quota_error,
-    validate_rich_content,
-    write_html_preview,
+from catalog_db import (
+    CATALOG_FILENAME,
+    database_stats,
+    exam_id_for_directory,
+    exam_label,
+    load_exam,
+    open_catalog,
+    optimize,
+    prepare_release,
+    replace_exam,
+    replace_layout,
+    validate_catalog,
+    write_rich_content,
 )
+from pdf_parser import parse_exam_directory
+from question_layout import extract_question_layout
+from rich_content import QuotaExceededError, is_quota_error, write_html_preview
 from rich_pipeline import (
     DEFAULT_RICH_WORKERS,
     MAX_RICH_WORKERS,
-    enrich_rich_data_file,
+    enrich_rich_exam,
 )
 
 
 ROOT_DIR = Path(__file__).resolve().parent
-MAIN_DATA = ROOT_DIR / "data.json"
+CATALOG_PATH = ROOT_DIR / CATALOG_FILENAME
+LOG_DIR = ROOT_DIR / "logs"
 
 
 def find_exam_directories(root_dir: Path = ROOT_DIR) -> list[Path]:
@@ -39,136 +49,145 @@ def find_exam_directories(root_dir: Path = ROOT_DIR) -> list[Path]:
 
 
 def partition_exam_directories(
-    directories: list[Path], *, regenerate_all: bool
+    connection: Any,
+    directories: list[Path],
+    *,
+    regenerate_all: bool,
+    repository_root: Path = ROOT_DIR,
 ) -> tuple[list[Path], list[Path]]:
-    """Return directories to refresh locally and directories to regenerate with AI."""
+    """Return exams to refresh locally and exams to regenerate with Gemini."""
     if regenerate_all:
         return [], directories
-    return (
-        [directory for directory in directories if (directory / "data.json").exists()],
-        [directory for directory in directories if not (directory / "data.json").exists()],
+    existing: list[Path] = []
+    missing: list[Path] = []
+    for directory in directories:
+        target = (
+            existing
+            if exam_id_for_directory(
+                connection, directory, repository_root=repository_root
+            )
+            is not None
+            else missing
+        )
+        target.append(directory)
+    return existing, missing
+
+
+def _new_log() -> tuple[Path, TextIO]:
+    LOG_DIR.mkdir(exist_ok=True)
+    path = LOG_DIR / f"generation-{datetime.now():%Y%m%d-%H%M%S}-{os.getpid()}.log"
+    log = path.open("w", encoding="utf-8", newline="\n")
+    log.write("timestamp\texam\tquestion\tstage\terror\n")
+    log.flush()
+    return path, log
+
+
+def _record_failure(
+    failures: list[dict[str, Any]],
+    log: TextIO,
+    *,
+    exam: str,
+    question: int | None,
+    stage: str,
+    error: BaseException | str,
+) -> None:
+    message = " ".join(str(error).splitlines()).strip()
+    failure = {
+        "exam": exam,
+        "question": question,
+        "stage": stage,
+        "error": message,
+    }
+    failures.append(failure)
+    log.write(
+        f"{datetime.now().isoformat(timespec='seconds')}\t{exam}\t"
+        f"{question if question is not None else '-'}\t{stage}\t{message}\n"
+    )
+    log.flush()
+
+
+def _print_stats(database_path: Path) -> None:
+    stats = database_stats(database_path)
+    tqdm.write("Database:")
+    tqdm.write(f"- size: {stats['size']} bytes")
+    tqdm.write(f"- exams: {stats['exams']}")
+    tqdm.write(f"- questions: {stats['questions']}")
+    tqdm.write(f"- question_content rows: {stats['question_content']}")
+    tqdm.write(
+        f"- question_rich_content rows: {stats['question_rich_content']}"
     )
 
 
-def validate_complete_rich_data(data: dict, pdf_path: Path) -> list[str]:
-    """Return every structural or source mismatch in one rich exam document."""
-    errors: list[str] = []
-    questions = data.get("questoes")
-    labels = data.get("opcoes_resposta")
-    metadata = data.get("rich_extraction")
-    if not isinstance(questions, dict) or not isinstance(labels, list):
-        return ["exam data has no valid questions or answer-option list"]
-
-    digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
-    successful = 0
-    for number, question in questions.items():
-        rich = (
-            question.get("conteudo", {}).get("rich")
-            if isinstance(question, dict)
-            else None
-        )
-        if not isinstance(rich, dict):
-            errors.append(f"question {number} has no rich content")
-            continue
-        try:
-            validate_rich_content(rich, labels)
-        except ValueError as error:
-            errors.append(f"question {number}: {error}")
-            continue
-        if rich.get("source_pdf_sha256") != digest:
-            errors.append(f"question {number} was extracted from a different PDF")
-            continue
-        successful += 1
-
-    expected = len(questions)
-    if data.get("qtd_questoes") != expected:
-        errors.append("qtd_questoes does not match the question object")
-    if not isinstance(metadata, dict):
-        errors.append("rich_extraction metadata is missing")
-    else:
-        if metadata.get("version") != RICH_EXTRACTION_VERSION:
-            errors.append("rich_extraction uses an unsupported version")
-        if metadata.get("source_pdf_sha256") != digest:
-            errors.append("rich_extraction metadata references a different PDF")
-        if metadata.get("status") != "success":
-            errors.append("rich_extraction status is not success")
-        if metadata.get("question_count") != expected:
-            errors.append("rich_extraction question_count is incorrect")
-        if metadata.get("successful_question_count") != successful:
-            errors.append("rich_extraction successful_question_count is incorrect")
-    return errors
-
-
-def check_repository_rich_content(
-    directories: list[Path], *, root_dir: Path = ROOT_DIR
+def _print_summary(
+    exams: list[str],
+    question_counts: dict[str, int],
+    failures: list[dict[str, Any]],
+    log_path: Path,
 ) -> None:
-    """Exit unsuccessfully unless every discovered exam has valid rich content."""
-    failures: list[tuple[Path, list[str]]] = []
-    for directory in tqdm(
-        directories,
-        desc="Validating rich content",
-        unit="exam",
-        dynamic_ncols=True,
-    ):
-        relative_directory = directory.relative_to(root_dir)
-        data_path = directory / "data.json"
-        try:
-            data = json.loads(data_path.read_text(encoding="utf-8"))
-            errors = validate_complete_rich_data(data, directory / "prova.pdf")
-            if errors:
-                failures.append((relative_directory, errors))
-        except (OSError, ValueError, json.JSONDecodeError) as error:
-            failures.append((relative_directory, [str(error)]))
-
-    if failures:
-        tqdm.write("Rich-content validation failed:")
-        for directory, errors in failures:
-            tqdm.write(f"  {directory}: {len(errors)} issue(s)")
-            for error in errors[:5]:
-                tqdm.write(f"    - {error}")
-            if len(errors) > 5:
-                tqdm.write(f"    - ... and {len(errors) - 5} more")
-        raise SystemExit(1)
-    tqdm.write(f"Rich content is complete and valid for all {len(directories)} exams.")
+    tqdm.write("\nExams processed:")
+    for exam in exams:
+        tqdm.write(f"- {exam}")
+    tqdm.write("\nQuestions:")
+    tqdm.write(f"- total attempted: {question_counts['attempted']}")
+    tqdm.write(f"- successfully extracted: {question_counts['successful']}")
+    tqdm.write(f"- failed: {question_counts['failed']}")
+    tqdm.write("\nFailed questions:")
+    question_failures = [failure for failure in failures if failure["question"] is not None]
+    if question_failures:
+        for failure in question_failures:
+            tqdm.write(
+                f"- {failure['exam']} / question {failure['question']} "
+                f"({failure['stage']})"
+            )
+    else:
+        tqdm.write("- none")
+    exam_failures = [failure for failure in failures if failure["question"] is None]
+    if exam_failures:
+        tqdm.write("\nExam-level failures:")
+        for failure in exam_failures:
+            tqdm.write(f"- {failure['exam']} ({failure['stage']}): {failure['error']}")
+    tqdm.write(f"\nFailure log: {log_path.relative_to(ROOT_DIR)}")
 
 
 def run(
     *,
     directories: list[Path] | None = None,
+    database_path: Path = CATALOG_PATH,
     regenerate_all: bool = False,
-    rich_content: bool = True,
-    rich_provider: RichProvider | None = None,
+    rich_content: bool = False,
+    gemini_rich: bool = False,
     rich_model: str | None = None,
     rich_questions: set[int] | None = None,
     preview_dir: Path | None = None,
     rich_workers: int = DEFAULT_RICH_WORKERS,
 ) -> None:
     directories = directories if directories is not None else find_exam_directories()
-
     if not directories:
         tqdm.write("No directories containing prova.pdf and gabarito.pdf were found.")
         return
 
+    log_path, log = _new_log()
+    failures: list[dict[str, Any]] = []
+    processed_exams: list[str] = []
+    question_counts = {"attempted": 0, "successful": 0, "failed": 0}
+    connection = open_catalog(database_path)
+    terminal_error: BaseException | None = None
     existing_directories, generation_directories = partition_exam_directories(
-        directories, regenerate_all=regenerate_all
+        connection,
+        directories,
+        regenerate_all=regenerate_all,
+        repository_root=ROOT_DIR,
     )
-    failures: list[tuple[Path, str]] = []
-    total_steps = (
-        len(existing_directories)
-        + len(generation_directories)
-        + (len(directories) if rich_content else 0)
-    )
-
     overall = tqdm(
-        total=total_steps,
+        total=len(existing_directories)
+        + len(generation_directories)
+        + (len(directories) if rich_content else 0),
         desc="Repository",
         unit="exam-step",
         position=0,
         dynamic_ncols=True,
     )
     try:
-        # Refresh every existing exam before attempting network-backed Gemini work.
-        # This keeps layout backfills deterministic even when one new exam fails.
         for directory in tqdm(
             existing_directories,
             desc="Layouts",
@@ -177,16 +196,33 @@ def run(
             leave=False,
             dynamic_ncols=True,
         ):
-            relative_directory = directory.relative_to(ROOT_DIR)
-            data_file = directory / "data.json"
+            exam_id = exam_id_for_directory(
+                connection, directory, repository_root=ROOT_DIR
+            )
+            assert exam_id is not None
+            label = exam_label(connection, exam_id)
+            if label not in processed_exams:
+                processed_exams.append(label)
             try:
-                succeeded = enrich_data_file(data_file, directory / "prova.pdf")
-                if not succeeded:
-                    failures.append((relative_directory, "layout extraction failed"))
-                    tqdm.write(f"{relative_directory}: layout extraction failed")
-            except (OSError, ValueError) as error:
-                failures.append((relative_directory, str(error)))
-                tqdm.write(f"{relative_directory}: {error}")
+                data = load_exam(connection, exam_id)
+                questions = data["questoes"]
+                layouts = extract_question_layout(
+                    directory / "prova.pdf",
+                    (int(number) for number in questions),
+                    raw_questions=questions,
+                )
+                replace_layout(connection, exam_id, layouts)
+            except Exception as error:
+                replace_layout(connection, exam_id, None)
+                _record_failure(
+                    failures,
+                    log,
+                    exam=label,
+                    question=None,
+                    stage="layout",
+                    error=error,
+                )
+                tqdm.write(f"{label}: layout extraction failed: {error}")
             finally:
                 overall.update(1)
 
@@ -198,19 +234,33 @@ def run(
             leave=False,
             dynamic_ncols=True,
         ):
-            relative_directory = directory.relative_to(ROOT_DIR)
+            relative = directory.relative_to(ROOT_DIR).as_posix()
             try:
-                parse_exam_directory(directory, repository_root=ROOT_DIR)
+                data = parse_exam_directory(directory)
+                exam_id = replace_exam(
+                    connection, directory, data, repository_root=ROOT_DIR
+                )
+                label = exam_label(connection, exam_id)
+                if label not in processed_exams:
+                    processed_exams.append(label)
+                if not rich_content:
+                    count = len(data["questoes"])
+                    question_counts["attempted"] += count
+                    question_counts["successful"] += count
             except Exception as error:
                 if is_quota_error(error):
                     raise QuotaExceededError(
-                        "Gemini quota/rate limit reached while generating "
-                        f"{relative_directory}."
+                        f"Gemini quota/rate limit reached while generating {relative}."
                     ) from error
-                # Keep processing so one network/API failure cannot prevent the
-                # deterministic aggregate from being rebuilt for valid exams.
-                failures.append((relative_directory, str(error)))
-                tqdm.write(f"{relative_directory}: generation failed: {error}")
+                _record_failure(
+                    failures,
+                    log,
+                    exam=relative,
+                    question=None,
+                    stage="base extraction",
+                    error=error,
+                )
+                tqdm.write(f"{relative}: base extraction failed: {error}")
             finally:
                 overall.update(1)
 
@@ -223,112 +273,171 @@ def run(
                 leave=False,
                 dynamic_ncols=True,
             ):
-                relative_directory = directory.relative_to(ROOT_DIR)
-                data_file = directory / "data.json"
+                exam_id = exam_id_for_directory(
+                    connection, directory, repository_root=ROOT_DIR
+                )
+                if exam_id is None:
+                    overall.update(1)
+                    continue
+                label = exam_label(connection, exam_id)
+                if label not in processed_exams:
+                    processed_exams.append(label)
+                data = load_exam(connection, exam_id)
+
+                def result_callback(
+                    number: int,
+                    error: BaseException | None,
+                    *,
+                    current_label: str = label,
+                ) -> None:
+                    question_counts["attempted"] += 1
+                    if error is None:
+                        question_counts["successful"] += 1
+                    else:
+                        question_counts["failed"] += 1
+                        _record_failure(
+                            failures,
+                            log,
+                            exam=current_label,
+                            question=number,
+                            stage="rich extraction",
+                            error=error,
+                        )
+
                 try:
-                    if not data_file.is_file():
-                        continue
-                    enriched = enrich_rich_data_file(
-                        data_file,
+                    enriched = enrich_rich_exam(
+                        data,
                         directory / "prova.pdf",
+                        directory=directory,
                         repository_root=ROOT_DIR,
                         question_numbers=rich_questions,
-                        provider=rich_provider,
+                        use_gemini=gemini_rich,
                         model_name=rich_model,
                         force=regenerate_all,
                         max_workers=rich_workers,
                         progress=True,
                         progress_position=2,
-                        progress_desc=f"{relative_directory} questions",
+                        progress_desc=f"{label} questions",
+                        checkpoint=lambda number, rich, current_exam=exam_id: write_rich_content(
+                            connection, current_exam, number, rich
+                        ),
+                        result_callback=result_callback,
                     )
-                    metadata = enriched["rich_extraction"]
-                    if metadata["status"] != "success":
+                    if enriched["failures"]:
                         tqdm.write(
-                            f"{relative_directory}: rich extraction "
-                            f"{metadata['successful_question_count']}/"
-                            f"{metadata['question_count']} ({metadata['status']})"
+                            f"{label}: {len(enriched['failures'])} rich question(s) failed"
                         )
                     if preview_dir is not None:
-                        preview_path = preview_dir / relative_directory / "index.html"
+                        preview_path = (
+                            preview_dir / directory.relative_to(ROOT_DIR) / "index.html"
+                        )
                         write_html_preview(
-                            enriched,
+                            load_exam(connection, exam_id),
                             directory=directory,
                             output_path=preview_path,
                             question_numbers=rich_questions,
                         )
-                except QuotaExceededError:
+                except (KeyboardInterrupt, QuotaExceededError):
                     raise
-                except (OSError, ValueError, RuntimeError) as error:
-                    failures.append((relative_directory, f"rich extraction: {error}"))
-                    tqdm.write(f"{relative_directory}: rich extraction failed: {error}")
+                except Exception as error:
+                    _record_failure(
+                        failures,
+                        log,
+                        exam=label,
+                        question=None,
+                        stage="rich extraction",
+                        error=error,
+                    )
+                    tqdm.write(f"{label}: rich extraction failed: {error}")
                 finally:
                     overall.update(1)
-
-        write_gabarito_json(ROOT_DIR, MAIN_DATA)
-        tqdm.write(f"Updated {MAIN_DATA.relative_to(ROOT_DIR)}")
     except (KeyboardInterrupt, QuotaExceededError) as error:
-        interrupted = isinstance(error, KeyboardInterrupt)
+        terminal_error = error
         overall.set_postfix_str(
-            "interrupted" if interrupted else "quota reached",
+            "interrupted" if isinstance(error, KeyboardInterrupt) else "quota reached",
             refresh=True,
         )
-        message = (
-            "Ctrl-C received"
-            if interrupted
-            else f"{error} No further AI requests will be made"
+        tqdm.write(
+            "Generation stopped; every completed question was already committed to SQLite."
         )
-        tqdm.write(f"{message}; rebuilding the aggregate from saved checkpoints...")
-        try:
-            write_gabarito_json(ROOT_DIR, MAIN_DATA)
-            tqdm.write(f"Saved checkpoints and refreshed {MAIN_DATA.relative_to(ROOT_DIR)}.")
-        except Exception as error:
-            tqdm.write(f"Could not refresh aggregate after interruption: {error}")
-        raise
     finally:
         overall.close()
+        try:
+            optimize(connection)
+        except Exception as error:
+            _record_failure(
+                failures,
+                log,
+                exam="catalog",
+                question=None,
+                stage="optimization",
+                error=error,
+            )
+        connection.close()
+        try:
+            validate_catalog(database_path, repository_root=ROOT_DIR)
+        except Exception as error:
+            _record_failure(
+                failures,
+                log,
+                exam="catalog",
+                question=None,
+                stage="validation",
+                error=error,
+            )
+        _print_summary(processed_exams, question_counts, failures, log_path)
+        if database_path.is_file():
+            _print_stats(database_path)
+        log.close()
 
+    if terminal_error is not None:
+        raise terminal_error
     if failures:
-        tqdm.write("Completed with failures:")
-        for directory, error in failures:
-            tqdm.write(f"  {directory}: {error}")
         raise SystemExit(1)
 
 
+def _scoped_directories(scopes: list[Path] | None, parser: argparse.ArgumentParser) -> list[Path] | None:
+    if not scopes:
+        return None
+    resolved_scopes: list[Path] = []
+    for scope in scopes:
+        resolved = scope.resolve()
+        try:
+            resolved.relative_to(ROOT_DIR)
+        except ValueError:
+            parser.error(f"--directory must be inside {ROOT_DIR}")
+        resolved_scopes.append(resolved)
+    return sorted(
+        {
+            exam_directory
+            for scope in resolved_scopes
+            for exam_directory in find_exam_directories(scope)
+        }
+    )
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Generate exam JSON files and rebuild the aggregate catalog."
-    )
-    parser.add_argument(
-        "--regenerate-all",
-        action="store_true",
-        help="Regenerate every exam data.json with Gemini, even when it already exists.",
-    )
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--database", type=Path, default=CATALOG_PATH)
+    parser.add_argument("--regenerate-all", action="store_true")
     parser.add_argument(
         "--directory",
         type=Path,
         action="append",
-        help="Limit generation to exam directories found beneath this path; repeatable.",
+        help="Limit generation to exams beneath this path; repeatable.",
     )
     parser.add_argument(
         "--rich-content",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Build rich text, image, formula, and option content from local PDFs (default: enabled).",
+        default=False,
+        help="Build optional rich question documents (default: disabled).",
     )
     parser.add_argument(
-        "--use-gemini-rich",
+        "--gemini-rich",
         action="store_true",
-        help="Deprecated alias for --rich-provider gemini.",
+        help="Use Gemini vision to improve rich content.",
     )
-    parser.add_argument(
-        "--rich-provider",
-        choices=("gemini", "openai"),
-        help="AI vision provider for rich content; omit for deterministic extraction.",
-    )
-    parser.add_argument(
-        "--rich-model",
-        help="Override the provider's default rich extraction model.",
-    )
+    parser.add_argument("--rich-model", help="Override the Gemini rich model.")
     parser.add_argument(
         "--rich-question",
         type=int,
@@ -341,58 +450,50 @@ def main() -> None:
         default=DEFAULT_RICH_WORKERS,
         choices=range(1, MAX_RICH_WORKERS + 1),
         metavar="1-4",
-        help=f"Maximum concurrent AI rich requests (default: {DEFAULT_RICH_WORKERS}).",
     )
-    parser.add_argument(
-        "--preview-dir",
-        type=Path,
-        help="Write local HTML previews beneath this directory.",
-    )
-    parser.add_argument(
-        "--check-rich-content",
-        action="store_true",
-        help="Validate existing rich content for every exam without regenerating it.",
-    )
+    parser.add_argument("--preview-dir", type=Path)
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument("--validate", action="store_true")
+    action.add_argument("--release-version")
+    parser.add_argument("--source-commit")
+    parser.add_argument("--output-directory", type=Path, default=ROOT_DIR / "dist")
     args = parser.parse_args()
-    if args.use_gemini_rich and args.rich_provider not in {None, "gemini"}:
-        parser.error("--use-gemini-rich cannot be combined with --rich-provider openai")
-    rich_provider = args.rich_provider or (
-        "gemini" if args.use_gemini_rich else None
-    )
-    if rich_provider and not args.rich_content:
-        parser.error("--rich-provider requires --rich-content")
-    if args.rich_model and rich_provider is None:
-        parser.error("--rich-model requires --rich-provider")
+
+    database_path = args.database.resolve()
+    if args.validate:
+        validate_catalog(database_path, repository_root=ROOT_DIR)
+        tqdm.write("Catalog validation passed.")
+        _print_stats(database_path)
+        return
+    if args.release_version:
+        if not args.source_commit:
+            parser.error("--release-version requires --source-commit")
+        manifest = prepare_release(
+            database_path,
+            args.output_directory,
+            version=args.release_version,
+            source_commit=args.source_commit,
+            repository_root=ROOT_DIR,
+        )
+        tqdm.write(
+            f"Prepared release {manifest['version']} ({manifest['size']} bytes) "
+            f"in {args.output_directory.resolve()}"
+        )
+        return
+    if args.gemini_rich and not args.rich_content:
+        parser.error("--gemini-rich requires --rich-content")
+    if args.rich_model and not args.gemini_rich:
+        parser.error("--rich-model requires --gemini-rich")
     if args.rich_question and not args.rich_content:
         parser.error("--rich-question requires --rich-content")
 
-    directories = None
-    if args.directory:
-        scopes = []
-        for directory in args.directory:
-            resolved = directory.resolve()
-            try:
-                resolved.relative_to(ROOT_DIR)
-            except ValueError:
-                parser.error(f"--directory must be inside {ROOT_DIR}")
-            scopes.append(resolved)
-        directories = sorted(
-            {
-                exam_directory
-                for scope in scopes
-                for exam_directory in find_exam_directories(scope)
-            }
-        )
-
     try:
-        if args.check_rich_content:
-            check_repository_rich_content(directories or find_exam_directories())
-            return
         run(
-            directories=directories,
+            directories=_scoped_directories(args.directory, parser),
+            database_path=database_path,
             regenerate_all=args.regenerate_all,
             rich_content=args.rich_content,
-            rich_provider=rich_provider,
+            gemini_rich=args.gemini_rich,
             rich_model=args.rich_model,
             rich_questions=set(args.rich_question) if args.rich_question else None,
             preview_dir=args.preview_dir.resolve() if args.preview_dir else None,
@@ -401,11 +502,8 @@ def main() -> None:
     except KeyboardInterrupt:
         tqdm.write("Generation stopped cleanly. Re-run the same command to resume.")
         raise SystemExit(130)
-    except QuotaExceededError:
-        tqdm.write(
-            "Generation stopped at the first quota/rate-limit response. "
-            "Re-run to resume."
-        )
+    except QuotaExceededError as error:
+        tqdm.write(f"{error} Re-run the same command to resume.")
         raise SystemExit(1)
 
 

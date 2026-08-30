@@ -1,15 +1,13 @@
 """Extract exam data from a pair of PDF files using Gemini.
 
-The public :func:`parse_exam_directory` function can be imported by other
-Python code. Run this file directly to use the command-line interface.
+The public :func:`parse_exam_directory` function returns validated exam data;
+the caller commits it directly to SQLite.
 """
 
-import argparse
 import json
 import os
 import time
 from pathlib import Path
-from urllib.parse import quote
 
 from google import genai
 from google.genai import types
@@ -17,6 +15,7 @@ from dotenv import load_dotenv
 from tqdm.auto import tqdm
 
 from question_layout import apply_layout_to_data
+from rich_pipeline import retry_gemini_call
 
 
 PDF_FILENAMES = ("prova.pdf", "gabarito.pdf")
@@ -32,16 +31,6 @@ INVALIDATED_ANSWER_KEYS = {
     "CANCELADA",
     "CANCELADO",
 }
-
-
-def build_pdf_link(directory: Path, repository_root: Path) -> str:
-    """Return the GitHub raw URL for the exam's ``prova.pdf`` file."""
-    relative_path = directory.resolve().relative_to(repository_root.resolve()) / "prova.pdf"
-    return (
-        "https://raw.githubusercontent.com/cirillom/gabarito-digital-data/"
-        "refs/heads/main/"
-        f"{quote(relative_path.as_posix())}"
-    )
 
 
 def extract_json(response_text: str) -> dict:
@@ -141,16 +130,9 @@ Field Population Rules:
 
 def parse_exam_directory(
     directory: str | Path,
-    *,
-    repository_root: str | Path | None = None,
 ) -> dict:
-    """Generate and save ``data.json`` for an exam directory.
-
-    The directory must contain ``prova.pdf`` and ``gabarito.pdf``. The parsed
-    dictionary, including its ``pdf_link``, is returned after it is saved.
-    """
+    """Extract one exam from its ``prova.pdf`` and ``gabarito.pdf`` files."""
     directory = Path(directory).resolve()
-    repository_root = Path(repository_root or Path(__file__).resolve().parent).resolve()
 
     missing_files = [name for name in PDF_FILENAMES if not (directory / name).is_file()]
     if missing_files:
@@ -169,12 +151,16 @@ def parse_exam_directory(
         file_path = directory / filename
         tqdm.write(f"Uploading {file_path}...")
         uploaded_files.append(
-            client.files.upload(
-                file=file_path,
-                config=types.UploadFileConfig(
-                    mime_type="application/pdf",
-                    display_name=str(file_path),
+            retry_gemini_call(
+                lambda: client.files.upload(
+                    file=file_path,
+                    config=types.UploadFileConfig(
+                        mime_type="application/pdf",
+                        display_name=str(file_path),
+                    ),
                 ),
+                label=f"uploading {filename}",
+                status_callback=tqdm.write,
             )
         )
 
@@ -185,7 +171,11 @@ def parse_exam_directory(
             if state_name != "PROCESSING":
                 break
             time.sleep(1)
-            uploaded_file = client.files.get(name=uploaded_file.name)
+            uploaded_file = retry_gemini_call(
+                lambda: client.files.get(name=uploaded_file.name),
+                label=f"processing {uploaded_file.display_name}",
+                status_callback=tqdm.write,
+            )
             uploaded_files[index] = uploaded_file
         state = getattr(uploaded_file, "state", None)
         state_name = getattr(state, "name", str(state or ""))
@@ -195,51 +185,28 @@ def parse_exam_directory(
             raise RuntimeError(f"Timed out while processing {uploaded_file.display_name}.")
 
     tqdm.write("Sending prompt to Gemini...")
-    response = client.models.generate_content(
-        model=MODEL_NAME,
-        contents=[build_prompt(), *uploaded_files],
-        config=types.GenerateContentConfig(
-            temperature=0,
-            response_mime_type="application/json",
-            automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                disable=True
+    response = retry_gemini_call(
+        lambda: client.models.generate_content(
+            model=MODEL_NAME,
+            contents=[build_prompt(), *uploaded_files],
+            config=types.GenerateContentConfig(
+                temperature=0,
+                response_mime_type="application/json",
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                    disable=True
+                ),
             ),
         ),
+        label=f"extracting {directory.name}",
+        status_callback=tqdm.write,
     )
     data = extract_json(response.text)
     normalize_exam_description(data)
     normalize_answer_keys(data)
-    data["pdf_link"] = build_pdf_link(directory, repository_root)
     layout_succeeded = apply_layout_to_data(data, directory / "prova.pdf")
     tqdm.write(
         "Question layout extraction "
         f"{'succeeded' if layout_succeeded else 'failed; PDF mode will stay disabled'}."
     )
 
-    output_path = directory / "data.json"
-    with output_path.open("w", encoding="utf-8", newline="\n") as output_file:
-        json.dump(data, output_file, indent=2, ensure_ascii=False)
-        output_file.write("\n")
-
     return data
-
-
-def main() -> None:
-    """Run the command-line interface."""
-    parser = argparse.ArgumentParser(description="Extract exam data from PDF files.")
-    parser.add_argument("--directory", "-d", type=Path, required=True, help="Exam directory.")
-    args = parser.parse_args()
-
-    try:
-        parse_exam_directory(args.directory)
-    except KeyboardInterrupt:
-        tqdm.write("Generation stopped cleanly.")
-        raise SystemExit(130)
-    except (FileNotFoundError, RuntimeError, ValueError, json.JSONDecodeError) as error:
-        parser.exit(1, f"Error: {error}\n")
-    except Exception as error:
-        parser.exit(1, f"Unexpected error while parsing PDFs: {error}\n")
-
-
-if __name__ == "__main__":
-    main()

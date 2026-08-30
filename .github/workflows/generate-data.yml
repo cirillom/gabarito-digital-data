@@ -9,26 +9,22 @@ on:
         default: "data: generate exam catalog"
         type: string
       regenerate_all:
-        description: Regenerate every exam data.json with Gemini
+        description: Regenerate every exam with Gemini
         required: true
         default: false
         type: boolean
       rich_content:
         description: Reconstruct questions and alternatives as rich content
         required: true
-        default: true
+        default: false
         type: boolean
-      rich_provider:
-        description: AI vision provider for formulas and complex rich layouts
+      gemini_rich:
+        description: Use Gemini vision for formulas and complex rich layouts
         required: true
-        default: gemini
-        type: choice
-        options:
-          - gemini
-          - openai
-          - deterministic
+        default: false
+        type: boolean
       rich_model:
-        description: Optional provider model override
+        description: Optional Gemini model override
         required: false
         type: string
 
@@ -57,9 +53,7 @@ jobs:
           python-version: "3.12"
 
       - name: Resolve and install dependencies
-        run: |
-          uv lock
-          uv sync --locked
+        run: uv sync --locked
 
       - name: Run tests
         run: uv run python -m unittest discover -v
@@ -67,10 +61,9 @@ jobs:
       - name: Generate exam data and catalog
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REGENERATE_ALL: ${{ inputs.regenerate_all }}
           RICH_CONTENT: ${{ inputs.rich_content }}
-          RICH_PROVIDER: ${{ inputs.rich_provider }}
+          GEMINI_RICH: ${{ inputs.gemini_rich }}
           RICH_MODEL: ${{ inputs.rich_model }}
         run: |
           args=()
@@ -82,17 +75,16 @@ jobs:
           else
             args+=(--no-rich-content)
           fi
-          if [ "$RICH_PROVIDER" != "deterministic" ]; then
-            args+=(--rich-provider "$RICH_PROVIDER")
+          if [ "$GEMINI_RICH" = "true" ]; then
+            args+=(--gemini-rich)
           fi
           if [ -n "$RICH_MODEL" ]; then
             args+=(--rich-model "$RICH_MODEL")
           fi
           uv run main.py "${args[@]}"
 
-      - name: Validate complete rich content
-        if: ${{ inputs.rich_content }}
-        run: uv run main.py --check-rich-content
+      - name: Validate catalog
+        run: uv run main.py --validate
 
       - name: Commit generated files
         env:
